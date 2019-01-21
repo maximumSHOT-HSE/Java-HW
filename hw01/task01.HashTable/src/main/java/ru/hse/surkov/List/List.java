@@ -53,7 +53,7 @@ public class List {
     }
 
     /**
-     * @return value of key or null (if there is no such key in HashTable)
+     * @return value of key or null (if there is no such key)
      * */
     public String get(String key) {
         for (int i = 0;i < size();i++) {
@@ -75,7 +75,7 @@ public class List {
 
     /**
      * Method puts value by key (if such key has already been, then previous value will be overwritten)
-     * @return previous value of key or null (if there was no such key in HashTable)
+     * @return previous value of key or null (if there was no such key)
      * */
     public String put(String key, String value) {
         for (int i = 0;i < size();i++) {
