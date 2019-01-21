@@ -1,6 +1,5 @@
 package ru.hse.surkov.hw01;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class HashTable {
@@ -8,6 +7,7 @@ public class HashTable {
     private List[] table;
     private int tableSize;    // physical size of table
     private int numberOfKeys; // actual number of keys
+    private static final int startTableSize = 10;
 
     // fill factor = NUM / DENOM
     private static final int NUM   = 1; // numerator
@@ -21,7 +21,7 @@ public class HashTable {
     }
 
     public HashTable() {
-        this(1);
+        this(startTableSize);
     }
 
     private HashTable(int tableSize) {

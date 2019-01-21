@@ -5,7 +5,8 @@ import java.util.Arrays;
 public class List {
 
     public static class ListVertex {
-        private String key, value;
+        private String key;
+        private String value;
 
         public ListVertex(String key, String value) {
             this.key   = key;
@@ -28,10 +29,11 @@ public class List {
     private ListVertex[] list;
     private int listSize;
     private int listCapacity;
+    private static final int startCapacity = 10;
 
     public List() {
         listSize     = 0;
-        listCapacity = 1;
+        listCapacity = startCapacity;
         list         = new ListVertex[listCapacity];
     }
 
