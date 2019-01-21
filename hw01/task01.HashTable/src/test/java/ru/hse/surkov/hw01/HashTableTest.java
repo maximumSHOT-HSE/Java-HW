@@ -1,6 +1,7 @@
+package ru.hse.surkov.hw01;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.hse.surkov.HashTable.HashTable;
 
 import static org.junit.jupiter.api.Assertions.*;
 

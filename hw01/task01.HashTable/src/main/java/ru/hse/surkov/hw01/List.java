@@ -1,6 +1,5 @@
-package ru.hse.surkov.List;
+package ru.hse.surkov.hw01;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class List {
@@ -9,7 +8,7 @@ public class List {
         private String key, value;
 
         public ListVertex(String key, String value) {
-            this.key = key;
+            this.key   = key;
             this.value = value;
         }
 
@@ -36,11 +35,11 @@ public class List {
         list         = new ListVertex[listCapacity];
     }
 
-    public int size() {
+    private int size() {
         return listSize;
     }
 
-    public int capacity() {
+    private int capacity() {
         return listCapacity;
     }
 
@@ -67,7 +66,7 @@ public class List {
     /*
     * Method changes listCapacity
     * */
-    public void reserve(int capacity) {
+    private void reserve(int capacity) {
         list         = Arrays.copyOf(list, capacity);
         listCapacity = capacity;
         listSize     = Math.min(capacity, listSize);
@@ -94,7 +93,7 @@ public class List {
 
     /**
      * Method removes value by key
-     * and does nothing if there is not such key
+     * and does nothing if there is no such key
      * @return value by key (or null if there was no such key)
      * */
     public String remove(String key) {

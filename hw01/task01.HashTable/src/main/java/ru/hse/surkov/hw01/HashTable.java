@@ -1,6 +1,4 @@
-package ru.hse.surkov.HashTable;
-
-import ru.hse.surkov.List.List;
+package ru.hse.surkov.hw01;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -11,9 +9,9 @@ public class HashTable {
     private int tableSize;    // physical size of table
     private int numberOfKeys; // actual number of keys
 
-    // fill factor = NUM / DENUM
-    private static final int NUM   = 1;
-    private static final int DENUM = 2;
+    // fill factor = NUM / DENOM
+    private static final int NUM   = 1; // numerator
+    private static final int DENOM = 2; // denominator
 
     private void clearAndSetTableSize(int tableSize) {
         this.tableSize = tableSize;
@@ -68,7 +66,7 @@ public class HashTable {
     }
 
     /**
-     * {@link ru.hse.surkov.List.List#get(String)}
+     * {@link ru.hse.surkov.hw01.List#get(String)}
      * */
     public String get(String key) {
         int position = getPosition(key);
@@ -76,7 +74,7 @@ public class HashTable {
     }
 
     /**
-     * {@link ru.hse.surkov.List.List#put(String, String)}
+     * {@link ru.hse.surkov.hw01.List#put(String, String)}
      * */
     public String put(String key, String value) {
         int position = getPosition(key);
@@ -84,14 +82,14 @@ public class HashTable {
         if (previousValue == null) {
             numberOfKeys++;
         }
-        if (size() * (long)DENUM > tableSize * (long)NUM) { // size() > tableSize * (NUM / DENUM). Calculations without loss of accuracy
+        if (numberOfKeys * (long)DENOM > tableSize * (long)NUM) { // numberOfKeys > tableSize * (NUM / DENOM). Calculations without loss of accuracy
             rebuild();
         }
         return previousValue;
     }
 
     /**
-     * {@link ru.hse.surkov.List.List#remove(String)}
+     * {@link ru.hse.surkov.hw01.List#remove(String)}
      * */
     public String remove(String key) {
         int position = getPosition(key);
