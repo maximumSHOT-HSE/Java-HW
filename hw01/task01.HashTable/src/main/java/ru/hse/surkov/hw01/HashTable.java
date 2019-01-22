@@ -1,6 +1,5 @@
 package ru.hse.surkov.hw01;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.Arrays;
 
 public class HashTable {
@@ -8,14 +7,14 @@ public class HashTable {
     private List[] table;
     private int capacity; // physical size of table
     private int size; // actual number of keys
-    private static final int startTableSize = 10;
+    private static final int startCapacity = 10;
 
     // fill factor = NUM / DENOM
     private static final int NUM = 1; // numerator
     private static final int DENOM = 2; // denominator
 
     public HashTable() {
-        this(startTableSize);
+        this(startCapacity);
     }
 
     private HashTable(int capacity) {
@@ -26,7 +25,7 @@ public class HashTable {
     }
 
     private void copy(HashTable original) {
-        table        = original.table;
+        table = original.table;
         capacity = original.capacity;
         size = original.size;
     }

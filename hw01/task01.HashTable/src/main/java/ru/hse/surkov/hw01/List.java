@@ -9,7 +9,7 @@ public class List {
         private String value;
 
         public ListVertex(String key, String value) {
-            this.key   = key;
+            this.key = key;
             this.value = value;
         }
 
@@ -32,9 +32,9 @@ public class List {
     private static final int startCapacity = 10;
 
     public List() {
-        listSize     = 0;
+        listSize = 0;
         listCapacity = startCapacity;
-        list         = new ListVertex[listCapacity];
+        list = new ListVertex[listCapacity];
     }
 
     private int size() {
@@ -69,9 +69,9 @@ public class List {
     * Method changes listCapacity
     * */
     private void reserve(int capacity) {
-        list         = Arrays.copyOf(list, capacity);
+        list = Arrays.copyOf(list, capacity);
         listCapacity = capacity;
-        listSize     = Math.min(capacity, listSize);
+        listSize = Math.min(capacity, listSize);
     }
 
     /**
