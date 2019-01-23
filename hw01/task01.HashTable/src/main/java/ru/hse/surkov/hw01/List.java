@@ -54,6 +54,8 @@ public class List {
     }
 
     /**
+     * Method returns a value by key (if there is no such key, then answer will be null).
+     * if there is such key, then it is present in a single copy
      * @return value of key or null (if there is no such key)
      * */
     public String get(String key) {
