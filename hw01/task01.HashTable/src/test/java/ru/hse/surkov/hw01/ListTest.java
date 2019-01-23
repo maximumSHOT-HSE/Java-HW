@@ -63,6 +63,19 @@ class ListTest {
     }
 
     @Test
+    void testRemoveWithNull() {
+        assertNull(list.remove(null));
+        for (int i = 1;i <= 100;i++) {
+            list.put(Integer.toString(i), "!");
+            assertNull(list.remove(null));;
+        }
+        for (int i = 1;i <= 100;i++) {
+            list.remove(Integer.toString(i));
+            assertNull(list.remove(null));
+        }
+    }
+
+    @Test
     void testContains() {
         for (int i = 1;i <= 100;i++) {
             list.put(Integer.toString(i), "!");
@@ -106,7 +119,7 @@ class ListTest {
     }
 
     @Test
-    void testGetPutNull() {
+    void testGetPutWithNull() {
         assertThrows(IllegalArgumentException.class, () -> list.put(null, null));
         assertThrows(IllegalArgumentException.class, () -> list.put(null, "!"));
         assertThrows(IllegalArgumentException.class, () -> list.put("!", null));

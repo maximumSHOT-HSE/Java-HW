@@ -65,6 +65,15 @@ class HashTableTest {
     }
 
     @Test
+    void testContainsWithNull() {
+        assertFalse(hashTable.contains(null));
+        for (int i = 1;i <= 100;i++) {
+            hashTable.put(Integer.toString(i), "!");
+        }
+        assertFalse(hashTable.contains(null));
+    }
+
+    @Test
     void testContainsWithFilledHashTable() {
         for (int i = 1;i <= 100;i++) {
             hashTable.put(Integer.toString(i), "+");
@@ -156,5 +165,29 @@ class HashTableTest {
             hashTable.clear();
             assertEquals(0, hashTable.size());
         }
+    }
+
+    @Test
+    void testRemoveWithNull() {
+        assertNull(hashTable.remove(null));
+        for (int i = 1;i <= 100;i++) {
+            hashTable.put(Integer.toString(i), "!");
+            assertNull(hashTable.remove(null));;
+        }
+        for (int i = 1;i <= 100;i++) {
+            hashTable.remove(Integer.toString(i));
+            assertNull(hashTable.remove(null));
+        }
+    }
+
+    @Test
+    void testGetPutWithNull() {
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, "!"));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put("!", null));
+        assertNull(hashTable.get("!"));
+        assertNull(hashTable.put("a", "b"));
+        assertEquals("b", hashTable.get("a"));
+        assertNull(hashTable.get(null));
     }
 }
