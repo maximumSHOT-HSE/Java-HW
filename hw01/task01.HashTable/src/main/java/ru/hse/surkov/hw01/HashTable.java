@@ -91,7 +91,7 @@ public class HashTable {
     /**
      * {@link ru.hse.surkov.hw01.List#put(String, String)}
      * */
-    public String put(String key, String value) {
+    public String put(String key, String value) throws IllegalArgumentException {
         if (key == null) {
             throw new IllegalArgumentException("key can not be null");
         }
