@@ -55,10 +55,14 @@ public class List {
 
     /**
      * Method returns a value by key (if there is no such key, then answer will be null).
-     * if there is such key, then it is present in a single copy
+     * if there is such key, then it is present in a single copy.
+     * get(null) == null
      * @return value of key or null (if there is no such key)
      * */
     public String get(String key) {
+        if (key == null) {
+            return null;
+        }
         for (int i = 0;i < size();i++) {
             if (list[i].getKey().equals(key)) {
                 return list[i].getValue();
@@ -79,8 +83,15 @@ public class List {
     /**
      * Method puts value by key (if such key has already been, then previous value will be overwritten)
      * @return previous value of key or null (if there was no such key)
+     * @throws IllegalArgumentException if (key == null) or (value == null)
      * */
-    public String put(String key, String value) {
+    public String put(String key, String value) throws IllegalArgumentException {
+        if (key == null) {
+            throw new IllegalArgumentException("key can not be null");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("value can not be null");
+        }
         for (int i = 0;i < size();i++) {
             if (list[i].getKey().equals(key)) {
                 String previousValue = list[i].getValue();
@@ -97,10 +108,14 @@ public class List {
 
     /**
      * Method removes value by key
-     * and does nothing if there is no such key
+     * and does nothing if there is no such key.
+     * remove(null) == null
      * @return value by key (or null if there was no such key)
      * */
     public String remove(String key) {
+        if (key == null) {
+            return null;
+        }
         for (int i = 0;i < size();i++) {
             if (list[i].getKey().equals(key)) {
                 // swap(list[i], list.back())

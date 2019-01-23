@@ -28,7 +28,10 @@ public class HashTable {
         initEmpty(capacity);
     }
 
-    private void copy(HashTable original) {
+    private void copy(HashTable original) throws IllegalArgumentException {
+        if (original == null) {
+            throw new IllegalArgumentException("original can not be null");
+        }
         table = original.table;
         capacity = original.capacity;
         size = original.size;
@@ -48,7 +51,10 @@ public class HashTable {
         copy(doubleHashTable);
     }
 
-    private int getPosition(String key) {
+    private int getPosition(String key) throws IllegalArgumentException {
+        if (key == null) {
+            throw new IllegalArgumentException("key can not be null");
+        }
         int position = key.hashCode() % capacity;
         if (position < 0) {
             position += capacity;
@@ -60,7 +66,13 @@ public class HashTable {
         return size;
     }
 
+    /**
+     * {@link ru.hse.surkov.hw01.List#contains(String)}
+     * */
     public boolean contains(String key) {
+        if (key == null) {
+            return false;
+        }
         int position = getPosition(key);
         return table[position].contains(key);
     }
@@ -69,6 +81,9 @@ public class HashTable {
      * {@link ru.hse.surkov.hw01.List#get(String)}
      * */
     public String get(String key) {
+        if (key == null) {
+            return null;
+        }
         int position = getPosition(key);
         return table[position].get(key);
     }
@@ -77,6 +92,12 @@ public class HashTable {
      * {@link ru.hse.surkov.hw01.List#put(String, String)}
      * */
     public String put(String key, String value) {
+        if (key == null) {
+            throw new IllegalArgumentException("key can not be null");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("value can not be null");
+        }
         int position = getPosition(key);
         String previousValue = table[position].put(key, value);
         if (previousValue == null) {
@@ -92,6 +113,9 @@ public class HashTable {
      * {@link ru.hse.surkov.hw01.List#remove(String)}
      * */
     public String remove(String key) {
+        if (key == null) {
+            return null;
+        }
         int position = getPosition(key);
         String value = table[position].remove(key);
         if (value != null) {

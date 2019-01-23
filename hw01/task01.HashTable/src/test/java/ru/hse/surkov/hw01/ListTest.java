@@ -73,6 +73,15 @@ class ListTest {
     }
 
     @Test
+    void testContainsWithNullArgument() {
+        for (int i = 1;i <= 100;i++) {
+            list.put(Integer.toString(i), "abc");
+        }
+        assertThrows(IllegalArgumentException.class, () -> list.put(null, "!"));
+        assertFalse(list.contains(null));
+    }
+
+    @Test
     void testGet() {
         for(int i = 1;i <= 100;i++) {
             list.put(Integer.toString(i), Integer.toString(i * 5 + 3));
@@ -94,5 +103,16 @@ class ListTest {
         list.clear();
         List.ListVertex[] records = list.getRecords();
         assertEquals(0, records.length);
+    }
+
+    @Test
+    void testGetPutNull() {
+        assertThrows(IllegalArgumentException.class, () -> list.put(null, null));
+        assertThrows(IllegalArgumentException.class, () -> list.put(null, "!"));
+        assertThrows(IllegalArgumentException.class, () -> list.put("!", null));
+        assertNull(list.get("!"));
+        assertNull(list.put("a", "b"));
+        assertEquals("b", list.get("a"));
+        assertNull(list.get(null));
     }
 }
