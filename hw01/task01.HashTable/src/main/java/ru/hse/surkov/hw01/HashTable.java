@@ -13,15 +13,19 @@ public class HashTable {
     private static final int NUM = 1; // numerator
     private static final int DENOM = 2; // denominator
 
-    public HashTable() {
-        this(startCapacity);
-    }
-
-    private HashTable(int capacity) {
+    private void initEmpty(int capacity) {
         this.capacity = capacity;
         size = 0;
         table = new List[capacity];
         Arrays.fill(table, new List());
+    }
+
+    public HashTable() {
+        initEmpty(startCapacity);
+    }
+
+    private HashTable(int capacity) {
+        initEmpty(capacity);
     }
 
     private void copy(HashTable original) {
@@ -97,7 +101,6 @@ public class HashTable {
     }
 
     public void clear() {
-        size = 0;
-        Arrays.fill(table, new List());
+        initEmpty(startCapacity);
     }
 }
