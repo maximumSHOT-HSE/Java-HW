@@ -7,7 +7,7 @@ public class HashTable {
     private List[] table;
     private int capacity; // physical size of table
     private int size; // actual number of keys
-    private static final int startCapacity = 10;
+    private static final int START_CAPACITY = 10;
 
     // fill factor = NUM / DENOM
     private static final int NUM = 1; // numerator
@@ -21,7 +21,7 @@ public class HashTable {
     }
 
     public HashTable() {
-        initEmpty(startCapacity);
+        initEmpty(START_CAPACITY);
     }
 
     private HashTable(int capacity) {
@@ -125,6 +125,6 @@ public class HashTable {
     }
 
     public void clear() {
-        initEmpty(startCapacity);
+        initEmpty(START_CAPACITY);
     }
 }
