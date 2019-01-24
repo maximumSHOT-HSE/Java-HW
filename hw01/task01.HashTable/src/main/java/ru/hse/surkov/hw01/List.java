@@ -29,11 +29,11 @@ public class List {
     private ListVertex[] list;
     private int listSize;
     private int listCapacity;
-    private static final int startCapacity = 10;
+    private static final int START_CAPACITY = 10;
 
     public List() {
         listSize = 0;
-        listCapacity = startCapacity;
+        listCapacity = START_CAPACITY;
         list = new ListVertex[listCapacity];
     }
 
