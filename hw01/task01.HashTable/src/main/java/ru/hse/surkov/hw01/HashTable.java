@@ -66,9 +66,7 @@ public class HashTable {
         return size;
     }
 
-    /**
-     * {@link ru.hse.surkov.hw01.List#contains(String)}
-     * */
+    /** {@link ru.hse.surkov.hw01.List#contains(String)} */
     public boolean contains(String key) {
         if (key == null) {
             return false;
@@ -90,6 +88,7 @@ public class HashTable {
 
     /**
      * {@link ru.hse.surkov.hw01.List#put(String, String)}
+     * @throws IllegalArgumentException if ((key == null) or (value == null))
      * */
     public String put(String key, String value) throws IllegalArgumentException {
         if (key == null) {
