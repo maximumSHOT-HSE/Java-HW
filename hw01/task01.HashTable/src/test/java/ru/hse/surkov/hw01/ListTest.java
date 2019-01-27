@@ -21,15 +21,15 @@ class ListTest {
     }
 
     @Test
-    void testGetRecodsWithPut() {
-        for (int iter = 1;iter <= 10;iter++) {
+    void testGetRecordsWithPut() {
+        for (int iter = 1; iter <= 10; iter++) {
             for (int i = 1; i <= 20; i++) {
                 list.put(Integer.toString(i), Integer.toString(i * 10));
             }
         }
         List.ListVertex[] records = list.getRecords();
         assertEquals(20, records.length);
-        for (int i = 1;i <= 20;i++) {
+        for (int i = 1; i <= 20; i++) {
             assertEquals(Integer.toString(i), records[i - 1].getKey());
             assertEquals(Integer.toString(i * 10), records[i - 1].getValue());
         }
@@ -37,10 +37,10 @@ class ListTest {
 
     @Test
     void testGetRecordsWithFirstPutThenRemoveOperations() {
-        for (int i = 1;i <= 20;i++) {
+        for (int i = 1; i <= 20; i++) {
             list.put(Integer.toString(i), "+");
         }
-        for (int i = 1;i <= 20;i++) {
+        for (int i = 1; i <= 20; i++) {
             list.remove(Integer.toString(i));
         }
         List.ListVertex[] records = list.getRecords();
@@ -49,13 +49,13 @@ class ListTest {
 
     @Test
     void testGetRecordsAfterEachDoublePuttingAndRemoving() {
-        for (int i = 1;i <= 20;i++) {
+        for (int i = 1; i <= 20; i++) {
             list.put(Integer.toString(i * 2), "a");
             list.put(Integer.toString(i * 2 + 1), "b");
             list.remove(Integer.toString(i * 2));
             List.ListVertex[] records = list.getRecords();
             assertEquals(i, records.length);
-            for (int j = 1;j <= i;j++) {
+            for (int j = 1; j <= i; j++) {
                 assertEquals(Integer.toString(2 * j + 1), records[j - 1].getKey());
                 assertEquals("b", records[j - 1].getValue());
             }
@@ -65,11 +65,11 @@ class ListTest {
     @Test
     void testRemoveWithNull() {
         assertNull(list.remove(null));
-        for (int i = 1;i <= 100;i++) {
+        for (int i = 1; i <= 100; i++) {
             list.put(Integer.toString(i), "!");
             assertNull(list.remove(null));;
         }
-        for (int i = 1;i <= 100;i++) {
+        for (int i = 1; i <= 100; i++) {
             list.remove(Integer.toString(i));
             assertNull(list.remove(null));
         }
@@ -77,17 +77,17 @@ class ListTest {
 
     @Test
     void testContains() {
-        for (int i = 1;i <= 100;i++) {
+        for (int i = 1; i <= 100; i++) {
             list.put(Integer.toString(i), "!");
         }
-        for (int i = 1;i <= 200;i++) {
+        for (int i = 1; i <= 200; i++) {
             assertEquals(i <= 100, list.contains(Integer.toString(i)));
         }
     }
 
     @Test
     void testContainsWithNullArgument() {
-        for (int i = 1;i <= 100;i++) {
+        for (int i = 1; i <= 100; i++) {
             list.put(Integer.toString(i), "abc");
         }
         assertThrows(IllegalArgumentException.class, () -> list.put(null, "!"));
@@ -96,10 +96,10 @@ class ListTest {
 
     @Test
     void testGet() {
-        for(int i = 1;i <= 100;i++) {
+        for(int i = 1; i <= 100; i++) {
             list.put(Integer.toString(i), Integer.toString(i * 5 + 3));
         }
-        for(int i = 1;i <= 200;i++) {
+        for(int i = 1; i <= 200; i++) {
             if (i <= 100) {
                 assertEquals(Integer.toString(i * 5 + 3), list.get(Integer.toString(i)));
             } else {
@@ -110,7 +110,7 @@ class ListTest {
 
     @Test
     void testClear() {
-        for (int i = 1;i <= 100;i++) {
+        for (int i = 1; i <= 100; i++) {
             list.put(Integer.toString(i), "!");
         }
         list.clear();
@@ -119,7 +119,14 @@ class ListTest {
     }
 
     @Test
-    void testGetPutWithNull() {
+    void testPutWithNull() {
+        assertThrows(IllegalArgumentException.class, () -> list.put(null, null));
+        assertThrows(IllegalArgumentException.class, () -> list.put(null, "!"));
+        assertThrows(IllegalArgumentException.class, () -> list.put("!", null));
+    }
+
+    @Test
+    void testGetWithNull() {
         assertThrows(IllegalArgumentException.class, () -> list.put(null, null));
         assertThrows(IllegalArgumentException.class, () -> list.put(null, "!"));
         assertThrows(IllegalArgumentException.class, () -> list.put("!", null));
