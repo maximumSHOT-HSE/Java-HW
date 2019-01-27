@@ -12,7 +12,7 @@ public class HashTable {
     private static final double FILL_FACTOR = 0.5;
 
     /*
-        free all data and set new capacity
+        Free all data and set new capacity
         One method implementation because of operations simplicity
      */
     private void freeAndSetCapacity(int capacity) {
@@ -32,7 +32,7 @@ public class HashTable {
 
     private void copy(HashTable original) throws IllegalArgumentException {
         if (original == null) {
-            throw new IllegalArgumentException("original can not be null");
+            throw new IllegalArgumentException("The object to be copied can not be null");
         }
         table = original.table;
         capacity = original.capacity;
