@@ -181,7 +181,14 @@ class HashTableTest {
     }
 
     @Test
-    void testGetPutWithNull() {
+    void testPutWithNull() {
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, null));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, "!"));
+        assertThrows(IllegalArgumentException.class, () -> hashTable.put("!", null));
+    }
+
+    @Test
+    void testGetWithNull() {
         assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, null));
         assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, "!"));
         assertThrows(IllegalArgumentException.class, () -> hashTable.put("!", null));
