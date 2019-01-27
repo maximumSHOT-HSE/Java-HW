@@ -2,6 +2,7 @@ package ru.hse.surkov.hw01;
 
 import java.util.Arrays;
 
+/** HashTable with chains method */
 public class HashTable {
 
     private List[] table;
@@ -13,7 +14,11 @@ public class HashTable {
     private static final int NUM = 1; // numerator
     private static final int DENOM = 2; // denominator
 
-    private void initEmpty(int capacity) {
+    /*
+        free all data and set new capacity
+        One method implementation because of operations simplicity
+     */
+    private void freeAndSetCapacity(int capacity) {
         this.capacity = capacity;
         size = 0;
         table = new List[capacity];
@@ -21,11 +26,11 @@ public class HashTable {
     }
 
     public HashTable() {
-        initEmpty(START_CAPACITY);
+        freeAndSetCapacity(START_CAPACITY);
     }
 
     private HashTable(int capacity) {
-        initEmpty(capacity);
+        freeAndSetCapacity(capacity);
     }
 
     private void copy(HashTable original) throws IllegalArgumentException {
@@ -37,9 +42,7 @@ public class HashTable {
         size = original.size;
     }
 
-    /*
-     * Doubles the capacity of HashTable
-     * */
+    // Doubles the capacity of HashTable
     private void rebuild() {
         HashTable doubleHashTable = new HashTable(capacity * 2);
         for (List chain : table) {
@@ -125,6 +128,6 @@ public class HashTable {
     }
 
     public void clear() {
-        initEmpty(START_CAPACITY);
+        freeAndSetCapacity(START_CAPACITY);
     }
 }

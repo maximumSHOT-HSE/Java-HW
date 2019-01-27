@@ -2,6 +2,7 @@ package ru.hse.surkov.hw01;
 
 import java.util.Arrays;
 
+/** Dynamic array */
 public class List {
 
     public static class ListVertex {
