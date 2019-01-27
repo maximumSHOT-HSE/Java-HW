@@ -75,9 +75,7 @@ public class HashTable {
         return table[position].contains(key);
     }
 
-    /**
-     * {@link ru.hse.surkov.hw01.List#get(String)}
-     * */
+    /** {@link ru.hse.surkov.hw01.List#get(String)} */
     public String get(String key) {
         if (key == null) {
             return null;
@@ -108,9 +106,7 @@ public class HashTable {
         return previousValue;
     }
 
-    /**
-     * {@link ru.hse.surkov.hw01.List#remove(String)}
-     * */
+    /** {@link ru.hse.surkov.hw01.List#remove(String)} */
     public String remove(String key) {
         if (key == null) {
             return null;

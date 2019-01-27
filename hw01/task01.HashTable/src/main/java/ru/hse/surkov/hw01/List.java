@@ -64,7 +64,7 @@ public class List {
         if (key == null) {
             return null;
         }
-        for (int i = 0;i < size();i++) {
+        for (int i = 0; i < size(); i++) {
             if (list[i].getKey().equals(key)) {
                 return list[i].getValue();
             }
@@ -73,8 +73,10 @@ public class List {
     }
 
     /*
-    * Method changes listCapacity
-    * */
+        Method changes listCapacity
+        if oldCapacity < capacity then data will be saved
+        else data in [0, capacity) will be saved
+     */
     private void reserve(int capacity) {
         list = Arrays.copyOf(list, capacity);
         listCapacity = capacity;
@@ -93,7 +95,7 @@ public class List {
         if (value == null) {
             throw new IllegalArgumentException("value can not be null");
         }
-        for (int i = 0;i < size();i++) {
+        for (int i = 0; i < size(); i++) {
             if (list[i].getKey().equals(key)) {
                 String previousValue = list[i].getValue();
                 list[i].setValue(value);
@@ -117,7 +119,7 @@ public class List {
         if (key == null) {
             return null;
         }
-        for (int i = 0;i < size();i++) {
+        for (int i = 0; i < size(); i++) {
             if (list[i].getKey().equals(key)) {
                 // swap(list[i], list.back())
                 ListVertex bufVertex = list[i];
