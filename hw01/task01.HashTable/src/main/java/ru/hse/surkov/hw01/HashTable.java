@@ -9,10 +9,7 @@ public class HashTable {
     private int capacity; // physical size of table
     private int size; // actual number of keys
     private static final int START_CAPACITY = 10;
-
-    // fill factor = NUM / DENOM
-    private static final int NUM = 1; // numerator
-    private static final int DENOM = 2; // denominator
+    private static final double FILL_FACTOR = 0.5;
 
     /*
         free all data and set new capacity
@@ -106,7 +103,7 @@ public class HashTable {
         if (previousValue == null) {
             size++;
         }
-        if (size * (long)DENOM > capacity * (long)NUM) { // size > capacity * (NUM / DENOM). Calculations without loss of accuracy
+        if (size > FILL_FACTOR * capacity) {
             rebuild();
         }
         return previousValue;
