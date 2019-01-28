@@ -189,12 +189,11 @@ class HashTableTest {
 
     @Test
     void testGetWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, null));
-        assertThrows(IllegalArgumentException.class, () -> hashTable.put(null, "!"));
-        assertThrows(IllegalArgumentException.class, () -> hashTable.put("!", null));
         assertNull(hashTable.get("!"));
         assertNull(hashTable.put("a", "b"));
         assertEquals("b", hashTable.get("a"));
+        assertNull(hashTable.get(null));
+        assertEquals("b", hashTable.put("a", "c"));
         assertNull(hashTable.get(null));
     }
 }
