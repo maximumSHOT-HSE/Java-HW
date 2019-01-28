@@ -7,6 +7,7 @@ import java.io.OutputStream;
 /**
  * Data structure for storing a set of strings,
  * A tree with symbols on edges
+ * Data structure does not contain null's
  * */
 public class Trie implements Serializable {
 
