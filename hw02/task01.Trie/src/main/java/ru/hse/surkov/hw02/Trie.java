@@ -31,7 +31,7 @@ public class Trie implements Serializable {
         public void serialize(OutputStream out) throws IOException {
             out.write(arc.size());
             out.write(isLeaf() ? 1 : 0);
-            for (Map.Entry<Character, Node> elem : arc.entrySet()) {
+            for (var elem : arc.entrySet()) {
                 char symbol = elem.getKey();
                 Node target = elem.getValue();
                 out.write(symbol);
@@ -78,7 +78,7 @@ public class Trie implements Serializable {
             ) {
                 return false;
             }
-            for (Map.Entry<Character, Node> elem : arc.entrySet()) {
+            for (var elem : arc.entrySet()) {
                 char symbol = elem.getKey();
                 Node thisTarget = elem.getValue();
                 Node otherTarget = other.next(symbol);
@@ -95,7 +95,7 @@ public class Trie implements Serializable {
                 Character.hashCode(getParentChar()) ^
                 Boolean.hashCode(isLeaf()) ^
                 arc.hashCode();
-            for (Map.Entry<Character, Node> elem : arc.entrySet()) {
+            for (var elem : arc.entrySet()) {
                 char symbol = elem.getKey();
                 Node target = elem.getValue();
                 hashCode ^= target.hashcode();

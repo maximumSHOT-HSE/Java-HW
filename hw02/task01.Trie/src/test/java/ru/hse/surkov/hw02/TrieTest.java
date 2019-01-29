@@ -136,13 +136,13 @@ class TrieTest {
     void testContainsNotNullDifferentNonPrefixStrings() {
         String[] words = {"a", "ba", "bcd", "bce", "abb"};
         String[] notWords = {"1", "10", "123", "124", "2983"};
-        for (String word : words) {
+        for (var word : words) {
             assertTrue(trie.add(word));
         }
-        for (String word : words) {
+        for (var word : words) {
             assertTrue(trie.contains(word));
         }
-        for (String notWord : notWords) {
+        for (var notWord : notWords) {
             assertFalse(trie.contains(notWord));
         }
     }
@@ -169,7 +169,7 @@ class TrieTest {
         assertTrue(trie.add(""));
         assertTrue(trie.contains(""));
         for (char c = 'a'; c <= 'z'; c++) {
-            StringBuilder current = new StringBuilder(Character.toString(c));
+            var current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
                 assertFalse(trie.contains(current.toString()));
                 assertTrue(trie.add(current.toString()));
@@ -232,7 +232,7 @@ class TrieTest {
         assertTrue(trie.add(""));
         assertTrue(trie.contains(""));
         for (char c = 'a'; c <= 'z'; c++) {
-            StringBuilder current = new StringBuilder(Character.toString(c));
+            var current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
                 assertFalse(trie.contains(current.toString()));
                 assertTrue(trie.add(current.toString()));
@@ -299,7 +299,7 @@ class TrieTest {
 
     @Test
     void testSizePrefixStrings() {
-        StringBuilder current = new StringBuilder("");
+        var current = new StringBuilder();
         for (int i = 1; i <= 100; i++, current.append("a")) {
             assertEquals(i - 1, trie.size());
             assertTrue(trie.add(current.toString()));
@@ -343,7 +343,7 @@ class TrieTest {
         String[] words = {
             "a", "ba", "xyz", "bcd", "bce", "bbb"
         };
-        for (String word : words) {
+        for (var word : words) {
             assertTrue(trie.add(word));
         }
         for (int iter = 0; iter < 10; iter++) {
@@ -367,7 +367,7 @@ class TrieTest {
 
     @Test
     void testHowManyStartWithPrefixWithPrefixStrings() {
-        StringBuilder current = new StringBuilder("a");
+        var current = new StringBuilder("a");
         for (int i = 1; i <= 10; i++, current.append('a')) {
             String s = current.toString();
             assertEquals(0, trie.howManyStartWithPrefix(s));
@@ -390,7 +390,7 @@ class TrieTest {
             trie.add(Integer.toString(i));
         }
         for (char c = 'a'; c <= 'z'; c++) {
-            StringBuilder current = new StringBuilder(Character.toString(c));
+            var current = new StringBuilder(Character.toString(c));
             for (int i = 1; i <= 10; i++, current.append(c)) {
                 trie.add(current.toString());
             }
@@ -398,7 +398,7 @@ class TrieTest {
         String[] words = {
             "abracadabra", "cacao", "kuku", "koko", "abc", "qwerty", "hse", "code", "jvm", "java", "javadoc"
         };
-        for (String word : words) {
+        for (var word : words) {
             trie.add(word);
         }
         OutputStream os = new ByteArrayOutputStream();
