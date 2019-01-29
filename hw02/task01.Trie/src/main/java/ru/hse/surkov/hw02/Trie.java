@@ -21,13 +21,86 @@ public class Trie implements Serializable {
         private char parentChar;
         private boolean isLeaf;
 
+        /*
+        * Recursive method
+        * <size: int>
+        * <isLeaf: int>
+        * <symbol1: int> <target1: Node> ...
+        * */
         @Override
         public void serialize(OutputStream out) throws IOException {
+            out.write(arc.size());
+            out.write(isLeaf() ? 1 : 0);
+            for (Map.Entry<Character, Node> elem : arc.entrySet()) {
+                char symbol = elem.getKey();
+                Node target = elem.getValue();
+                out.write(symbol);
+                target.serialize(out);
+            }
         }
 
+        // Replaces current Node with data from input stream
         @Override
         public void deserialize(InputStream in) throws IOException {
+           int size = in.read();
+           zeroCntLeafsInSubtree();
+           if (in.read() == 0) { // isLeaf
+               turnOffLeaf();
+           } else {
+               turnOnLeaf();
+               incLeafsCounter(+1);
+           }
+           if (size < 0) {
+               throw new IOException("Size (number of arcs) can not be negative");
+           }
+           arc.clear();
+           for (int iter = 0; iter < size; iter++) {
+               char symbol = (char) in.read();
+               Node target = new Node(symbol, this);
+               target.deserialize(in);
+               incLeafsCounter(+target.getCntLeafsInSubTree());
+           }
+        }
 
+        private void zeroCntLeafsInSubtree() {
+            cntLeafsInSubTree = 0;
+        }
+
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Node)) {
+                return false;
+            }
+            Node other = (Node) obj;
+            if (
+                (getCntLeafsInSubTree() != other.getCntLeafsInSubTree()) ||
+                (getParentChar() != other.getParentChar()) ||
+                (isLeaf() != other.isLeaf())
+            ) {
+                return false;
+            }
+            for (Map.Entry<Character, Node> elem : arc.entrySet()) {
+                char symbol = elem.getKey();
+                Node thisTarget = elem.getValue();
+                Node otherTarget = other.next(symbol);
+                if (!thisTarget.equals(otherTarget)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public int hashcode() {
+            int hashCode =
+                Integer.hashCode(getCntLeafsInSubTree()) ^
+                Character.hashCode(getParentChar()) ^
+                Boolean.hashCode(isLeaf()) ^
+                arc.hashCode();
+            for (Map.Entry<Character, Node> elem : arc.entrySet()) {
+                char symbol = elem.getKey();
+                Node target = elem.getValue();
+                hashCode ^= target.hashcode();
+            }
+            return hashCode;
         }
 
         public Node() {
@@ -211,5 +284,17 @@ public class Trie implements Serializable {
         Node inputRoot = new Node();
         inputRoot.deserialize(in);
         root = inputRoot;
+    }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Trie)) {
+            return false;
+        }
+        Trie other = (Trie) obj;
+        return root.equals(other.root);
+    }
+
+    public int hashCode() {
+        return root.hashCode();
     }
 }

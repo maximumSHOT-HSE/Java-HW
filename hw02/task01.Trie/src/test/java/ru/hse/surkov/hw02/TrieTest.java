@@ -3,6 +3,10 @@ package ru.hse.surkov.hw02;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrieTest {
@@ -374,5 +378,37 @@ class TrieTest {
         for (int i = 1; i <= 10; i++, current.append('a')) {
             assertEquals(11 - i, trie.howManyStartWithPrefix(current.toString()));
         }
+    }
+
+    /*
+        One method for testing because of difficulties of an independent testing.
+        More effective way is testing composition of serialize and deserialize
+     */
+    @Test
+    void testSerializing() {
+        for(int i = 1; i <= 100; i++) {
+            trie.add(Integer.toString(i));
+        }
+        for (char c = 'a'; c <= 'z'; c++) {
+            StringBuilder current = new StringBuilder(Character.toString(c));
+            for (int i = 1; i <= 10; i++, current.append(c)) {
+                trie.add(current.toString());
+            }
+        }
+        String[] words = {
+            "abracadabra", "cacao", "kuku", "koko", "abc", "qwerty", "hse", "code", "jvm", "java", "javadoc"
+        };
+        for (String word : words) {
+            trie.add(word);
+        }
+        OutputStream os = new ByteArrayOutputStream();
+        assertDoesNotThrow(() -> trie.serialize(os));
+        Trie inputTrie = new Trie();
+        assertDoesNotThrow(
+            () -> inputTrie.deserialize(
+                new ByteArrayInputStream(((ByteArrayOutputStream) os).toByteArray())
+            )
+        );
+        assertEquals(trie, inputTrie);
     }
 }
