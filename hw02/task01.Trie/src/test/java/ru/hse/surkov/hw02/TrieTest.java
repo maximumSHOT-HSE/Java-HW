@@ -1,6 +1,5 @@
 package ru.hse.surkov.hw02;
 
-import jdk.internal.joptsimple.internal.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -166,7 +165,7 @@ class TrieTest {
         assertTrue(trie.add(""));
         assertTrue(trie.contains(""));
         for (char c = 'a'; c <= 'z'; c++) {
-            StringBuilder current = new StringBuilder(c);
+            StringBuilder current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
                 assertFalse(trie.contains(current.toString()));
                 assertTrue(trie.add(current.toString()));
@@ -229,7 +228,7 @@ class TrieTest {
         assertTrue(trie.add(""));
         assertTrue(trie.contains(""));
         for (char c = 'a'; c <= 'z'; c++) {
-            StringBuilder current = new StringBuilder(c);
+            StringBuilder current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
                 assertFalse(trie.contains(current.toString()));
                 assertTrue(trie.add(current.toString()));
@@ -245,7 +244,7 @@ class TrieTest {
                 assertFalse(trie.remove(current.toString()));
                 assertFalse(trie.remove(current.toString()));
             }
-            current = new StringBuilder(c);
+            current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
                 assertEquals((i % 2) == 1, trie.contains(current.toString()));
             }
@@ -364,14 +363,16 @@ class TrieTest {
 
     @Test
     void testHowManyStartWithPrefixWithPrefixStrings() {
-        for (int i = 1; i <= 10; i++) {
-            String s = Strings.repeat('a', i);
+        StringBuilder current = new StringBuilder("a");
+        for (int i = 1; i <= 10; i++, current.append('a')) {
+            String s = current.toString();
             assertEquals(0, trie.howManyStartWithPrefix(s));
             assertTrue(trie.add(s));
             assertEquals(1, trie.howManyStartWithPrefix(s));
         }
-        for (int i = 1; i <= 10; i++) {
-            assertEquals(11 - i, trie.howManyStartWithPrefix(Strings.repeat('a', i)));
+        current = new StringBuilder("a");
+        for (int i = 1; i <= 10; i++, current.append('a')) {
+            assertEquals(11 - i, trie.howManyStartWithPrefix(current.toString()));
         }
     }
 }
