@@ -62,10 +62,7 @@ public class Trie implements Serializable {
            }
         }
 
-        private void zeroCntLeafsInSubtree() {
-            cntLeafsInSubTree = 0;
-        }
-
+        @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof Node)) {
                 return false;
@@ -89,7 +86,8 @@ public class Trie implements Serializable {
             return true;
         }
 
-        public int hashcode() {
+        @Override
+        public int hashCode() {
             int hashCode =
                 Integer.hashCode(getCntLeafsInSubTree()) ^
                 Character.hashCode(getParentChar()) ^
@@ -98,7 +96,7 @@ public class Trie implements Serializable {
             for (var elem : arc.entrySet()) {
                 char symbol = elem.getKey();
                 Node target = elem.getValue();
-                hashCode ^= target.hashcode();
+                hashCode ^= target.hashCode();
             }
             return hashCode;
         }
@@ -124,6 +122,10 @@ public class Trie implements Serializable {
             return arc.get(symbol);
         }
 
+        private void zeroCntLeafsInSubtree() {
+            cntLeafsInSubTree = 0;
+        }
+
         public void incLeafsCounter(int diff) {
             cntLeafsInSubTree += diff;
         }
@@ -140,8 +142,16 @@ public class Trie implements Serializable {
             isLeaf = false;
         }
 
+        public boolean isLeaf() {
+            return isLeaf;
+        }
+
         public char getParentChar() {
             return parentChar;
+        }
+
+        public Node getParent() {
+            return parent;
         }
 
         private void addArc(char symbol, Node target) {
@@ -150,14 +160,6 @@ public class Trie implements Serializable {
 
         public void delArc(char symbol) {
             arc.remove(symbol);
-        }
-
-        public boolean isLeaf() {
-            return isLeaf;
-        }
-
-        public Node getParent() {
-            return parent;
         }
     }
 
@@ -286,6 +288,7 @@ public class Trie implements Serializable {
         root = inputRoot;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Trie)) {
             return false;
@@ -294,6 +297,7 @@ public class Trie implements Serializable {
         return root.equals(other.root);
     }
 
+    @Override
     public int hashCode() {
         return root.hashCode();
     }
