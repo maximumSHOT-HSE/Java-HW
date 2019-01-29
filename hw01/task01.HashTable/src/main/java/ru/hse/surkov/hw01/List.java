@@ -121,10 +121,10 @@ public class List {
         }
         for (int i = 0; i < size(); i++) {
             if (list[i].getKey().equals(key)) {
-                // swap(list[i], list.back())
+                // swap(list[i], list.back()) with delete list.back()
                 ListVertex bufVertex = list[i];
                 list[i] = list[size() - 1];
-                list[size() - 1] = bufVertex;
+                list[size() - 1] = null;
                 listSize--;
                 return bufVertex.getValue();
             }
@@ -133,6 +133,7 @@ public class List {
     }
 
     public void clear() {
+        Arrays.fill(list, null);
         listSize = 0;
     }
 }
