@@ -43,8 +43,8 @@ public class HashTable {
     private void rebuild() {
         HashTable doubleHashTable = new HashTable(capacity * 2);
         for (List chain : table) {
-            List.ListVertex[] records = chain.getRecords();
-            for (List.ListVertex vertex : records) {
+            for (var it : chain) {
+                List.ListVertex vertex = (List.ListVertex) it;
                 doubleHashTable.put(vertex.getKey(), vertex.getValue());
             }
         }

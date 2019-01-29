@@ -1,9 +1,30 @@
 package ru.hse.surkov.hw01;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /** Dynamic array */
-public class List {
+public class List implements Iterable {
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+
+            private int currentPosition;
+
+            @Override
+            public boolean hasNext() {
+                return currentPosition < size();
+            }
+
+            @Override
+            public Object next() {
+                Object nxt = list[currentPosition];
+                currentPosition++;
+                return nxt;
+            }
+        };
+    }
 
     public static class ListVertex {
         private String key;
