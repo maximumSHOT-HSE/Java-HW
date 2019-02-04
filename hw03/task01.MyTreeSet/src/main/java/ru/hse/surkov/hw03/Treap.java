@@ -3,6 +3,7 @@ package ru.hse.surkov.hw03;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.event.TreeSelectionEvent;
 import java.util.AbstractSet;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -12,7 +13,11 @@ import java.util.Iterator;
  * cartesian tree (BST of keys, Heap of params)
  * of pairs (key, random)
  * */
-public class Treap<E> extends AbstractSet implements MyTreeSet {
+public final class Treap<E> extends AbstractSet implements MyTreeSet {
+
+    public static void main(String[] args) {
+//        TreeSelectionEvent
+    }
 
     /** {@link java.util.TreeSet#TreeSet()} */
     public Treap() {
@@ -36,6 +41,11 @@ public class Treap<E> extends AbstractSet implements MyTreeSet {
             @Override
             public Object next() {
                 return null;
+            }
+
+            @Override
+            public void remove() {
+
             }
         };
     }
@@ -74,6 +84,7 @@ public class Treap<E> extends AbstractSet implements MyTreeSet {
         return null;
     }
 
+    // <
     /** {@link java.util.TreeSet#lower(Object)} */
     @Override
     @Nullable
@@ -81,6 +92,7 @@ public class Treap<E> extends AbstractSet implements MyTreeSet {
         return null;
     }
 
+    // <=
     /** {@link java.util.TreeSet#floor(Object)} */
     @Override
     @Nullable
@@ -88,17 +100,19 @@ public class Treap<E> extends AbstractSet implements MyTreeSet {
         return null;
     }
 
-    /** {@link java.util.TreeSet#ceiling(Object)} */
-    @Override
-    @Nullable
-    public Object ceiling(@NotNull Object o) {
-        return null;
-    }
-
+    // >
     /** {@link java.util.TreeSet#higher(Object)} */
     @Override
     @Nullable
     public Object higher(@NotNull Object o) {
+        return null;
+    }
+
+    // >=
+    /** {@link java.util.TreeSet#ceiling(Object)} */
+    @Override
+    @Nullable
+    public Object ceiling(@NotNull Object o) {
         return null;
     }
 
@@ -112,7 +126,7 @@ public class Treap<E> extends AbstractSet implements MyTreeSet {
     /** {@link java.util.TreeSet#add(Object)} */
     @Override
     public boolean add(@NotNull Object o) {
-        return super.add(o);
+        return true;
     }
 
     /** {@link java.util.TreeSet#remove(Object)} */
