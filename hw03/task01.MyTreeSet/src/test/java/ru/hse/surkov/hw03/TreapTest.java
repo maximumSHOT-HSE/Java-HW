@@ -312,8 +312,8 @@ class TreapTest {
         }
         var reverseSet = set.descendingSet();
         var reverseCmpSet = cmpSet.descendingSet();
-        assertArrayEquals(reverseCmpSet.toArray(), cmpSet.toArray());
-        assertArrayEquals(reverseSet.toArray(), set.toArray());
+        assertArrayEquals(reverseSet.toArray(), cmpSet.toArray());
+        assertArrayEquals(reverseCmpSet.toArray(), set.toArray());
     }
 
     @Test
@@ -340,17 +340,17 @@ class TreapTest {
         cmpSetIt.remove();
         setIt = set.iterator();
         cmpSetIt = cmpSet.iterator();
-        for (int i = 1; i + 2 < 100; i += 3) {
+        for (int i = 1; i < 100; i += 3) {
             assertEquals(i, setIt.next());
             setIt.remove();
             assertEquals(i + 1, setIt.next());
             assertEquals(i + 2, setIt.next());
         }
-        for (int i = 100; i > 1; i -= 3) {
+        for (int i = 100; i - 2 > 1; i -= 3) {
+            assertEquals(i, cmpSetIt.next());
             cmpSetIt.remove();
             assertEquals(i - 1, cmpSetIt.next());
             assertEquals(i - 2, cmpSetIt.next());
-            assertEquals(i - 3, cmpSetIt.next());
         }
     }
 
@@ -376,16 +376,16 @@ class TreapTest {
         assertFalse(cmpSetIt.hasNext());
         setIt.remove();
         cmpSetIt.remove();
-        setIt = set.iterator();
-        cmpSetIt = cmpSet.iterator();
-        assertEquals(1, setIt.next());
-        assertEquals(100, cmpSetIt.next());
+        setIt = cmpSet.descendingSet().iterator();
+        cmpSetIt = set.descendingSet().iterator();
         for (int i = 1; i < 100; i += 3) {
+            assertEquals(i, setIt.next());
             setIt.remove();
             assertEquals(i + 1, setIt.next());
             assertEquals(i + 2, setIt.next());
         }
-        for (int i = 100; i > 1; i -= 3) {
+        for (int i = 100; i - 2 > 1; i -= 3) {
+            assertEquals(i, cmpSetIt.next());
             cmpSetIt.remove();
             assertEquals(i - 1, cmpSetIt.next());
             assertEquals(i - 2, cmpSetIt.next());

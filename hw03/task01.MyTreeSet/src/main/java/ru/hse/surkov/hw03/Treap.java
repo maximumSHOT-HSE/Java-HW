@@ -51,7 +51,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
                 right.parent = this;
             }
         }
-
     }
 
     /*
@@ -77,9 +76,11 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         }
         if (splitted.first != null) {
             splitted.first.update();
+            splitted.first.parent = null;
         }
         if (splitted.second != null) {
             splitted.second.update();
+            splitted.second.parent = null;
         }
         return splitted;
     }
@@ -90,7 +91,11 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     * */
     @Nullable private Node merge(@Nullable Node fromLeft, @Nullable Node fromRight) {
         if (fromLeft == null || fromRight == null) {
-            return fromLeft == null ? fromRight : fromLeft;
+            Node merged = fromLeft == null ? fromRight : fromLeft;
+            if(merged != null) {
+                merged.parent = null;
+            }
+            return merged;
         }
         Node merged;
         if (fromLeft.priority < fromRight.priority) {
@@ -103,13 +108,11 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             merged = fromRight;
         }
         merged.update();
+        merged.parent = null;
         return merged;
     }
 
     @NotNull private Node moveDeepLeft(@NotNull Node vertex) {
-        if (!isAscendingTreapOrder) {
-            return reversedTreap.moveDeepRight(vertex);
-        }
         Node visitor = vertex;
         while (visitor.left != null) {
             visitor = visitor.left;
@@ -118,9 +121,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     }
 
     @NotNull private Node moveDeepRight(@NotNull Node vertex) {
-        if (!isAscendingTreapOrder) {
-            return reversedTreap.moveDeepLeft(vertex);
-        }
         Node visitor = vertex;
         while (visitor.right != null) {
             visitor = visitor.right;
@@ -129,9 +129,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     }
 
     @Nullable private Node getPrev(@NotNull Node vertex) {
-        if (!isAscendingTreapOrder) {
-            return reversedTreap.getNext(vertex);
-        }
         if (vertex.left != null) {
             return moveDeepRight(vertex.left);
         }
@@ -143,9 +140,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     }
 
     @Nullable private Node getNext(@NotNull Node vertex) {
-        if (!isAscendingTreapOrder) {
-            return reversedTreap.getPrev(vertex);
-        }
         if (vertex.right != null) {
             return moveDeepLeft(vertex.right);
         }
@@ -239,7 +233,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             if (candidate == null) {
                 throw new IllegalStateException();
             }
-            Treap.this.removeNode(candidate);
+            data.root = Treap.this.removeNode(candidate);
         }
     }
 
@@ -274,6 +268,9 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     @Override
     @Nullable
     public Object first() {
+        if (!isAscendingTreapOrder) {
+            return descendingSet().last();
+        }
         return data.root == null ? null : moveDeepLeft(data.root).value;
     }
 
@@ -281,7 +278,10 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     @Override
     @Nullable
     public Object last() {
-        return descendingSet().first();
+        if (!isAscendingTreapOrder) {
+            return descendingSet().first();
+        }
+        return data.root == null ? null : moveDeepRight(data.root).value;
     }
 
     @Nullable private Node floorNode(@Nullable Node vertex, @NotNull E o) {
@@ -399,10 +399,13 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
     /*
     * Removes node by 'pointer', merges it's sons without copying
-    * and returns new merged Node
+    * and returns new root
     * */
     @Nullable private Node removeNode(@NotNull Node vertex) {
         Node merged = merge(vertex.left, vertex.right);
+        if (vertex.parent == null) {
+            return merged;
+        }
         if (vertex.isLeftSon()) {
             vertex.parent.left = merged;
         } else if (vertex.isRightSon()) {
@@ -410,11 +413,17 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         }
         while (vertex.parent != null) {
             vertex.parent.update();
-            vertex = vertex.parent;
+            if (vertex.parent != null) {
+                vertex = vertex.parent;
+            }
         }
-        return merged;
+        return vertex;
     }
 
+    /*
+    * Removes element o if such exists and returns new root.
+    * If there was not such element null will be returned.
+    * */
     @Nullable private Node remove(@Nullable Node vertex, @NotNull E o) {
         if (vertex == null) {
             return null;
@@ -423,12 +432,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         if (order == 0) {
             return removeNode(vertex);
         }
-        if (order < 0) {
-            remove(vertex.right, o);
-        } else if(order > 0) {
-            remove(vertex.left, o);
-        }
-        return vertex;
+        return remove(order < 0 ? vertex.right : vertex.left, o);
     }
 
     /** {@link java.util.TreeSet#remove(Object)} */
