@@ -86,6 +86,7 @@ class TreapTest {
     @Test
     void testAddNotComparable() {
         MyTreeSet<Set<Integer>> l = new Treap<>();
+        assertTrue(l.add(set));
         assertThrows(ClassCastException.class, () -> l.add(set));
     }
 
@@ -173,8 +174,8 @@ class TreapTest {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
                 cmpSet.add(r);
-                assertEquals(java.util.Optional.of(l), set.first());
-                assertEquals(l, cmpSet.first());
+                assertEquals(Optional.of(l), Optional.of(set.first()));
+                assertEquals(r, cmpSet.first());
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
@@ -189,8 +190,8 @@ class TreapTest {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
                 cmpSet.add(r);
-                assertEquals(java.util.Optional.of(r), set.last());
-                assertEquals(r, cmpSet.last());
+                assertEquals(Optional.of(r), Optional.of(set.last()));
+                assertEquals(l, cmpSet.last());
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
@@ -209,7 +210,7 @@ class TreapTest {
                     if (x <= l) {
                         assertNull(set.lower(x));
                     } else {
-                        assertEquals(Optional.of(Math.min(r, x - 1)), set.lower(x));
+                        assertEquals(Optional.of(Math.min(r, x - 1)), Optional.of(set.lower(x)));
                     }
                     if (x >= r) {
                         assertNull(cmpSet.lower(x));
@@ -233,14 +234,14 @@ class TreapTest {
                 cmpSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x < l) {
-                        assertNull(set.lower(x));
+                        assertNull(set.floor(x));
                     } else {
-                        assertEquals(Optional.of(Math.min(r, x)), set.lower(x));
+                        assertEquals(Optional.of(Math.min(r, x)), Optional.of(set.floor(x)));
                     }
                     if (x > r) {
-                        assertNull(cmpSet.lower(x));
+                        assertNull(cmpSet.floor(x));
                     } else {
-                        assertEquals(Math.max(l, x), cmpSet.lower(x));
+                        assertEquals(Math.max(l, x), cmpSet.floor(x));
                     }
                 }
             }
@@ -259,14 +260,14 @@ class TreapTest {
                 cmpSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x <= l) {
-                        assertNull(cmpSet.lower(x));
+                        assertNull(cmpSet.higher(x));
                     } else {
-                        assertEquals(Math.min(r, x - 1), cmpSet.lower(x));
+                        assertEquals(Math.min(r, x - 1), cmpSet.higher(x));
                     }
                     if (x >= r) {
-                        assertNull(set.lower(x));
+                        assertNull(set.higher(x));
                     } else {
-                        assertEquals(Optional.of(Math.max(l, x + 1)), set.lower(x));
+                        assertEquals(Optional.of(Math.max(l, x + 1)), Optional.of(set.higher(x)));
                     }
                 }
             }
@@ -285,14 +286,14 @@ class TreapTest {
                 cmpSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x < l) {
-                        assertNull(cmpSet.lower(x));
+                        assertNull(cmpSet.ceiling(x));
                     } else {
-                        assertEquals(Math.min(r, x), cmpSet.lower(x));
+                        assertEquals(Math.min(r, x), cmpSet.ceiling(x));
                     }
                     if (x > r) {
-                        assertNull(set.lower(x));
+                        assertNull(set.ceiling(x));
                     } else {
-                        assertEquals(Optional.of(Math.max(l, x)), set.lower(x));
+                        assertEquals(Optional.of(Math.max(l, x)), Optional.of(set.ceiling(x)));
                     }
                 }
             }
@@ -311,8 +312,8 @@ class TreapTest {
         }
         var reverseSet = set.descendingSet();
         var reverseCmpSet = cmpSet.descendingSet();
-        assertEquals(reverseCmpSet, cmpSet);
-        assertEquals(reverseSet, set);
+        assertArrayEquals(reverseCmpSet.toArray(), cmpSet.toArray());
+        assertArrayEquals(reverseSet.toArray(), set.toArray());
     }
 
     @Test
@@ -339,9 +340,8 @@ class TreapTest {
         cmpSetIt.remove();
         setIt = set.iterator();
         cmpSetIt = cmpSet.iterator();
-        assertEquals(1, setIt.next());
-        assertEquals(100, cmpSetIt.next());
-        for (int i = 1; i < 100; i += 3) {
+        for (int i = 1; i + 2 < 100; i += 3) {
+            assertEquals(i, setIt.next());
             setIt.remove();
             assertEquals(i + 1, setIt.next());
             assertEquals(i + 2, setIt.next());
@@ -350,6 +350,7 @@ class TreapTest {
             cmpSetIt.remove();
             assertEquals(i - 1, cmpSetIt.next());
             assertEquals(i - 2, cmpSetIt.next());
+            assertEquals(i - 3, cmpSetIt.next());
         }
     }
 
