@@ -1,6 +1,5 @@
 package ru.hse.surkov.hw03;
 
-import com.sun.source.tree.Tree;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,7 +8,7 @@ import java.util.*;
 /**
  * Balanced search tree implemented as
  * cartesian tree (BST of keys, Heap of priorities)
- * of pairs (key, random)
+ * of pairs (key, random).
  * */
 public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
@@ -23,13 +22,17 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         long priority;
         int subtreeSize; // including current Node
 
-        Node(E value) {
+        Node(@NotNull E value) {
             left = null;
             right = null;
             parent = null;
             this.value = value;
             priority = generator.nextLong();
             subtreeSize = 1;
+        }
+
+        boolean isSon() {
+            return parent != null;
         }
 
         boolean isLeftSon() {
@@ -40,24 +43,36 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             return parent != null && (parent.right == this);
         }
 
-        void update() {
-            subtreeSize = 1;
-            if (left != null) {
-                subtreeSize += left.subtreeSize;
-                left.parent = this;
-            }
-            if (right != null) {
-                subtreeSize += right.subtreeSize;
-                right.parent = this;
-            }
+    }
+
+    // Recalculates vertex fields.
+    private void updateNode(@Nullable Node vertex, boolean deleteParent) {
+        if (vertex == null) {
+            return;
         }
+        if (deleteParent) {
+            vertex.parent = null;
+        }
+        vertex.subtreeSize = 1;
+        if (vertex.left != null) {
+            vertex.subtreeSize += vertex.left.subtreeSize;
+            vertex.left.parent = vertex;
+        }
+        if (vertex.right != null) {
+            vertex.subtreeSize += vertex.right.subtreeSize;
+            vertex.right.parent = vertex;
+        }
+    }
+
+    @Nullable private Node getNodeParent(@Nullable Node vertex) {
+        return vertex == null ? null : vertex.parent;
     }
 
     /*
     * Splits treap into two parts:
     * part with keys less than separator and
     * part with keys greater or equal then separator
-    * without copying
+    * without copying.
     * (<)(>=)
     * */
     @NotNull private Pair<Node, Node> split(@Nullable Node vertex, @NotNull E separator) {
@@ -74,45 +89,39 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             vertex.left = splitted.second;
             splitted.second = vertex;
         }
-        if (splitted.first != null) {
-            splitted.first.update();
-            splitted.first.parent = null;
-        }
-        if (splitted.second != null) {
-            splitted.second.update();
-            splitted.second.parent = null;
-        }
+        updateNode(splitted.first, true);
+        updateNode(splitted.second, true);
         return splitted;
     }
 
     /*
-    * Merges two treap into one without copying.
-    * All keys in left treap are less then all keys in right treap
+    * Merges two treaps into one without copying.
+    * If not all keys in left treap are less then all keys in right treap,
+    * then result of merge will be undefined.
     * */
     @Nullable private Node merge(@Nullable Node fromLeft, @Nullable Node fromRight) {
-        if (fromLeft == null || fromRight == null) {
-            Node merged = fromLeft == null ? fromRight : fromLeft;
-            if(merged != null) {
-                merged.parent = null;
-            }
-            return merged;
-        }
         Node merged;
-        if (fromLeft.priority < fromRight.priority) {
-            merged = merge(fromLeft.right, fromRight);
-            fromLeft.right = merged;
-            merged = fromLeft;
+        if (fromLeft == null || fromRight == null) {
+            merged = fromLeft == null ? fromRight : fromLeft;
         } else {
-            merged = merge(fromLeft, fromRight.left);
-            fromRight.left = merged;
-            merged = fromRight;
+            if (fromLeft.priority < fromRight.priority) {
+                merged = merge(fromLeft.right, fromRight);
+                fromLeft.right = merged;
+                merged = fromLeft;
+            } else {
+                merged = merge(fromLeft, fromRight.left);
+                fromRight.left = merged;
+                merged = fromRight;
+            }
         }
-        merged.update();
-        merged.parent = null;
+        updateNode(merged, true);
         return merged;
     }
 
-    @NotNull private Node moveDeepLeft(@NotNull Node vertex) {
+    @Nullable private Node moveDeepLeft(@Nullable Node vertex) {
+        if (vertex == null) {
+            return null;
+        }
         Node visitor = vertex;
         while (visitor.left != null) {
             visitor = visitor.left;
@@ -120,7 +129,10 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         return visitor;
     }
 
-    @NotNull private Node moveDeepRight(@NotNull Node vertex) {
+    @Nullable private Node moveDeepRight(@Nullable Node vertex) {
+        if (vertex == null) {
+            return null;
+        }
         Node visitor = vertex;
         while (visitor.right != null) {
             visitor = visitor.right;
@@ -128,7 +140,10 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         return visitor;
     }
 
-    @Nullable private Node getPrev(@NotNull Node vertex) {
+    @Nullable private Node getPrev(@Nullable Node vertex) {
+        if (vertex == null) {
+            return null;
+        }
         if (vertex.left != null) {
             return moveDeepRight(vertex.left);
         }
@@ -136,7 +151,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         while (visitor != null && !visitor.isRightSon()) {
             visitor = visitor.parent;
         }
-        return visitor == null ? null : visitor.parent;
+        return getNodeParent(visitor);
     }
 
     @Nullable private Node getNext(@NotNull Node vertex) {
@@ -147,7 +162,80 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         while (visitor != null && !visitor.isLeftSon()) {
             visitor = visitor.parent;
         }
-        return visitor == null ? null : visitor.parent;
+        return getNodeParent(visitor);
+    }
+
+    private int getOrder(@Nullable Node vertex, @NotNull E o, @NotNull Comparator<? super E> comparator) {
+        return vertex == null ? 0 : comparator.compare(vertex.value, o);
+    }
+
+    @Nullable private Node floorNode(@Nullable Node vertex, @NotNull E o, @NotNull Comparator<? super E> comparator) {
+        int order = getOrder(vertex, o, comparator);
+        if (order == 0) {
+            return vertex;
+        }
+        if (order > 0) {
+            return floorNode(vertex.left, o, comparator);
+        }
+        Node candidate = floorNode(vertex.right, o, comparator);
+        if (candidate == null) {
+            candidate = vertex;
+        }
+        return candidate;
+    }
+
+    @Nullable private Node ceilingNode(@Nullable Node vertex, @NotNull E o, @NotNull Comparator<? super E> comparator) {
+        int order = getOrder(vertex, o, comparator);
+        if (order == 0) {
+            return vertex;
+        }
+        if (order < 0) {
+            return ceilingNode(vertex.right, o, comparator);
+        }
+        Node candidate = ceilingNode(vertex.left, o, comparator);
+        if (candidate == null) {
+            candidate = vertex;
+        }
+        return candidate;
+    }
+
+    /*
+     * Removes node by 'pointer', merges it's sons without copying
+     * and returns new root
+     * */
+    @Nullable private Node removeNode(@Nullable Node vertex) {
+        if (vertex == null) {
+            return null;
+        }
+        Node merged = merge(vertex.left, vertex.right);
+        if (vertex.parent == null) {
+            return merged;
+        }
+        if (vertex.isLeftSon()) {
+            vertex.parent.left = merged;
+        } else if (vertex.isRightSon()) {
+            vertex.parent.right = merged;
+        }
+        while (vertex.parent != null) {
+            updateNode(vertex.parent, false);
+            vertex = vertex.parent;
+        }
+        return vertex;
+    }
+
+    /*
+     * Removes element o if such exists and returns new root.
+     * If there was not such element null will be returned.
+     * */
+    @Nullable private Node remove(@Nullable Node vertex, @NotNull E o, @NotNull Comparator<? super E> comparator) {
+        if (vertex == null) {
+            return null;
+        }
+        int order = comparator.compare(vertex.value, o);
+        if (order == 0) {
+            return removeNode(vertex);
+        }
+        return remove(order < 0 ? vertex.right : vertex.left, o, comparator);
     }
 
     private class DataHolder {
@@ -284,42 +372,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         return data.root == null ? null : moveDeepRight(data.root).value;
     }
 
-    @Nullable private Node floorNode(@Nullable Node vertex, @NotNull E o) {
-        if (vertex == null) {
-            return null;
-        }
-        int order = data.comparator.compare(vertex.value, o);
-        if (order == 0) {
-            return vertex;
-        }
-        if (order > 0) {
-            return floorNode(vertex.left, o);
-        }
-        Node candidate = floorNode(vertex.right, o);
-        if (candidate == null) {
-            candidate = vertex;
-        }
-        return candidate;
-    }
-
-    @Nullable private Node ceilingNode(@Nullable Node vertex, @NotNull E o) {
-        if (vertex == null) {
-            return null;
-        }
-        int order = data.comparator.compare(vertex.value, o);
-        if (order == 0) {
-            return vertex;
-        }
-        if (order < 0) {
-            return ceilingNode(vertex.right, o);
-        }
-        Node candidate = ceilingNode(vertex.left, o);
-        if (candidate == null) {
-            candidate = vertex;
-        }
-        return candidate;
-    }
-
     // <
     /** {@link java.util.TreeSet#lower(Object)} */
     @Override
@@ -329,7 +381,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             return descendingSet().higher(o);
         }
         E need = (E) o;
-        Node visitor = floorNode(data.root, need);
+        Node visitor = floorNode(data.root, need, data.comparator);
         if (visitor == null || data.comparator.compare(visitor.value, need) < 0) {
             return visitor == null ? visitor : visitor.value;
         }
@@ -345,7 +397,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         if (!isAscendingTreapOrder) {
             return descendingSet().ceiling(o);
         }
-        Node visitor = floorNode(data.root, (E) o);
+        Node visitor = floorNode(data.root, (E) o, data.comparator);
         return visitor == null ? null : visitor.value;
     }
 
@@ -358,7 +410,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             return descendingSet().lower(o);
         }
         E need = (E) o;
-        Node visitor = ceilingNode(data.root, need);
+        Node visitor = ceilingNode(data.root, need, data.comparator);
         if (visitor == null || data.comparator.compare(visitor.value, need) > 0) {
             return visitor == null ? null : visitor.value;
         }
@@ -374,7 +426,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         if (!isAscendingTreapOrder) {
             return descendingSet().floor(o);
         }
-        Node visitor = ceilingNode(data.root, (E) o);
+        Node visitor = ceilingNode(data.root, (E) o, data.comparator);
         return visitor == null ? null : visitor.value;
     }
 
@@ -397,51 +449,13 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         return true;
     }
 
-    /*
-    * Removes node by 'pointer', merges it's sons without copying
-    * and returns new root
-    * */
-    @Nullable private Node removeNode(@NotNull Node vertex) {
-        Node merged = merge(vertex.left, vertex.right);
-        if (vertex.parent == null) {
-            return merged;
-        }
-        if (vertex.isLeftSon()) {
-            vertex.parent.left = merged;
-        } else if (vertex.isRightSon()) {
-            vertex.parent.right = merged;
-        }
-        while (vertex.parent != null) {
-            vertex.parent.update();
-            if (vertex.parent != null) {
-                vertex = vertex.parent;
-            }
-        }
-        return vertex;
-    }
-
-    /*
-    * Removes element o if such exists and returns new root.
-    * If there was not such element null will be returned.
-    * */
-    @Nullable private Node remove(@Nullable Node vertex, @NotNull E o) {
-        if (vertex == null) {
-            return null;
-        }
-        int order = data.comparator.compare(vertex.value, o);
-        if (order == 0) {
-            return removeNode(vertex);
-        }
-        return remove(order < 0 ? vertex.right : vertex.left, o);
-    }
-
     /** {@link java.util.TreeSet#remove(Object)} */
     @Override
     public boolean remove(@NotNull Object o) {
         if (!contains(o)) {
             return false;
         }
-        data.root = remove(data.root, (E) o);
+        data.root = remove(data.root, (E) o, data.comparator);
         return true;
     }
 }
