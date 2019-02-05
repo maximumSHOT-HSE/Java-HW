@@ -12,7 +12,7 @@ import java.util.*;
  * */
 public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
-    private static final Random generator = new Random(153);
+    private static final Random GENERATOR = new Random(153);
 
     private class Node {
         @Nullable private Node left;
@@ -27,7 +27,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
             right = null;
             parent = null;
             this.value = value;
-            priority = generator.nextLong();
+            priority = GENERATOR.nextLong();
             subtreeSize = 1;
         }
 
@@ -200,7 +200,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     }
 
     /*
-     * Removes node by 'pointer', merges it's sons without copying
+     * Removes node by 'pointer', merges it's sons without copying.
      * and returns new root
      * */
     @Nullable private Node removeNode(@Nullable Node vertex) {
