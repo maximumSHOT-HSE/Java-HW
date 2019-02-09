@@ -3,10 +3,7 @@ package ru.hse.surkov.hw03;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -421,5 +418,97 @@ class TreapTest {
         cmpSet.add(-1);
         assertThrows(ConcurrentModificationException.class, it2::next);
         assertThrows(ConcurrentModificationException.class, it2::remove);
+    }
+
+    @Test
+    void testDescendingSetInfoMethods() {
+        Treap<Integer> t1 = new Treap<>(), t2;
+
+        for (int i = 1; i <= 100; i += 2) {
+            t1.add(i);
+        }
+
+        t2 = (Treap<Integer>) t1.descendingSet();
+
+        assertEquals(t1.first(), t2.last());
+        assertEquals(t1.last(), t2.first());
+
+        for (int i = 1; i <= 200; i++) {
+            assertEquals(i <= 100 && i % 2 == 1, t2.contains(i));
+        }
+
+        for (int i = -100; i <= 200; i++) {
+            assertEquals(t1.lower(i), t2.higher(i));
+            assertEquals(t1.higher(i), t2.lower(i));
+            assertEquals(t1.floor(i), t2.ceiling(i));
+            assertEquals(t1.ceiling(i), t2.floor(i));
+        }
+    }
+
+    @Test
+    void testDescendingSetModificationMethods() {
+        Treap<Integer> t1 = new Treap<>(), t2;
+
+        for (int i = 1; i <= 100; i += 2) {
+            t1.add(i);
+        }
+
+        t2 = (Treap<Integer>) t1.descendingSet();
+
+        for (int i = 1; i <= 100; i++) {
+            if (t1.contains(i)) {
+                assertTrue(t2.contains(i));
+                t1.remove(i);
+                assertFalse(t2.contains(i));
+                t2.add(i);
+                assertTrue(t1.contains(i));
+            } else {
+                assertFalse(t2.contains(i));
+                t2.add(i);
+                assertTrue(t1.contains(i));
+            }
+        }
+    }
+
+    @Test
+    void testDescendingSetIteratorInvalidation() {
+        Treap<Integer> t1 = new Treap<>(), t2;
+
+        for (int i = 1; i <= 100; i += 2) {
+            t1.add(i);
+        }
+
+        t2 = (Treap<Integer>) t1.descendingSet();
+
+        for (int i = 1; i <= 100; i++) {
+            if (t1.contains(i)) {
+                var it = t2.iterator();
+                assertTrue(it.hasNext());
+                t2.remove(i);
+                assertThrows(ConcurrentModificationException.class, it::remove);
+                assertThrows(ConcurrentModificationException.class, it::next);
+                it = t1.descendingIterator();
+                assertTrue(it.hasNext());
+                t1.add(i);
+                var it2 = t1.iterator();
+                assertTrue(it2.hasNext());
+                assertThrows(ConcurrentModificationException.class, it::next);
+                assertThrows(ConcurrentModificationException.class, it::remove);
+            } else {
+                var it1 = t1.iterator();
+                var it2 = t2.iterator();
+                var rit1 = t1.descendingIterator();
+                var rit2 = t2.descendingIterator();
+                var ar = Arrays.asList(it1, it2, rit1, rit2);
+                for (var it : ar) {
+                    assertTrue(it.hasNext());
+                }
+                t1.add(i);
+                for (var it : ar) {
+                    assertThrows(ConcurrentModificationException.class, it::next);
+                    assertThrows(ConcurrentModificationException.class, it::remove);
+                }
+            }
+        }
     }
 }
