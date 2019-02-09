@@ -3,6 +3,7 @@ package ru.hse.surkov.hw03;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -16,7 +17,7 @@ class TreapTest {
 
     @BeforeEach
     void setUp() {
-        set = new Treap<Integer>();
+        set = new Treap<>();
         cmpSet = new Treap<>((x, y) -> x > y ? -1 : x < y ? +1 : 0);
     }
 
@@ -79,7 +80,7 @@ class TreapTest {
 
     @Test
     void testAddNotComparable() {
-        MyTreeSet<Set<Integer>> l = new Treap<>();
+        Treap<Set<Integer>> l = new Treap<>();
         assertTrue(l.add(set));
         assertThrows(ClassCastException.class, () -> l.add(set));
     }
@@ -182,7 +183,7 @@ class TreapTest {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
                 cmpSet.add(r);
-                assertEquals(Optional.of(l), Optional.of(set.first()));
+                assertEquals(Optional.of(l), Optional.ofNullable(set.first()));
                 assertEquals(r, cmpSet.first());
             }
             for (int r = l; r <= 10; r++) {
@@ -198,7 +199,7 @@ class TreapTest {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
                 cmpSet.add(r);
-                assertEquals(Optional.of(r), Optional.of(set.last()));
+                assertEquals(Optional.of(r), Optional.ofNullable(set.last()));
                 assertEquals(l, cmpSet.last());
             }
             for (int r = l; r <= 10; r++) {
@@ -218,7 +219,7 @@ class TreapTest {
                     if (x <= l) {
                         assertNull(set.lower(x));
                     } else {
-                        assertEquals(Optional.of(Math.min(r, x - 1)), Optional.of(set.lower(x)));
+                        assertEquals(Optional.of(Math.min(r, x - 1)), Optional.ofNullable(set.lower(x)));
                     }
                     if (x >= r) {
                         assertNull(cmpSet.lower(x));
@@ -244,7 +245,7 @@ class TreapTest {
                     if (x < l) {
                         assertNull(set.floor(x));
                     } else {
-                        assertEquals(Optional.of(Math.min(r, x)), Optional.of(set.floor(x)));
+                        assertEquals(Optional.of(Math.min(r, x)), Optional.ofNullable(set.floor(x)));
                     }
                     if (x > r) {
                         assertNull(cmpSet.floor(x));
@@ -275,7 +276,7 @@ class TreapTest {
                     if (x >= r) {
                         assertNull(set.higher(x));
                     } else {
-                        assertEquals(Optional.of(Math.max(l, x + 1)), Optional.of(set.higher(x)));
+                        assertEquals(Optional.of(Math.max(l, x + 1)), Optional.ofNullable(set.higher(x)));
                     }
                 }
             }
@@ -301,7 +302,7 @@ class TreapTest {
                     if (x > r) {
                         assertNull(set.ceiling(x));
                     } else {
-                        assertEquals(Optional.of(Math.max(l, x)), Optional.of(set.ceiling(x)));
+                        assertEquals(Optional.of(Math.max(l, x)), Optional.ofNullable(set.ceiling(x)));
                     }
                 }
             }
@@ -398,5 +399,27 @@ class TreapTest {
             assertEquals(i - 1, cmpSetIt.next());
             assertEquals(i - 2, cmpSetIt.next());
         }
+    }
+
+    @Test
+    void testIteratorInvalidation() {
+        for (int i = 1; i <= 10; i++) {
+            set.add(i);
+        }
+        var it = set.iterator();
+        assertTrue(it.hasNext());
+        assertEquals(1, it.next());
+        set.add(-1);
+        assertThrows(ConcurrentModificationException.class, it::next);
+        assertThrows(ConcurrentModificationException.class, it::remove);
+        for (int i = 1; i <= 10; i++) {
+            cmpSet.add(i);
+        }
+        var it2 = cmpSet.iterator();
+        assertTrue(it2.hasNext());
+        assertEquals(10, it2.next());
+        cmpSet.add(-1);
+        assertThrows(ConcurrentModificationException.class, it2::next);
+        assertThrows(ConcurrentModificationException.class, it2::remove);
     }
 }

@@ -65,8 +65,10 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
     private class TreapIterator implements Iterator {
 
         @Nullable private Node currentNode;
+        private long trackedVersion;
 
         public TreapIterator() {
+            trackedVersion = data.version;
             if (data.root == null) {
                 currentNode = null;
             } else {
@@ -81,6 +83,9 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
         @Override
         @NotNull public Object next() {
+            if (trackedVersion != data.version) {
+                throw new ConcurrentModificationException();
+            }
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -91,6 +96,9 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
         @Override
         public void remove() {
+            if (trackedVersion != data.version) {
+                throw new ConcurrentModificationException();
+            }
             Node candidate;
             if (currentNode != null) {
                 candidate = isAscendingTreapOrder ? getPrev(currentNode) : getNext(currentNode);
@@ -104,6 +112,8 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
                 throw new IllegalStateException();
             }
             data.root = Treap.this.removeNode(candidate);
+            data.version++;
+            trackedVersion++;
         }
     }
 
@@ -230,6 +240,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         if (contains(o)) {
             return false;
         }
+        data.version++;
         E need = (E) o;
         Pair<Node, Node> splitted = split(data.root, need);
         data.root = merge(merge(splitted.first, new Node(need)), splitted.second);
@@ -243,6 +254,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         if (!contains(o)) {
             return false;
         }
+        data.version++;
         data.root = remove(data.root, (E) o, data.comparator);
         return true;
     }
