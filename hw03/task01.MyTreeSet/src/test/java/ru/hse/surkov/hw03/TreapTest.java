@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TreapTest {
 
-    Treap<Integer> set;
-    Treap<Integer> cmpSet;
+    private Treap<Integer> set;
+    private Treap<Integer> cmpSet;
 
     @BeforeEach
     void setUp() {
