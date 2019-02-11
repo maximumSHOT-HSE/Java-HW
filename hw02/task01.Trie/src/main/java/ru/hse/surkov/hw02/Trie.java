@@ -194,7 +194,7 @@ public class Trie implements Serializable {
         @Override
         public void deserialize(InputStream in) throws IOException {
             int size = in.read();
-            zeroCntLeafsInSubtree();
+            cntLeafsInSubTree = 0;
             if (in.read() == 0) { // isLeaf
                 isLeaf = false;
             } else {
@@ -251,10 +251,6 @@ public class Trie implements Serializable {
 
         public Node next(char symbol) {
             return arc.get(symbol);
-        }
-
-        private void zeroCntLeafsInSubtree() {
-            cntLeafsInSubTree = 0;
         }
 
         public void incLeafsCounter(int diff) {
