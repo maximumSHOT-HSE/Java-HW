@@ -12,11 +12,7 @@ import java.util.HashMap;
  * */
 public class Trie implements Serializable {
 
-    private Node root;
-
-    public Trie() {
-        root = new Node();
-    }
+    private Node root = new Node();
 
     /**
      * Adds a new string (if there was not such element)
