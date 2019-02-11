@@ -113,19 +113,13 @@ public class Trie implements Serializable {
         return visitor == null ? 0 : visitor.cntLeafsInSubTree;
     }
 
-    /**
-     * Transfers Trie to the output stream
-     * @throws IOException if there is IO problems during transferring
-     * */
+    /** {@link Serializable#serialize(OutputStream)} */
     @Override
     public void serialize(OutputStream out) throws IOException {
         root.serialize(out);
     }
 
-    /**
-     * Replaces current Trie with data from input stream
-     * @throws IOException if there is IO problems during retrieving
-     * */
+    /** {@link Serializable#deserialize(InputStream)} */
     @Override
     public void deserialize(InputStream in) throws IOException {
         Node inputRoot = new Node();
