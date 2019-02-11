@@ -15,54 +15,6 @@ class ListTest {
     }
 
     @Test
-    void testGetRecordsWithEmptyList() {
-        List.ListVertex[] records = list.getRecords();
-        assertEquals(0, records.length);
-    }
-
-    @Test
-    void testGetRecordsWithPut() {
-        for (int iter = 1; iter <= 10; iter++) {
-            for (int i = 1; i <= 20; i++) {
-                list.put(Integer.toString(i), Integer.toString(i * 10));
-            }
-        }
-        List.ListVertex[] records = list.getRecords();
-        assertEquals(20, records.length);
-        for (int i = 1; i <= 20; i++) {
-            assertEquals(Integer.toString(i), records[i - 1].getKey());
-            assertEquals(Integer.toString(i * 10), records[i - 1].getValue());
-        }
-    }
-
-    @Test
-    void testGetRecordsWithFirstPutThenRemoveOperations() {
-        for (int i = 1; i <= 20; i++) {
-            list.put(Integer.toString(i), "+");
-        }
-        for (int i = 1; i <= 20; i++) {
-            list.remove(Integer.toString(i));
-        }
-        List.ListVertex[] records = list.getRecords();
-        assertEquals(0, records.length);
-    }
-
-    @Test
-    void testGetRecordsAfterEachDoublePuttingAndRemoving() {
-        for (int i = 1; i <= 20; i++) {
-            list.put(Integer.toString(i * 2), "a");
-            list.put(Integer.toString(i * 2 + 1), "b");
-            list.remove(Integer.toString(i * 2));
-            List.ListVertex[] records = list.getRecords();
-            assertEquals(i, records.length);
-            for (int j = 1; j <= i; j++) {
-                assertEquals(Integer.toString(2 * j + 1), records[j - 1].getKey());
-                assertEquals("b", records[j - 1].getValue());
-            }
-        }
-    }
-
-    @Test
     void testRemoveWithNull() {
         assertNull(list.remove(null));
         for (int i = 1; i <= 100; i++) {
@@ -114,8 +66,7 @@ class ListTest {
             list.put(Integer.toString(i), "!");
         }
         list.clear();
-        List.ListVertex[] records = list.getRecords();
-        assertEquals(0, records.length);
+        assertEquals(0, list.size());
     }
 
     @Test

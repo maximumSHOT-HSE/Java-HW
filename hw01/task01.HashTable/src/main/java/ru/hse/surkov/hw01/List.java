@@ -31,7 +31,7 @@ public class List implements Iterable {
     private int listSize;
     private int listCapacity = START_CAPACITY;
 
-    private int size() {
+    public int size() {
         return listSize;
     }
 
