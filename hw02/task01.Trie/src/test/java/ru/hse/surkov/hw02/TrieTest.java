@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -238,7 +237,7 @@ class TrieTest {
                 assertTrue(trie.add(current.toString()));
                 assertTrue(trie.contains(current.toString()));
             }
-            current = new StringBuilder(c);
+            current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
                 if ((i % 2) == 0) {
                     continue;
@@ -250,7 +249,7 @@ class TrieTest {
             }
             current = new StringBuilder(Character.toString(c));
             for (int i = 0; i < 100; i++, current.append(c)) {
-                assertEquals((i % 2) == 1, trie.contains(current.toString()));
+                assertEquals((i % 2) == 0, trie.contains(current.toString()));
             }
         }
         assertFalse(trie.contains("abracadabra"));
@@ -401,12 +400,12 @@ class TrieTest {
         for (var word : words) {
             trie.add(word);
         }
-        OutputStream os = new ByteArrayOutputStream();
+        var os = new ByteArrayOutputStream();
         assertDoesNotThrow(() -> trie.serialize(os));
         Trie inputTrie = new Trie();
         assertDoesNotThrow(
             () -> inputTrie.deserialize(
-                new ByteArrayInputStream(((ByteArrayOutputStream) os).toByteArray())
+                new ByteArrayInputStream(os.toByteArray())
             )
         );
         assertEquals(trie, inputTrie);

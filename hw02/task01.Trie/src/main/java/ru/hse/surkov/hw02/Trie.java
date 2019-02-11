@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Data structure for storing a set of strings,
@@ -12,156 +11,6 @@ import java.util.Map;
  * Data structure does not contain null's
  * */
 public class Trie implements Serializable {
-
-    private class Node implements Serializable {
-
-        private int cntLeafsInSubTree;
-        private HashMap<Character, Node> arc;
-        private Node parent;
-        private char parentChar;
-        private boolean isLeaf;
-
-        /*
-        * Recursive method
-        * <size: int>
-        * <isLeaf: int>
-        * <symbol1: int> <target1: Node> ...
-        * */
-        @Override
-        public void serialize(OutputStream out) throws IOException {
-            out.write(arc.size());
-            out.write(isLeaf() ? 1 : 0);
-            for (var elem : arc.entrySet()) {
-                char symbol = elem.getKey();
-                Node target = elem.getValue();
-                out.write(symbol);
-                target.serialize(out);
-            }
-        }
-
-        // Replaces current Node with data from input stream
-        @Override
-        public void deserialize(InputStream in) throws IOException {
-           int size = in.read();
-           zeroCntLeafsInSubtree();
-           if (in.read() == 0) { // isLeaf
-               turnOffLeaf();
-           } else {
-               turnOnLeaf();
-               incLeafsCounter(+1);
-           }
-           if (size < 0) {
-               throw new IOException("Size (number of arcs) can not be negative");
-           }
-           arc.clear();
-           for (int iter = 0; iter < size; iter++) {
-               char symbol = (char) in.read();
-               Node target = new Node(symbol, this);
-               target.deserialize(in);
-               incLeafsCounter(+target.getCntLeafsInSubTree());
-           }
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof Node)) {
-                return false;
-            }
-            Node other = (Node) obj;
-            if (
-                (getCntLeafsInSubTree() != other.getCntLeafsInSubTree()) ||
-                (getParentChar() != other.getParentChar()) ||
-                (isLeaf() != other.isLeaf())
-            ) {
-                return false;
-            }
-            for (var elem : arc.entrySet()) {
-                char symbol = elem.getKey();
-                Node thisTarget = elem.getValue();
-                Node otherTarget = other.next(symbol);
-                if (!thisTarget.equals(otherTarget)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int hashCode =
-                Integer.hashCode(getCntLeafsInSubTree()) ^
-                Character.hashCode(getParentChar()) ^
-                Boolean.hashCode(isLeaf()) ^
-                arc.hashCode();
-            for (var elem : arc.entrySet()) {
-                char symbol = elem.getKey();
-                Node target = elem.getValue();
-                hashCode ^= target.hashCode();
-            }
-            return hashCode;
-        }
-
-        public Node() {
-            cntLeafsInSubTree = 0;
-            arc = new HashMap<>();
-            parent = null;
-            parentChar = 0;
-            isLeaf = false;
-        }
-
-        public Node(char symbol, Node parent) {
-            cntLeafsInSubTree = 0;
-            arc = new HashMap<>();
-            this.parent = parent;
-            parentChar = symbol;
-            isLeaf = false;
-            parent.addArc(symbol, this);
-        }
-
-        public Node next(char symbol) {
-            return arc.get(symbol);
-        }
-
-        private void zeroCntLeafsInSubtree() {
-            cntLeafsInSubTree = 0;
-        }
-
-        public void incLeafsCounter(int diff) {
-            cntLeafsInSubTree += diff;
-        }
-
-        public int getCntLeafsInSubTree() {
-            return cntLeafsInSubTree;
-        }
-
-        public void turnOnLeaf() {
-            isLeaf = true;
-        }
-
-        public void turnOffLeaf() {
-            isLeaf = false;
-        }
-
-        public boolean isLeaf() {
-            return isLeaf;
-        }
-
-        public char getParentChar() {
-            return parentChar;
-        }
-
-        public Node getParent() {
-            return parent;
-        }
-
-        private void addArc(char symbol, Node target) {
-            arc.put(symbol, target);
-        }
-
-        public void delArc(char symbol) {
-            arc.remove(symbol);
-        }
-    }
 
     private Node root;
 
@@ -191,14 +40,14 @@ public class Trie implements Serializable {
             visitor = visitor.next(symbol);
             visitor.incLeafsCounter(+1);
         }
-        if (visitor.isLeaf()) {
+        if (visitor.isLeaf) {
             while (visitor != null) {
                 visitor.incLeafsCounter(-1);
-                visitor = visitor.getParent();
+                visitor = visitor.parent;
             }
             return false;
         } else {
-            visitor.turnOnLeaf();
+            visitor.isLeaf = true;
             return true;
         }
     }
@@ -226,7 +75,7 @@ public class Trie implements Serializable {
      * */
     public boolean contains(String element) {
         Node visitor = moveTo(element);
-        return visitor != null && visitor.isLeaf();
+        return visitor != null && visitor.isLeaf;
     }
 
     /**
@@ -236,16 +85,16 @@ public class Trie implements Serializable {
      * */
     public boolean remove(String element) {
         Node visitor = moveTo(element);
-        if (visitor == null || !visitor.isLeaf()) {
+        if (visitor == null || !visitor.isLeaf) {
             return false;
         }
-        visitor.turnOffLeaf();
+        visitor.isLeaf = false;
         while (visitor != null) {
             visitor.incLeafsCounter(-1);
             Node buffer = visitor;
-            visitor = visitor.getParent();
-            if (buffer.getParent() != null && buffer.getCntLeafsInSubTree() == 0) {
-                visitor.delArc(buffer.getParentChar());
+            visitor = visitor.parent;
+            if (buffer.parent != null && buffer.cntLeafsInSubTree == 0) {
+                visitor.delArc(buffer.parentChar);
             }
         }
         return true;
@@ -256,7 +105,7 @@ public class Trie implements Serializable {
      * @return number of strings
      * */
     public int size() {
-        return root.getCntLeafsInSubTree();
+        return root.cntLeafsInSubTree;
     }
 
     /**
@@ -265,7 +114,7 @@ public class Trie implements Serializable {
      * */
     public int howManyStartWithPrefix(String prefix) {
         Node visitor = moveTo(prefix);
-        return visitor == null ? 0 : visitor.getCntLeafsInSubTree();
+        return visitor == null ? 0 : visitor.cntLeafsInSubTree;
     }
 
     /**
@@ -301,4 +150,124 @@ public class Trie implements Serializable {
     public int hashCode() {
         return root.hashCode();
     }
+
+    private class Node implements Serializable {
+
+        private int cntLeafsInSubTree;
+        private HashMap<Character, Node> arc;
+        private Node parent;
+        private char parentChar;
+        private boolean isLeaf;
+
+        public Node() {
+            arc = new HashMap<>();
+        }
+
+        public Node(char symbol, Node parent) {
+            cntLeafsInSubTree = 0;
+            arc = new HashMap<>();
+            this.parent = parent;
+            parentChar = symbol;
+            isLeaf = false;
+            parent.addArc(symbol, this);
+        }
+
+        /*
+         * Recursive method
+         * <size: int>
+         * <isLeaf: int>
+         * <symbol1: int> <target1: Node> ...
+         * */
+        @Override
+        public void serialize(OutputStream out) throws IOException {
+            out.write(arc.size());
+            out.write(isLeaf ? 1 : 0);
+            for (var elem : arc.entrySet()) {
+                char symbol = elem.getKey();
+                Node target = elem.getValue();
+                out.write(symbol);
+                target.serialize(out);
+            }
+        }
+
+        // Replaces current Node with data from input stream
+        @Override
+        public void deserialize(InputStream in) throws IOException {
+            int size = in.read();
+            zeroCntLeafsInSubtree();
+            if (in.read() == 0) { // isLeaf
+                isLeaf = false;
+            } else {
+                isLeaf = true;
+                incLeafsCounter(+1);
+            }
+            if (size < 0) {
+                throw new IOException("Size (number of arcs) can not be negative");
+            }
+            arc.clear();
+            for (int iter = 0; iter < size; iter++) {
+                char symbol = (char) in.read();
+                Node target = new Node(symbol, this);
+                target.deserialize(in);
+                incLeafsCounter(+target.cntLeafsInSubTree);
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Node)) {
+                return false;
+            }
+            Node other = (Node) obj;
+            if ((cntLeafsInSubTree != other.cntLeafsInSubTree) ||
+                    (parentChar != other.parentChar) ||
+                    (isLeaf != other.isLeaf)) {
+                return false;
+            }
+            for (var elem : arc.entrySet()) {
+                char symbol = elem.getKey();
+                Node thisTarget = elem.getValue();
+                Node otherTarget = other.next(symbol);
+                if (!thisTarget.equals(otherTarget)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int hashCode =
+                    Integer.hashCode(cntLeafsInSubTree) ^
+                            Character.hashCode(parentChar) ^
+                            Boolean.hashCode(isLeaf) ^
+                            arc.hashCode();
+            for (var elem : arc.entrySet()) {
+                Node target = elem.getValue();
+                hashCode ^= target.hashCode();
+            }
+            return hashCode;
+        }
+
+        public Node next(char symbol) {
+            return arc.get(symbol);
+        }
+
+        private void zeroCntLeafsInSubtree() {
+            cntLeafsInSubTree = 0;
+        }
+
+        public void incLeafsCounter(int diff) {
+            cntLeafsInSubTree += diff;
+        }
+
+        private void addArc(char symbol, Node target) {
+            arc.put(symbol, target);
+        }
+
+        public void delArc(char symbol) {
+            arc.remove(symbol);
+        }
+    }
+
 }
