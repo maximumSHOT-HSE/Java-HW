@@ -1,0 +1,6 @@
+language: java
+os:
+- linux
+env:
+- PROJECT_DIR=hw01/task01.HashTable
+script: cd $PROJECT_DIR && ./gradlew check
