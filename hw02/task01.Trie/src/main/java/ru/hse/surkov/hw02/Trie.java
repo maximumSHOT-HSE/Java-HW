@@ -170,15 +170,12 @@ public final class Trie implements Serializable {
 
         /*
          * Recursive method
-         * <size: int>
+         * <how many arcs: int>
          * <isLeaf: int>
          * <symbol1: int> <target1: Node> ...
          * */
         @Override
         public void serialize(OutputStream out) throws IOException {
-            if (out == null) {
-                return;
-            }
             out.write(arc.size());
             out.write(isLeaf ? 1 : 0);
             for (var elem : arc.entrySet()) {
@@ -189,12 +186,8 @@ public final class Trie implements Serializable {
             }
         }
 
-        // Replaces current Node with data from input stream
         @Override
         public void deserialize(InputStream in) throws IOException {
-            if (in == null) {
-                return;
-            }
             int size = in.read();
             cntLeafsInSubTree = 0;
             if (in.read() == 0) { // isLeaf

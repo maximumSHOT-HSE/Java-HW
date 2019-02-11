@@ -51,8 +51,8 @@ class TrieTest {
     }
 
     /*
-        Non-prefix <=> there are not two strings,
-        such that one is the prefix of the other
+    * Non-prefix <=> there are not two strings,
+    * such that one is the prefix of the other
     * */
     @Test
     void testAddNotNullDifferentNonPrefixStrings() {
@@ -379,10 +379,6 @@ class TrieTest {
         }
     }
 
-    /*
-        One method for testing because of difficulties of an independent testing.
-        More effective way is testing composition of serialize and deserialize
-     */
     @Test
     void testSerializing() {
         for(int i = 1; i <= 100; i++) {
@@ -409,5 +405,111 @@ class TrieTest {
             )
         );
         assertEquals(trie, inputTrie);
+    }
+
+    @Test
+    void testSerializeEmptyTrie() {
+        var receivedOs = new ByteArrayOutputStream();
+        assertDoesNotThrow(() -> trie.serialize(receivedOs));
+        var expectedOs = new ByteArrayOutputStream();
+
+        expectedOs.write(0); // arc size
+        expectedOs.write(0); // isLeaf
+
+        assertArrayEquals(expectedOs.toByteArray(), receivedOs.toByteArray());
+    }
+
+    @Test
+    void testSerializeWithNullArgument() {
+        assertDoesNotThrow(() -> trie.serialize(null));
+    }
+
+    @Test
+    void testDeserializeEmptyTrie() {
+        byte[] inputStreamArray = {0, 0};
+        var is = new ByteArrayInputStream(inputStreamArray);
+        trie.add("abc");
+        assertEquals(1, trie.size());
+        assertDoesNotThrow(() -> trie.deserialize(is));
+        Trie emptyTrie = new Trie();
+        assertEquals(emptyTrie, trie);
+    }
+
+    @Test
+    void testDeserializeWithNullArgument() {
+        var helperTrie = new Trie();
+        for (int i = 0; i < 100; i++) {
+            trie.add(Integer.toString(i));
+            helperTrie.add(Integer.toString(i));
+        }
+        assertEquals(100, trie.size());
+        assertDoesNotThrow(() -> trie.deserialize(null));
+        assertEquals(helperTrie, trie);
+    }
+
+    @Test
+    void testSerialize() {
+        trie.add("ac");
+        trie.add("ad");
+        trie.add("b");
+
+        var receivedOs = new ByteArrayOutputStream();
+        var expectedOs = new ByteArrayOutputStream();
+
+        assertDoesNotThrow(() -> trie.serialize(receivedOs));
+
+        expectedOs.write(2);
+        expectedOs.write(0);
+        expectedOs.write('a');
+        expectedOs.write(2);
+        expectedOs.write(0);
+        expectedOs.write('c');
+        expectedOs.write(0);
+        expectedOs.write(1);
+        expectedOs.write('d');
+        expectedOs.write(0);
+        expectedOs.write(1);
+        expectedOs.write('b');
+        expectedOs.write(0);
+        expectedOs.write(1);
+
+        assertArrayEquals(expectedOs.toByteArray(), receivedOs.toByteArray());
+    }
+
+    @Test
+    void testDeserialize() {
+        var expectedOs = new ByteArrayOutputStream();
+
+        expectedOs.write(3);
+        expectedOs.write(0);
+        expectedOs.write('a');
+        expectedOs.write(2);
+        expectedOs.write(0);
+        expectedOs.write('x');
+        expectedOs.write(0);
+        expectedOs.write(1);
+        expectedOs.write('w');
+        expectedOs.write(1);
+        expectedOs.write(0);
+        expectedOs.write('w');
+        expectedOs.write(0);
+        expectedOs.write(1);
+        expectedOs.write('b');
+        expectedOs.write(0);
+        expectedOs.write(1);
+        expectedOs.write('c');
+        expectedOs.write(0);
+        expectedOs.write(1);
+
+        var helperTrie = new Trie();
+
+        helperTrie.add("ax");
+        helperTrie.add("aww");
+        helperTrie.add("b");
+        helperTrie.add("c");
+
+        assertDoesNotThrow(() -> trie.deserialize(new ByteArrayInputStream(expectedOs.toByteArray())));
+
+        assertEquals(helperTrie, trie);
     }
 }
