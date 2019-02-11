@@ -44,8 +44,8 @@ public class HashTable {
         HashTable doubleHashTable = new HashTable(capacity * 2);
         for (List chain : table) {
             for (var it : chain) {
-                List.ListVertex vertex = (List.ListVertex) it;
-                doubleHashTable.put(vertex.getKey(), vertex.getValue());
+                Pair vertex = (Pair) it;
+                doubleHashTable.put(vertex.first, vertex.second);
             }
         }
         copy(doubleHashTable);

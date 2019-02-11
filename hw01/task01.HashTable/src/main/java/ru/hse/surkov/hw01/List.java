@@ -26,38 +26,10 @@ public class List implements Iterable {
         };
     }
 
-    public static class ListVertex {
-        private String key;
-        private String value;
-
-        public ListVertex(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-    }
-
-    private ListVertex[] list;
-    private int listSize;
-    private int listCapacity;
     private static final int START_CAPACITY = 10;
-
-    public List() {
-        listSize = 0;
-        listCapacity = START_CAPACITY;
-        list = new ListVertex[listCapacity];
-    }
+    private Pair[] list = new Pair[START_CAPACITY];
+    private int listSize;
+    private int listCapacity = START_CAPACITY;
 
     private int size() {
         return listSize;
@@ -65,10 +37,6 @@ public class List implements Iterable {
 
     private int capacity() {
         return listCapacity;
-    }
-
-    public ListVertex[] getRecords() {
-        return Arrays.copyOf(list, listSize);
     }
 
     public boolean contains(String key) {
@@ -86,8 +54,8 @@ public class List implements Iterable {
             return null;
         }
         for (int i = 0; i < size(); i++) {
-            if (list[i].getKey().equals(key)) {
-                return list[i].getValue();
+            if (list[i].first.equals(key)) {
+                return list[i].second;
             }
         }
         return null;
@@ -117,16 +85,16 @@ public class List implements Iterable {
             throw new IllegalArgumentException("value can not be null");
         }
         for (int i = 0; i < size(); i++) {
-            if (list[i].getKey().equals(key)) {
-                String previousValue = list[i].getValue();
-                list[i].setValue(value);
+            if (list[i].first.equals(key)) {
+                String previousValue = list[i].second;
+                list[i].second = value;
                 return previousValue;
             }
         }
         if (size() == capacity()) {
             reserve(capacity() * 2);
         }
-        list[listSize++] = new ListVertex(key, value);
+        list[listSize++] = new Pair(key, value);
         return null;
     }
 
@@ -141,13 +109,13 @@ public class List implements Iterable {
             return null;
         }
         for (int i = 0; i < size(); i++) {
-            if (list[i].getKey().equals(key)) {
+            if (list[i].first.equals(key)) {
                 // swap(list[i], list.back()) with delete list.back()
-                ListVertex bufVertex = list[i];
+                var bufVertex = list[i];
                 list[i] = list[size() - 1];
                 list[size() - 1] = null;
                 listSize--;
-                return bufVertex.getValue();
+                return bufVertex.second;
             }
         }
         return null;
