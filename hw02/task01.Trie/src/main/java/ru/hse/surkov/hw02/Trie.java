@@ -232,11 +232,10 @@ public final class Trie implements Serializable {
 
         @Override
         public int hashCode() {
-            int hashCode =
-                    Integer.hashCode(cntLeafsInSubTree) ^
-                            Character.hashCode(parentChar) ^
-                            Boolean.hashCode(isLeaf) ^
-                            arc.hashCode();
+            int hashCode = Integer.hashCode(cntLeafsInSubTree) ^
+                    Character.hashCode(parentChar) ^
+                    Boolean.hashCode(isLeaf) ^
+                    arc.hashCode();
             for (var elem : arc.entrySet()) {
                 Node target = elem.getValue();
                 hashCode ^= target.hashCode();
@@ -244,11 +243,11 @@ public final class Trie implements Serializable {
             return hashCode;
         }
 
-        Node next(char symbol) {
+        private Node next(char symbol) {
             return arc.get(symbol);
         }
 
-        void incLeafsCounter(int diff) {
+        private void incLeafsCounter(int diff) {
             cntLeafsInSubTree += diff;
         }
 
@@ -256,9 +255,8 @@ public final class Trie implements Serializable {
             arc.put(symbol, target);
         }
 
-        void delArc(char symbol) {
+        private void delArc(char symbol) {
             arc.remove(symbol);
         }
     }
-
 }
