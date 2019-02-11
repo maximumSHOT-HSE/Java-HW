@@ -3,5 +3,5 @@ jdk: oraclejdk11
 os:
 - linux
 env:
-- PROJECT_DIR=hw02/task01.HashTabletask01.Trie
+- PROJECT_DIR=hw02/task01.Trie
 script: cd $PROJECT_DIR && ./gradlew check
