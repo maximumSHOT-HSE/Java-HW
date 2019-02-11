@@ -116,12 +116,18 @@ public final class Trie implements Serializable {
     /** {@link Serializable#serialize(OutputStream)} */
     @Override
     public void serialize(OutputStream out) throws IOException {
+        if (out == null) {
+            return;
+        }
         root.serialize(out);
     }
 
     /** {@link Serializable#deserialize(InputStream)} */
     @Override
     public void deserialize(InputStream in) throws IOException {
+        if (in == null) {
+            return;
+        }
         Node inputRoot = new Node();
         inputRoot.deserialize(in);
         root = inputRoot;
@@ -149,11 +155,11 @@ public final class Trie implements Serializable {
         private char parentChar;
         private boolean isLeaf;
 
-        public Node() {
+        Node() {
             arc = new HashMap<>();
         }
 
-        public Node(char symbol, Node parent) {
+        Node(char symbol, Node parent) {
             cntLeafsInSubTree = 0;
             arc = new HashMap<>();
             this.parent = parent;
@@ -170,6 +176,9 @@ public final class Trie implements Serializable {
          * */
         @Override
         public void serialize(OutputStream out) throws IOException {
+            if (out == null) {
+                return;
+            }
             out.write(arc.size());
             out.write(isLeaf ? 1 : 0);
             for (var elem : arc.entrySet()) {
@@ -183,6 +192,9 @@ public final class Trie implements Serializable {
         // Replaces current Node with data from input stream
         @Override
         public void deserialize(InputStream in) throws IOException {
+            if (in == null) {
+                return;
+            }
             int size = in.read();
             cntLeafsInSubTree = 0;
             if (in.read() == 0) { // isLeaf
@@ -239,11 +251,11 @@ public final class Trie implements Serializable {
             return hashCode;
         }
 
-        public Node next(char symbol) {
+        Node next(char symbol) {
             return arc.get(symbol);
         }
 
-        public void incLeafsCounter(int diff) {
+        void incLeafsCounter(int diff) {
             cntLeafsInSubTree += diff;
         }
 
@@ -251,7 +263,7 @@ public final class Trie implements Serializable {
             arc.put(symbol, target);
         }
 
-        public void delArc(char symbol) {
+        void delArc(char symbol) {
             arc.remove(symbol);
         }
     }
