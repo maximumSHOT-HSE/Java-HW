@@ -10,7 +10,7 @@ import java.util.HashMap;
  * A tree with symbols on edges
  * Data structure does not contain null's
  * */
-public class Trie implements Serializable {
+public final class Trie implements Serializable {
 
     private Node root = new Node();
 
