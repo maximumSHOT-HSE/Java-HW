@@ -150,7 +150,7 @@ public final class Trie implements Serializable {
     private class Node implements Serializable {
 
         private int subtreeLeafsCount;
-        private HashMap<Character, Node> arcs = new HashMap<>();
+        private HashMap<Character, Node> arcsToChildren = new HashMap<>();
         private Node parent;
         private char parentChar;
         private boolean isLeaf;
@@ -166,19 +166,19 @@ public final class Trie implements Serializable {
         }
 
         /*
-         * Recursive method
-         * <how many arcs: int>
-         * <isLeaf: int>
-         * <symbol1: int> <target1: Node> ...
+         * Serializing of Node in following way:
+         * amount of outgoing arcs to children (int),
+         * flag, which shows whether current node is leaf or not (boolean)
+         * list of outgoing symbols and similar description of children (symbol1, (...children1...), ...)
          * */
         @Override
         public void serialize(OutputStream out) throws IOException {
             if (out == null) {
                 throw new IllegalArgumentException("Output stream for serializing must not be null");
             }
-            out.write(arcs.size());
+            out.write(arcsToChildren.size());
             out.write(isLeaf ? 1 : 0);
-            for (var elem : arcs.entrySet()) {
+            for (var elem : arcsToChildren.entrySet()) {
                 char symbol = elem.getKey();
                 Node target = elem.getValue();
                 out.write(symbol);
@@ -200,9 +200,9 @@ public final class Trie implements Serializable {
                 incLeafsCounter(+1);
             }
             if (size < 0) {
-                throw new IOException("Size (number of arcs) can not be negative");
+                throw new IOException("Size (number of arcsToChildren) can not be negative");
             }
-            arcs.clear();
+            arcsToChildren.clear();
             for (int iter = 0; iter < size; iter++) {
                 char symbol = (char) in.read();
                 Node target = new Node(symbol, this);
@@ -222,7 +222,7 @@ public final class Trie implements Serializable {
                     (isLeaf != other.isLeaf)) {
                 return false;
             }
-            for (var elem : arcs.entrySet()) {
+            for (var elem : arcsToChildren.entrySet()) {
                 char symbol = elem.getKey();
                 Node thisTarget = elem.getValue();
                 Node otherTarget = other.next(symbol);
@@ -238,8 +238,8 @@ public final class Trie implements Serializable {
             int hashCode = Integer.hashCode(subtreeLeafsCount) ^
                     Character.hashCode(parentChar) ^
                     Boolean.hashCode(isLeaf) ^
-                    arcs.hashCode();
-            for (var elem : arcs.entrySet()) {
+                    arcsToChildren.hashCode();
+            for (var elem : arcsToChildren.entrySet()) {
                 Node target = elem.getValue();
                 hashCode ^= target.hashCode();
             }
@@ -247,7 +247,7 @@ public final class Trie implements Serializable {
         }
 
         private Node next(char symbol) {
-            return arcs.get(symbol);
+            return arcsToChildren.get(symbol);
         }
 
         private void incLeafsCounter(int diff) {
@@ -255,11 +255,11 @@ public final class Trie implements Serializable {
         }
 
         private void addArc(char symbol, Node target) {
-            arcs.put(symbol, target);
+            arcsToChildren.put(symbol, target);
         }
 
         private void delArc(char symbol) {
-            arcs.remove(symbol);
+            arcsToChildren.remove(symbol);
         }
     }
 }
