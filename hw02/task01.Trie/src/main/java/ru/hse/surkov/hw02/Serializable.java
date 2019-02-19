@@ -22,7 +22,7 @@ public interface Serializable {
     
     /**
      * Replaces current representative of the class with data from input stream.
-     * In case of in == null nothing will happen.
+     * In case of input stream is null nothing will happen.
      * @throws IOException if there is IO problems during retrieving
      * */
     void deserialize(InputStream in) throws IOException;
