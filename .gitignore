@@ -8,3 +8,4 @@ out/
 uiDesigner.xml
 build/
 *.iml
+**/.idea/*
