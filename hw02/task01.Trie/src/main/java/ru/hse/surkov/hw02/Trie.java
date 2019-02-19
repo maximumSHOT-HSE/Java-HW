@@ -150,21 +150,18 @@ public final class Trie implements Serializable {
     private class Node implements Serializable {
 
         private int subtreeLeafsCount;
-        private HashMap<Character, Node> arcs;
+        private HashMap<Character, Node> arcs = new HashMap<>();
         private Node parent;
         private char parentChar;
         private boolean isLeaf;
 
         Node() {
-            arcs = new HashMap<>();
+
         }
 
         Node(char symbol, Node parent) {
-            subtreeLeafsCount = 0;
-            arcs = new HashMap<>();
             this.parent = parent;
             parentChar = symbol;
-            isLeaf = false;
             parent.addArc(symbol, this);
         }
 
