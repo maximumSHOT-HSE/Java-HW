@@ -117,7 +117,7 @@ public final class Trie implements Serializable {
     @Override
     public void serialize(OutputStream out) throws IOException {
         if (out == null) {
-            return;
+            throw new IllegalArgumentException("Output stream for serializing must not be null");
         }
         root.serialize(out);
     }
@@ -126,7 +126,7 @@ public final class Trie implements Serializable {
     @Override
     public void deserialize(InputStream in) throws IOException {
         if (in == null) {
-            return;
+            throw new IllegalArgumentException("Input stream for deserializing must not be null");
         }
         Node inputRoot = new Node();
         inputRoot.deserialize(in);
@@ -176,6 +176,9 @@ public final class Trie implements Serializable {
          * */
         @Override
         public void serialize(OutputStream out) throws IOException {
+            if (out == null) {
+                throw new IllegalArgumentException("Output stream for serializing must not be null");
+            }
             out.write(arc.size());
             out.write(isLeaf ? 1 : 0);
             for (var elem : arc.entrySet()) {
@@ -188,6 +191,9 @@ public final class Trie implements Serializable {
 
         @Override
         public void deserialize(InputStream in) throws IOException {
+            if (in == null) {
+                throw new IllegalArgumentException("Input stream for deserializing must not be null");
+            }
             int size = in.read();
             cntLeafsInSubTree = 0;
             if (in.read() == 0) { // isLeaf

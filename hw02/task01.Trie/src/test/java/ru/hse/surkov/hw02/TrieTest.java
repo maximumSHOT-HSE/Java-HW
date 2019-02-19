@@ -421,7 +421,7 @@ class TrieTest {
 
     @Test
     void testSerializeWithNullArgument() {
-        assertDoesNotThrow(() -> trie.serialize(null));
+        assertThrows(IllegalArgumentException.class, () -> trie.serialize(null));
     }
 
     @Test
@@ -443,7 +443,7 @@ class TrieTest {
             helperTrie.add(Integer.toString(i));
         }
         assertEquals(100, trie.size());
-        assertDoesNotThrow(() -> trie.deserialize(null));
+        assertThrows(IllegalArgumentException.class, () -> trie.deserialize(null));
         assertEquals(helperTrie, trie);
     }
 
