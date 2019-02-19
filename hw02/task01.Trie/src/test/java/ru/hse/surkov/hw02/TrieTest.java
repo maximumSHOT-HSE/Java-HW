@@ -37,7 +37,7 @@ class TrieTest {
     @Test
     void testAddSymbolsWithBigOrdCode() {
         char c = Character.MAX_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c--) {
+        for (int i = 0; i < 100; i++, c--) {
             assertTrue(trie.add(Character.toString(c)));
         }
     }
@@ -45,7 +45,7 @@ class TrieTest {
     @Test
     void testAddSymbolsWithSmallOrdCode() {
         char c = Character.MIN_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c++) {
+        for (int i = 0; i < 100; i++, c++) {
             assertTrue(trie.add(Character.toString(c)));
         }
     }
@@ -102,15 +102,15 @@ class TrieTest {
     @Test
     void testContainsSymbolsWithBigOrdCode() {
         char c = Character.MAX_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c--) {
+        for (int i = 0; i < 100; i++, c--) {
             assertTrue(trie.add(Character.toString(c)));
         }
         c = Character.MAX_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c--) {
+        for (int i = 0; i < 100; i++, c--) {
             assertTrue(trie.contains(Character.toString(c)));
         }
         c = Character.MIN_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c++) {
+        for (int i = 0; i < 100; i++, c++) {
             assertFalse(trie.contains(Character.toString(c)));
         }
     }
@@ -118,15 +118,15 @@ class TrieTest {
     @Test
     void testContainsSymbolsWithSmallOrdCode() {
         char c = Character.MIN_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c++) {
+        for (int i = 0; i < 100; i++, c++) {
             assertTrue(trie.add(Character.toString(c)));
         }
         c = Character.MIN_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c++) {
+        for (int i = 0; i < 100; i++, c++) {
             assertTrue(trie.contains(Character.toString(c)));
         }
         c = Character.MAX_VALUE;
-        for (int cntSymbols = 0; cntSymbols < 100; cntSymbols++, c--) {
+        for (int i = 0; i < 100; i++, c--) {
             assertFalse(trie.contains(Character.toString(c)));
         }
     }
