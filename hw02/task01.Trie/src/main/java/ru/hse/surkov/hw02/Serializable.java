@@ -4,6 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Interface, that provides the contracts
+ * (methods) for serializability:
+ * object state conversion
+ * into a sequence of bytes
+ * and Vice versa.
+ * */
 public interface Serializable {
 
     /**
