@@ -203,7 +203,7 @@ public final class Trie implements Serializable {
                 throw new IOException("Size (number of arcsToChildren) can not be negative");
             }
             arcsToChildren.clear();
-            for (int iter = 0; iter < size; iter++) {
+            for (int i = 0; i < size; i++) {
                 char symbol = (char) in.read();
                 Node target = new Node(symbol, this);
                 target.deserialize(in);
