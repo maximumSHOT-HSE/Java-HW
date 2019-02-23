@@ -2,8 +2,6 @@ package ru.hse.surkov.hw04;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,6 +9,10 @@ public final class Main {
 
     private Main() {
 
+    }
+
+    static {
+//        LogManager.getLogManager().reset(); // disable all loggers (for testing UI)
     }
 
     @NotNull private static final String COMMAND_INTERFACE =
@@ -35,18 +37,22 @@ public final class Main {
     @NotNull private static String HAS_BEEN_CHANGED = "has been changed";
     @NotNull private static String PRINTING = "Printing...";
     @NotNull private static String DONE = "done";
-    @NotNull private static String UNSUPPOERTED_COMMAND = "Unsupported command. Please, try again!";
+    @NotNull private static String UNSUPPORTED_COMMAND = "Unsupported command. Please, try again!";
     @NotNull private static String NUMBER_OF_RECORDS = "number of records";
+    @NotNull private static String RECORD = "record";
+    @NotNull private static String RECORD_ALREADY_EXISTS = RECORD + " already exists";
+    @NotNull private static String AMOUNT = "amount";
+    @NotNull private static String DOES_NOT_EXISTS = RECORD + " does not exists";
 
     private enum CommandInterfaceStatus {FINISHED, IN_PROCESS, READY_TO_WORK};
     @NotNull private static CommandInterfaceStatus commandInterfaceStatus = CommandInterfaceStatus.READY_TO_WORK;
     @NotNull private static Scanner inputScanner = new Scanner(System.in);
-    @NotNull private static PhoneBook phoneBook = new PhoneBook();
+    @NotNull private static PhoneBook phoneBook;
 
     public static void main(String[] args) {
         System.out.println(APPLICATION_NAME + "\n" + DESCIPTION + "\n" + COMMAND_INTERFACE + "\n");
         commandInterfaceStatus = CommandInterfaceStatus.IN_PROCESS;
-        setPhoneBookName();
+        createPhoneBook();
         while (commandInterfaceStatus != CommandInterfaceStatus.FINISHED) {
             int queryType;
             String nextQuery;
@@ -54,7 +60,7 @@ public final class Main {
                 nextQuery = inputScanner.next();
                 queryType = Integer.parseInt(nextQuery);
             } catch (NumberFormatException ignored) {
-                System.out.println(UNSUPPOERTED_COMMAND);
+                System.out.println(UNSUPPORTED_COMMAND);
                 continue;
             }
             if (queryType == 0) { // exit
@@ -74,15 +80,15 @@ public final class Main {
             } else if (queryType == 7) { // print all records
                 printAllRecords();
             } else { // unsupported
-                System.out.println(UNSUPPOERTED_COMMAND);
+                System.out.println(UNSUPPORTED_COMMAND);
             }
         }
     }
 
-    public static void setPhoneBookName() {
+    public static void createPhoneBook() {
         System.out.print("Enter phone book global name: ");
         String phoneBookName = inputScanner.next();
-        phoneBook.setPhoneBookName(phoneBookName);
+        phoneBook = new PhoneBook(phoneBookName);
         System.out.println(DONE);
     }
 
@@ -94,16 +100,20 @@ public final class Main {
         System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
         String name = inputScanner.next();
         String phoneNumber = inputScanner.next();
-        phoneBook.addRecord(name, phoneNumber);
-        System.out.println(DONE);
+        if (phoneBook.addRecord(name, phoneNumber)) {
+            System.out.println(DONE);
+        } else {
+            System.out.println(RECORD_ALREADY_EXISTS);
+        }
     }
 
     private static void findPhoneNumbersByName() {
         System.out.print(ENTER_NAME);
         String name = inputScanner.next();
-        List<String> phoneNumbers = phoneBook.getPhoneNumbersByName(name);
+        List<Record> phoneNumbers = phoneBook.getPhoneNumbersByName(name);
+        System.out.println(AMOUNT + " of " + FIELD_PHONE_NUMBER + "s: " + phoneNumbers.size());
         for (int i = 0; i < phoneNumbers.size(); i++) {
-            System.out.println((i + 1) + ". " + phoneNumbers.get(i));
+            System.out.println((i + 1) + ". " + phoneNumbers.get(i).getPhoneNumber());
         }
         System.out.println(DONE);
     }
@@ -111,21 +121,24 @@ public final class Main {
     private static void findNamesByPhoneNumber() {
         System.out.print(ENTER_PHONE_NUMBER);
         String phoneNumber = inputScanner.next();
-        List<String> names = phoneBook.getNamesByPhoneNumber(phoneNumber);
+        List<Record> names = phoneBook.getNamesByPhoneNumber(phoneNumber);
+        System.out.println(AMOUNT + " of " + FIELD_NAME + "s: " + names.size());
         for (int i = 0; i < names.size(); i++) {
-            System.out.println((i + 1) + ". " + names.get(i));
+            System.out.println((i + 1) + ". " + names.get(i).getName());
         }
         System.out.println(DONE);
     }
 
     private static void deleteRecord() {
-        System.out.println(ENTER_NAME);
+        System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
         String name = inputScanner.next();
-        System.out.println(ENTER_PHONE_NUMBER);
         String phoneNumber = inputScanner.next();
         System.out.println(DELETING_RECORD);
-        phoneBook.deleteRecord(name, phoneNumber);
-        System.out.println(DONE);
+        if (phoneBook.deleteRecord(name, phoneNumber)) {
+            System.out.println(DONE);
+        } else {
+            System.out.println(DOES_NOT_EXISTS);
+        }
     }
 
     private static void changeFieldNameOfRecord() {
@@ -135,8 +148,11 @@ public final class Main {
         System.out.println(ENTER + " new " + FIELD_NAME + ": ");
         String newName = inputScanner.next();
 
-        phoneBook.changeName(name, phoneNumber, newName);
-        System.out.println(FIELD_NAME + " " + HAS_BEEN_CHANGED);
+        if (phoneBook.changeName(name, phoneNumber, newName)) {
+            System.out.println(FIELD_NAME + " " + HAS_BEEN_CHANGED);
+        } else {
+            System.out.println(RECORD_ALREADY_EXISTS);
+        }
     }
 
     private static void changeFieldPhoneNumberOfRecord() {
@@ -146,8 +162,11 @@ public final class Main {
         System.out.println(ENTER + " new " + FIELD_PHONE_NUMBER + ": ");
         String newPhoneNumber = inputScanner.next();
 
-        phoneBook.changePhoneNumber(name, phoneNumber, newPhoneNumber);
-        System.out.println(FIELD_PHONE_NUMBER + " " + HAS_BEEN_CHANGED);
+        if (phoneBook.changePhoneNumber(name, phoneNumber, newPhoneNumber)) {
+            System.out.println(FIELD_PHONE_NUMBER + " " + HAS_BEEN_CHANGED);
+        } else {
+            System.out.println(RECORD_ALREADY_EXISTS);
+        }
     }
 
     private static void printAllRecords() {
@@ -157,5 +176,6 @@ public final class Main {
         for (int i = 0; i < allRecords.size(); i++) {
             System.out.println((i + 1) + ". " + allRecords.get(i));
         }
+        System.out.println(DONE);
     }
 }

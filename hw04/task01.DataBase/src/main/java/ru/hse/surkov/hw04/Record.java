@@ -1,11 +1,22 @@
 package ru.hse.surkov.hw04;
 
+import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
+import xyz.morphia.annotations.Entity;
+import xyz.morphia.annotations.Id;
+import xyz.morphia.annotations.Indexed;
 
+@Entity("user")
 public class Record {
 
-    @NotNull private String name;
-    @NotNull private String phoneNumber;
+    @Id private ObjectId id;
+    @Indexed @NotNull private String name;
+    @Indexed @NotNull private String phoneNumber;
+
+    public Record() {
+        name = "name";
+        phoneNumber = "phoneNumber";
+    }
 
     public Record(@NotNull String name, @NotNull String phoneNumber) {
         this.name = name;
