@@ -2,33 +2,38 @@ package ru.hse.surkov.hw04;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneBook {
 
-    public void setPhoneBookName(@NotNull String phoneBookName) {
+    private List<Record> l = new ArrayList<>();
 
+    public void setPhoneBookName(@NotNull String phoneBookName) {
     }
 
     public void addRecord(@NotNull String name, @NotNull String phoneNumber) {
-
+        l.add(new Record(name, phoneNumber));
     }
 
-    public List<String> getPhoneNumbersByName(String name) {
+    @NotNull public List<String> getPhoneNumbersByName(@NotNull String name) {
         return null;
     }
 
-    public List<String> getNamesByPhoneNumber(String phoneNumber) {
+    @NotNull public List<String> getNamesByPhoneNumber(@NotNull String phoneNumber) {
         return null;
     }
 
-    public void deleteRecord(String name, String phoneNumber) {
+    public void deleteRecord(@NotNull String name, @NotNull String phoneNumber) {
     }
 
-    public void changeName(String name, String phoneNumber, String newName) {
+    public void changeName(@NotNull String name, @NotNull String phoneNumber, @NotNull String newName) {
     }
 
-    public void changePhoneNumber(String name, String phoneNumber, String newPhoneNumber) {
+    public void changePhoneNumber(@NotNull String name, @NotNull String phoneNumber, @NotNull String newPhoneNumber) {
+    }
 
+    @NotNull public List<Record> getAllRecords() {
+        return l;
     }
 }

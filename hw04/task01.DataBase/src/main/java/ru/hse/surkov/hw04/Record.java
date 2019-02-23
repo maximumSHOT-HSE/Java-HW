@@ -3,6 +3,7 @@ package ru.hse.surkov.hw04;
 import org.jetbrains.annotations.NotNull;
 
 public class Record {
+
     @NotNull private String name;
     @NotNull private String phoneNumber;
 
@@ -25,5 +26,10 @@ public class Record {
 
     public void setPhoneNumber(@NotNull String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "(name: " + name + ", phone: " + phoneNumber + ")";
     }
 }
