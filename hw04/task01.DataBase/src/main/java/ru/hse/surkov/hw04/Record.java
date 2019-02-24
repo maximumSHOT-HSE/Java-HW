@@ -6,6 +6,11 @@ import xyz.morphia.annotations.Entity;
 import xyz.morphia.annotations.Id;
 import xyz.morphia.annotations.Indexed;
 
+/**
+ * Data structure, which consists of two fields:
+ * user name and user's phone number. Record designed for
+ * storing information in mongodb (morphia)
+ */
 @Entity("user")
 public class Record {
 
@@ -13,6 +18,7 @@ public class Record {
     @Indexed @NotNull private String name;
     @Indexed @NotNull private String phoneNumber;
 
+    // Morphia needs an explicit default constructor
     public Record() {
         name = "name";
         phoneNumber = "phoneNumber";

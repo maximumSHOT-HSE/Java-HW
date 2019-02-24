@@ -9,17 +9,36 @@ import xyz.morphia.query.UpdateOperations;
 
 import java.util.List;
 
+/**
+ * Data structure developed as
+ * a shell with user friendly interface,
+ * which encapsulates work related with
+ * storing {@link Record}.
+ * Two records are equal if and only if
+ * their names and phone numbers are equal.
+ * Data structure does not support nulls
+ * as name or phone number values.
+ * */
 public class PhoneBook {
 
     @NotNull private Morphia morphia = new Morphia();
     @NotNull private final Datastore datastore;
 
+    /*
+    * Initializing data base by its name.
+    * If such data base has already been,
+    * then no new copy will be created.
+    * Otherwise, new instance will be created
+    * and will be initialized with given phone
+    * book name.
+    * */
     public PhoneBook(@NotNull String phoneBookName) {
         morphia.mapPackage(Record.class.getPackageName());
         datastore = morphia.createDatastore(new MongoClient(), phoneBookName);
         datastore.ensureIndexes();
     }
 
+    // Constructs query for finding Record in data base by name and phone number
     @NotNull private Query<Record> getFindQuery(@NotNull String name, @NotNull String phoneNumber) {
         Query<Record> query = datastore.createQuery(Record.class);
         query.and(
@@ -29,10 +48,17 @@ public class PhoneBook {
         return query;
     }
 
+    /** Method checks if there exists record with given name and phone numbers */
     public boolean contains(@NotNull String name, @NotNull String phoneNumber) {
         return !getFindQuery(name, phoneNumber).asList().isEmpty();
     }
 
+    /**
+     * Method checks if there exists record with given number and if there was no
+     * such record then it will be created and added to the data base.
+     * @return true if there was no such record and new record has been created successfully,
+     * otherwise false will be returned.
+     * */
     public boolean addRecord(@NotNull String name, @NotNull String phoneNumber) {
         if (contains(name, phoneNumber)) {
             return false;
@@ -42,6 +68,10 @@ public class PhoneBook {
         return true;
     }
 
+    /**
+     * Method finds all records with given name
+     * @return List of retrieved records
+     * */
     @NotNull public List<Record> getPhoneNumbersByName(@NotNull String name) {
         return datastore
                 .createQuery(Record.class)
@@ -50,6 +80,10 @@ public class PhoneBook {
                 .asList();
     }
 
+    /**
+     * Method finds all records with given phone number
+     * @return List of retrieved records
+     * */
     @NotNull public List<Record> getNamesByPhoneNumber(@NotNull String phoneNumber) {
         return datastore
                 .createQuery(Record.class)
@@ -58,6 +92,12 @@ public class PhoneBook {
                 .asList();
     }
 
+    /**
+     * Method checks if there exists record with given number and if there was
+     * such record then it will be deleted from data base.
+     * @return true if there was such record and it has been deleted successfully,
+     * otherwise false will be returned.
+     * */
     public boolean deleteRecord(@NotNull String name, @NotNull String phoneNumber) {
         if (!contains(name, phoneNumber)) {
             return false;
@@ -66,6 +106,12 @@ public class PhoneBook {
         return true;
     }
 
+    /**
+     * Method checks if there exists record with given number and if there was
+     * such record then it's name will be updated and changes will be stored in data base.
+     * @return true if there was such record and it has been updated successfully,
+     * otherwise false will be returned.
+     * */
     public boolean changeName(@NotNull String name, @NotNull String phoneNumber, @NotNull String newName) {
         if (contains(newName, phoneNumber)) {
             return false;
@@ -77,6 +123,12 @@ public class PhoneBook {
         return true;
     }
 
+    /**
+     * Method checks if there exists record with given number and if there was
+     * such record then it's phone number will be updated and changes will be stored in data base.
+     * @return true if there was such record and it has been updated successfully,
+     * otherwise false will be returned.
+     * */
     public boolean changePhoneNumber(@NotNull String name, @NotNull String phoneNumber, @NotNull String newPhoneNumber) {
         if (contains(name, newPhoneNumber)) {
             return false;
@@ -88,6 +140,10 @@ public class PhoneBook {
         return true;
     }
 
+    /**
+     * Method finds all records in data base
+     * @return List of retrieved records
+     * */
     @NotNull public List<Record> getAllRecords() {
         return datastore.createQuery(Record.class).asList();
     }
