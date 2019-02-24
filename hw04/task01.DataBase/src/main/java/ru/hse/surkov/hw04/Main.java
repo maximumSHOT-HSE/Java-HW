@@ -11,10 +11,6 @@ public final class Main {
 
     }
 
-    static {
-//        LogManager.getLogManager().reset(); // disable all loggers (for testing UI)
-    }
-
     @NotNull private static final String COMMAND_INTERFACE =
             "0 - exit\n" +
             "1 - add record (name and phone number)\n" +
@@ -88,7 +84,7 @@ public final class Main {
     public static void createPhoneBook() {
         System.out.print("Enter phone book global name: ");
         String phoneBookName = inputScanner.next();
-        phoneBook = new PhoneBook(phoneBookName);
+        phoneBook = new PhoneBook(phoneBookName, false);
         System.out.println(DONE);
     }
 

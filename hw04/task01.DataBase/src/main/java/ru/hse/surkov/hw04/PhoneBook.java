@@ -30,12 +30,17 @@ public class PhoneBook {
     * then no new copy will be created.
     * Otherwise, new instance will be created
     * and will be initialized with given phone
-    * book name.
-    * */
-    public PhoneBook(@NotNull String phoneBookName) {
+    * book name. Second argument is the flag which
+    * indicates whether to clear data base
+    * during phone book initialization or not.
+     * */
+    public PhoneBook(@NotNull String phoneBookName, boolean clearDataBase) {
         morphia.mapPackage(Record.class.getPackageName());
         datastore = morphia.createDatastore(new MongoClient(), phoneBookName);
         datastore.ensureIndexes();
+        if (clearDataBase) {
+            this.clearDataBase();
+        }
     }
 
     // Constructs query for finding Record in data base by name and phone number
@@ -146,5 +151,10 @@ public class PhoneBook {
      * */
     @NotNull public List<Record> getAllRecords() {
         return datastore.createQuery(Record.class).asList();
+    }
+
+    // Delete all records from data base
+    private void clearDataBase() {
+        datastore.getDB().dropDatabase();
     }
 }

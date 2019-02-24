@@ -33,16 +33,8 @@ public class Record {
         return name;
     }
 
-    public void setName(@NotNull String name) {
-        this.name = name;
-    }
-
     @NotNull public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public void setPhoneNumber(@NotNull String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     @Override
