@@ -36,7 +36,7 @@ public class PhoneBook {
      * */
     public PhoneBook(@NotNull String phoneBookName, boolean clearDataBase) {
         Morphia morphia = new Morphia();
-        morphia.mapPackage("ru.hse.surkov.hw04.Record");
+        morphia.mapPackage("ru.hse.surkov.hw04");
         datastore = morphia.createDatastore(new MongoClient(), phoneBookName);
         if (clearDataBase) {
             this.clearDataBase();
