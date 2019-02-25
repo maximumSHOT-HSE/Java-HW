@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PhoneBookTest {
 
-    private PhoneBook phoneBook;
+    private final PhoneBook phoneBook = new PhoneBook("TEST", true);
 
     @BeforeEach
     void setUp() {
-        phoneBook = new PhoneBook("TEST", true);
+        phoneBook.clearDataBase();
     }
 
     @Test

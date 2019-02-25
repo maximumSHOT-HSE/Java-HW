@@ -162,8 +162,8 @@ public class PhoneBook {
         return datastore.createQuery(Record.class).asList();
     }
 
-    // Delete all records from data base
-    private void clearDataBase() {
+    // Delete all records from data base (package private for testing)
+    void clearDataBase() {
         datastore.getDB().dropDatabase();
     }
 }

@@ -63,6 +63,11 @@ public class Record {
         return result;
     }
 
+    @Override
+    public int hashCode() {
+        return name.hashCode() ^ phoneNumber.hashCode();
+    }
+
     public boolean canEqual(@Nullable Object other) {
         return (other instanceof Record);
     }
