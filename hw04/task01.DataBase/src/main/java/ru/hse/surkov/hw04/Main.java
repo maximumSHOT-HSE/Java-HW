@@ -5,11 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Scanner;
 
-public final class Main {
-
-    private Main() {
-
-    }
+public class Main {
 
     @NotNull private static final String COMMAND_INTERFACE =
             "0 - exit\n" +

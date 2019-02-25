@@ -5,19 +5,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.morphia.annotations.Entity;
 import xyz.morphia.annotations.Id;
-import xyz.morphia.annotations.Indexed;
 
 /**
  * Data structure, which consists of two fields:
  * user name and user's phone number. Record designed for
  * storing information in mongodb (morphia)
  */
-@Entity("user")
+@Entity
 public class Record {
 
     @Id private ObjectId id;
-    @Indexed @NotNull private String name;
-    @Indexed @NotNull private String phoneNumber;
+    @NotNull private String name;
+    @NotNull private String phoneNumber;
 
     // Morphia needs an explicit default constructor
     public Record() {

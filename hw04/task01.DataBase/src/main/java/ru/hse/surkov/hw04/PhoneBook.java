@@ -36,12 +36,12 @@ public class PhoneBook {
      * */
     public PhoneBook(@NotNull String phoneBookName, boolean clearDataBase) {
         Morphia morphia = new Morphia();
-        morphia.mapPackage("ru.hse.surkov.hw04");
+        morphia.mapPackage("ru.hse.surkov.hw04.Record");
         datastore = morphia.createDatastore(new MongoClient(), phoneBookName);
-        datastore.ensureIndexes();
         if (clearDataBase) {
             this.clearDataBase();
         }
+        datastore.ensureIndexes();
     }
 
     // Constructs query for finding Record in data base by name and phone number

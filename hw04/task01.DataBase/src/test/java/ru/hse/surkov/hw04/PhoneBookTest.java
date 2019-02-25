@@ -15,7 +15,7 @@ class PhoneBookTest {
 
     @BeforeEach
     void setUp() {
-        phoneBook = new PhoneBook("TEST", true);
+        phoneBook = new PhoneBook("TestPhoneBook", true);
     }
 
     @Test
