@@ -1,8 +1,11 @@
-language: java
-jdk: oraclejdk11
-services: mongodb
+language: 
+- java
+jdk: 
+- oraclejdk11
 os:
 - linux
+services: 
+- mongodb
 env:
 - PROJECT_DIR=hw04/task01.DataBase
 script: cd $PROJECT_DIR && ./gradlew check
