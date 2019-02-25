@@ -22,7 +22,6 @@ import java.util.NoSuchElementException;
  * */
 public class PhoneBook {
 
-    @NotNull private Morphia morphia = new Morphia();
     @NotNull private final Datastore datastore;
 
     /*
@@ -36,6 +35,7 @@ public class PhoneBook {
     * during phone book initialization or not.
      * */
     public PhoneBook(@NotNull String phoneBookName, boolean clearDataBase) {
+        Morphia morphia = new Morphia();
         morphia.mapPackage("ru.hse.surkov.hw04");
         datastore = morphia.createDatastore(new MongoClient(), phoneBookName);
         datastore.ensureIndexes();
