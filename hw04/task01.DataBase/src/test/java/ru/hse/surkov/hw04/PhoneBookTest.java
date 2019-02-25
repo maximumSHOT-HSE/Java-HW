@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -126,14 +127,26 @@ class PhoneBookTest {
         for (char name = 'a'; name <= 'h'; name++) {
             for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
                 for (int iter = 0;iter < 3;iter++) {
-                    assertEquals(
-                            iter == 0,
+                    if (iter == 0) {
+                        assertTrue(
                             phoneBook.changeName(
-                                Character.toString(name),
-                                Integer.toString(phoneNumber),
-                                name + "!"
+                                    Character.toString(name),
+                                    Integer.toString(phoneNumber),
+                                    name + "!"
                             )
-                    );
+                        );
+                    } else {
+                        char finalName = name;
+                        int finalPhoneNumber = phoneNumber;
+                        assertThrows(
+                            NoSuchElementException.class,
+                            () -> phoneBook.changeName(
+                                    Character.toString(finalName),
+                                    Integer.toString(finalPhoneNumber),
+                                    finalName + "!"
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -154,6 +167,28 @@ class PhoneBookTest {
                     );
                 }
             }
+        }
+    }
+
+    @Test
+    void testChangeNameException() {
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0;iter < 3;iter++) {
+                    assertEquals(
+                            iter == 0,
+                            phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
+                    );
+                }
+            }
+        }
+        for (char name = 'i'; name <= 'z'; name++) {
+            char finalName = name;
+            assertThrows(NoSuchElementException.class, () -> phoneBook.changeName(Character.toString(finalName), "1", "aaa"));
+        }
+        for (int phoneNumber = 10; phoneNumber < 20; phoneNumber++) {
+            int finalPhoneNumber = phoneNumber;
+            assertThrows(NoSuchElementException.class, () -> phoneBook.changeName("a", Integer.toString(finalPhoneNumber), "aaa"));
         }
     }
 
@@ -185,14 +220,26 @@ class PhoneBookTest {
         for (char name = 'a'; name <= 'h'; name++) {
             for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
                 for (int iter = 0;iter < 3;iter++) {
-                    assertEquals(
-                        iter == 0,
-                        phoneBook.changePhoneNumber(
-                            Character.toString(name),
-                            Integer.toString(phoneNumber),
-                            phoneNumber + "!"
-                        )
-                    );
+                    if (iter == 0) {
+                        assertTrue(
+                            phoneBook.changePhoneNumber(
+                                    Character.toString(name),
+                                    Integer.toString(phoneNumber),
+                                    phoneNumber + "!"
+                            )
+                        );
+                    } else {
+                        char finalName = name;
+                        int finalPhoneNumber = phoneNumber;
+                        assertThrows(
+                            NoSuchElementException.class,
+                            () -> phoneBook.changePhoneNumber(
+                                    Character.toString(finalName),
+                                    Integer.toString(finalPhoneNumber),
+                                    finalPhoneNumber + "!"
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -213,6 +260,28 @@ class PhoneBookTest {
                     );
                 }
             }
+        }
+    }
+
+    @Test
+    void testChangePhoneNumberException() {
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0;iter < 3;iter++) {
+                    assertEquals(
+                            iter == 0,
+                            phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
+                    );
+                }
+            }
+        }
+        for (char name = 'i'; name <= 'z'; name++) {
+            char finalName = name;
+            assertThrows(NoSuchElementException.class, () -> phoneBook.changePhoneNumber(Character.toString(finalName), "1", "111"));
+        }
+        for (int phoneNumber = 10; phoneNumber < 20; phoneNumber++) {
+            int finalPhoneNumber = phoneNumber;
+            assertThrows(NoSuchElementException.class, () -> phoneBook.changePhoneNumber("a", Integer.toString(finalPhoneNumber), "111"));
         }
     }
 

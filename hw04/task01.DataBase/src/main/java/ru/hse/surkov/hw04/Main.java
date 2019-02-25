@@ -39,6 +39,7 @@ public final class Main {
     @NotNull private static String RECORD_ALREADY_EXISTS = RECORD + " already exists";
     @NotNull private static String AMOUNT = "amount";
     @NotNull private static String DOES_NOT_EXISTS = RECORD + " does not exists";
+    @NotNull private static String FINISHING = "Finishing...";
 
     private enum CommandInterfaceStatus {FINISHED, IN_PROCESS, READY_TO_WORK};
     @NotNull private static CommandInterfaceStatus commandInterfaceStatus = CommandInterfaceStatus.READY_TO_WORK;
@@ -89,6 +90,7 @@ public final class Main {
     }
 
     private static void exit() {
+        System.out.println(FINISHING);
         commandInterfaceStatus = CommandInterfaceStatus.FINISHED;
     }
 
@@ -129,11 +131,13 @@ public final class Main {
         System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
         String name = inputScanner.next();
         String phoneNumber = inputScanner.next();
-        System.out.println(DELETING_RECORD);
-        if (phoneBook.deleteRecord(name, phoneNumber)) {
-            System.out.println(DONE);
-        } else {
+        if (!phoneBook.contains(name, phoneNumber)) {
             System.out.println(DOES_NOT_EXISTS);
+            return;
+        } else {
+            System.out.println(DELETING_RECORD);
+            phoneBook.deleteRecord(name, phoneNumber);
+            System.out.println(DONE);
         }
     }
 
@@ -141,9 +145,12 @@ public final class Main {
         System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
         String name = inputScanner.next();
         String phoneNumber = inputScanner.next();
+        if (!phoneBook.contains(name, phoneNumber)) {
+            System.out.println(DOES_NOT_EXISTS);
+            return;
+        }
         System.out.println(ENTER + " new " + FIELD_NAME + ": ");
         String newName = inputScanner.next();
-
         if (phoneBook.changeName(name, phoneNumber, newName)) {
             System.out.println(FIELD_NAME + " " + HAS_BEEN_CHANGED);
         } else {
@@ -155,9 +162,12 @@ public final class Main {
         System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
         String name = inputScanner.next();
         String phoneNumber = inputScanner.next();
+        if (!phoneBook.contains(name, phoneNumber)) {
+            System.out.println(DOES_NOT_EXISTS);
+            return;
+        }
         System.out.println(ENTER + " new " + FIELD_PHONE_NUMBER + ": ");
         String newPhoneNumber = inputScanner.next();
-
         if (phoneBook.changePhoneNumber(name, phoneNumber, newPhoneNumber)) {
             System.out.println(FIELD_PHONE_NUMBER + " " + HAS_BEEN_CHANGED);
         } else {

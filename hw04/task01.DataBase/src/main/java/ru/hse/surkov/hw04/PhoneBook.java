@@ -8,6 +8,7 @@ import xyz.morphia.query.Query;
 import xyz.morphia.query.UpdateOperations;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Data structure developed as
@@ -116,8 +117,12 @@ public class PhoneBook {
      * such record then it's name will be updated and changes will be stored in data base.
      * @return true if there was such record and it has been updated successfully,
      * otherwise false will be returned.
+     * @throws NoSuchElementException if there was no record in data base to modify
      * */
-    public boolean changeName(@NotNull String name, @NotNull String phoneNumber, @NotNull String newName) {
+    public boolean changeName(@NotNull String name, @NotNull String phoneNumber, @NotNull String newName) throws NoSuchElementException {
+        if (!contains(name, phoneNumber)) {
+            throw new NoSuchElementException("Record (" + name + ", " + phoneNumber + ") does not exists in data base");
+        }
         if (contains(newName, phoneNumber)) {
             return false;
         }
@@ -133,8 +138,12 @@ public class PhoneBook {
      * such record then it's phone number will be updated and changes will be stored in data base.
      * @return true if there was such record and it has been updated successfully,
      * otherwise false will be returned.
+     * @throws NoSuchElementException if there was no record in data base to modify
      * */
-    public boolean changePhoneNumber(@NotNull String name, @NotNull String phoneNumber, @NotNull String newPhoneNumber) {
+    public boolean changePhoneNumber(@NotNull String name, @NotNull String phoneNumber, @NotNull String newPhoneNumber) throws NoSuchElementException {
+        if (!contains(name, phoneNumber)) {
+            throw new NoSuchElementException("Record (" + name + ", " + phoneNumber + ") does not exists in data base");
+        }
         if (contains(name, newPhoneNumber)) {
             return false;
         }
