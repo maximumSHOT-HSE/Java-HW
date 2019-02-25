@@ -3,6 +3,9 @@ package ru.hse.surkov.hw04;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PhoneBookTest {
@@ -211,5 +214,246 @@ class PhoneBookTest {
                 }
             }
         }
+    }
+
+    @Test
+    void testGetAllRecordsSimple() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+                expectedList.add(new Record(sname, sphoneNumber));
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getAllRecords().toArray());
+    }
+
+    @Test
+    void testGetAllRecordsWithDeleteOperations() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+                expectedList.add(new Record(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    continue;
+                }
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                expectedList.remove(new Record(sname, sphoneNumber));
+                assertTrue(phoneBook.deleteRecord(sname, sphoneNumber));
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getAllRecords().toArray());
+    }
+
+    @Test
+    void testGetAllRecordsWithChangeOperations() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+                expectedList.add(new Record(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    continue;
+                }
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                int position = (name - 'a') * 5 + phoneNumber;
+                expectedList.get(position).setName(sname + "!" + sname);
+                expectedList.get(position).setPhoneNumber(sphoneNumber + "?" + sphoneNumber);
+                assertTrue(phoneBook.changeName(sname, sphoneNumber, sname + "!" + sname));
+                assertTrue(phoneBook.changePhoneNumber(sname + "!" + sname, sphoneNumber, sphoneNumber + "?" + sphoneNumber));
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getAllRecords().toArray());
+    }
+
+    @Test
+    void testGetPhoneNumbersByNameSimple() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+                if (sname.equals("a")) {
+                    expectedList.add(new Record(sname, sphoneNumber));
+                }
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getPhoneNumbersByName("a").toArray());
+    }
+
+    @Test
+    void testGetPhoneNumbersByNameWithDeleteOperations() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    continue;
+                }
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.deleteRecord(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    String sname = Character.toString(name);
+                    String sphoneNumber = Integer.toString(phoneNumber);
+                    if (sname.equals("g")) {
+                        expectedList.add(new Record(sname, sphoneNumber));
+                    }
+                }
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getPhoneNumbersByName("g").toArray());
+    }
+
+    @Test
+    void testGetPhoneNumbersByNameWithChangeOperations() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    continue;
+                }
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.changeName(sname, sphoneNumber, sname + "!" + sname));
+                assertTrue(phoneBook.changePhoneNumber(sname + "!" + sname, sphoneNumber, sphoneNumber + "?" + sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                if (!(name % 2 == 0 || phoneNumber % 2 == 1)) {
+                    sname = sname + "!" + sname;
+                    sphoneNumber = sphoneNumber + "?" + sphoneNumber;
+                }
+                if (sname.equals("g!g")) {
+                    expectedList.add(new Record(sname, sphoneNumber));
+                }
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getPhoneNumbersByName("g!g").toArray());
+    }
+
+    @Test
+    void testGetNamesByPhoneNumberSimple() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+                if (sphoneNumber.equals("3")) {
+                    expectedList.add(new Record(sname, sphoneNumber));
+                }
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getNamesByPhoneNumber("3").toArray());
+    }
+
+    @Test
+    void testGetNamesByPhoneNumberWithDeleteOperations() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    continue;
+                }
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.deleteRecord(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    String sname = Character.toString(name);
+                    String sphoneNumber = Integer.toString(phoneNumber);
+                    if (sphoneNumber.equals("2")) {
+                        expectedList.add(new Record(sname, sphoneNumber));
+                    }
+                }
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getNamesByPhoneNumber("2").toArray());
+    }
+
+    @Test
+    void testGetNamesByPhoneNumberWithChangeOperations() {
+        List<Record> expectedList = new ArrayList<>();
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.addRecord(sname, sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                if (name % 2 == 0 || phoneNumber % 2 == 1) {
+                    continue;
+                }
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                assertTrue(phoneBook.changeName(sname, sphoneNumber, sname + "!" + sname));
+                assertTrue(phoneBook.changePhoneNumber(sname + "!" + sname, sphoneNumber, sphoneNumber + "?" + sphoneNumber));
+            }
+        }
+        for (char name = 'a'; name <= 'h'; name++) {
+            for (int phoneNumber = 0; phoneNumber < 5; phoneNumber++) {
+                String sname = Character.toString(name);
+                String sphoneNumber = Integer.toString(phoneNumber);
+                if (!(name % 2 == 0 || phoneNumber % 2 == 1)) {
+                    sname = sname + "!" + sname;
+                    sphoneNumber = sphoneNumber + "?" + sphoneNumber;
+                }
+                if (sphoneNumber.equals("2?2")) {
+                    expectedList.add(new Record(sname, sphoneNumber));
+                }
+            }
+        }
+        assertArrayEquals(expectedList.toArray(), phoneBook.getNamesByPhoneNumber("2?2").toArray());
     }
 }
