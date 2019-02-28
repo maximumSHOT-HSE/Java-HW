@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class TreapTest {
 
     private Treap<Integer> set;
-    private Treap<Integer> cmpSet;
+    private Treap<Integer> comparatorSet;
 
     @BeforeEach
     void setUp() {
         set = new Treap<>();
-        cmpSet = new Treap<>((x, y) -> x > y ? -1 : x < y ? +1 : 0);
+        comparatorSet = new Treap<>((x, y) -> x > y ? -1 : x < y ? +1 : 0);
     }
 
     @Test
@@ -30,8 +30,8 @@ class TreapTest {
             assertEquals(i, set.size());
         }
         for (int i = 1; i <= 100; i++) {
-            cmpSet.add(i);
-            assertEquals(i, cmpSet.size());
+            comparatorSet.add(i);
+            assertEquals(i, comparatorSet.size());
         }
     }
 
@@ -45,8 +45,8 @@ class TreapTest {
         }
         for (int i = 1; i <= 100; i++) {
             for (int j = 1; j <= 50; j++) {
-                cmpSet.add(i);
-                assertEquals(i, cmpSet.size());
+                comparatorSet.add(i);
+                assertEquals(i, comparatorSet.size());
             }
         }
     }
@@ -57,7 +57,7 @@ class TreapTest {
             assertTrue(set.add(i));
         }
         for (int i = 1; i <= 100; i++) {
-            assertTrue(cmpSet.add(i));
+            assertTrue(comparatorSet.add(i));
         }
     }
 
@@ -70,7 +70,7 @@ class TreapTest {
         }
         for (int i = 1; i <= 100; i++) {
             for (int j = 1; j <= 50; j++) {
-                assertEquals(j == 1, cmpSet.add(i));
+                assertEquals(j == 1, comparatorSet.add(i));
             }
         }
     }
@@ -86,11 +86,11 @@ class TreapTest {
     void testContainsDifferentValues() {
         for (int i = 1; i <= 100; i += 2) {
             set.add(i);
-            cmpSet.add(i);
+            comparatorSet.add(i);
         }
         for (int i = 1; i <= 100; i++) {
             assertEquals((i % 2) == 1, set.contains(i));
-            assertEquals((i % 2) == 1, cmpSet.contains(i));
+            assertEquals((i % 2) == 1, comparatorSet.contains(i));
         }
     }
 
@@ -100,11 +100,11 @@ class TreapTest {
             for (int i = 1; i <= 100; i++) {
                 for (int j = 1; j <= 50; j++) {
                     assertEquals(iter > 0 || j > 1, set.contains(i));
-                    assertEquals(iter > 0 || j > 1, cmpSet.contains(i));
+                    assertEquals(iter > 0 || j > 1, comparatorSet.contains(i));
                     set.add(i);
-                    cmpSet.add(i);
+                    comparatorSet.add(i);
                     assertTrue(set.contains(i));
-                    assertTrue(cmpSet.contains(i));
+                    assertTrue(comparatorSet.contains(i));
                 }
             }
         }
@@ -115,13 +115,13 @@ class TreapTest {
         for (int iter = 0; iter < 5; iter++) {
             for (int i = 1; i <= 10; i++) {
                 set.add(i);
-                cmpSet.add(i);
+                comparatorSet.add(i);
             }
             for (int i = 1; i <= 10; i++) {
                 assertTrue(set.remove(i));
-                assertTrue(cmpSet.remove(i));
+                assertTrue(comparatorSet.remove(i));
                 assertFalse(set.remove(i));
-                assertFalse(cmpSet.remove(i));
+                assertFalse(comparatorSet.remove(i));
             }
         }
     }
@@ -132,11 +132,11 @@ class TreapTest {
             for (int i = 1; i <= 100; i++) {
                 for (int j = 1; j <= 50; j++) {
                     assertTrue(set.add(i));
-                    assertTrue(cmpSet.add(i));
+                    assertTrue(comparatorSet.add(i));
                     assertTrue(set.remove(i));
-                    assertTrue(cmpSet.remove(i));
+                    assertTrue(comparatorSet.remove(i));
                     assertFalse(set.remove(i));
-                    assertFalse(cmpSet.remove(i));
+                    assertFalse(comparatorSet.remove(i));
                 }
             }
         }
@@ -148,13 +148,13 @@ class TreapTest {
         for (int l = 1; l <= 10; l++) {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
-                cmpSet.add(r);
+                comparatorSet.add(r);
                 assertEquals(Optional.of(l), Optional.ofNullable(set.first()));
-                assertEquals(r, cmpSet.first());
+                assertEquals(r, comparatorSet.first());
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
-                cmpSet.remove(r);
+                comparatorSet.remove(r);
             }
         }
     }
@@ -164,13 +164,13 @@ class TreapTest {
         for (int l = 1; l <= 10; l++) {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
-                cmpSet.add(r);
+                comparatorSet.add(r);
                 assertEquals(Optional.of(r), Optional.ofNullable(set.last()));
-                assertEquals(l, cmpSet.last());
+                assertEquals(l, comparatorSet.last());
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
-                cmpSet.remove(r);
+                comparatorSet.remove(r);
             }
         }
     }
@@ -180,7 +180,7 @@ class TreapTest {
         for (int l = 1; l <= 10; l++) {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
-                cmpSet.add(r);
+                comparatorSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x <= l) {
                         assertNull(set.lower(x));
@@ -188,15 +188,15 @@ class TreapTest {
                         assertEquals(Optional.of(Math.min(r, x - 1)), Optional.ofNullable(set.lower(x)));
                     }
                     if (x >= r) {
-                        assertNull(cmpSet.lower(x));
+                        assertNull(comparatorSet.lower(x));
                     } else {
-                        assertEquals(Math.max(l, x + 1), cmpSet.lower(x));
+                        assertEquals(Math.max(l, x + 1), comparatorSet.lower(x));
                     }
                 }
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
-                cmpSet.remove(r);
+                comparatorSet.remove(r);
             }
         }
     }
@@ -206,7 +206,7 @@ class TreapTest {
         for (int l = 1; l <= 10; l++) {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
-                cmpSet.add(r);
+                comparatorSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x < l) {
                         assertNull(set.floor(x));
@@ -214,15 +214,15 @@ class TreapTest {
                         assertEquals(Optional.of(Math.min(r, x)), Optional.ofNullable(set.floor(x)));
                     }
                     if (x > r) {
-                        assertNull(cmpSet.floor(x));
+                        assertNull(comparatorSet.floor(x));
                     } else {
-                        assertEquals(Math.max(l, x), cmpSet.floor(x));
+                        assertEquals(Math.max(l, x), comparatorSet.floor(x));
                     }
                 }
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
-                cmpSet.remove(r);
+                comparatorSet.remove(r);
             }
         }
     }
@@ -232,12 +232,12 @@ class TreapTest {
         for (int l = 1; l <= 10; l++) {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
-                cmpSet.add(r);
+                comparatorSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x <= l) {
-                        assertNull(cmpSet.higher(x));
+                        assertNull(comparatorSet.higher(x));
                     } else {
-                        assertEquals(Math.min(r, x - 1), cmpSet.higher(x));
+                        assertEquals(Math.min(r, x - 1), comparatorSet.higher(x));
                     }
                     if (x >= r) {
                         assertNull(set.higher(x));
@@ -248,7 +248,7 @@ class TreapTest {
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
-                cmpSet.remove(r);
+                comparatorSet.remove(r);
             }
         }
     }
@@ -258,12 +258,12 @@ class TreapTest {
         for (int l = 1; l <= 10; l++) {
             for (int r = l; r <= 10; r++) {
                 set.add(r);
-                cmpSet.add(r);
+                comparatorSet.add(r);
                 for (int x = l - 5; x <= r + 5; x++) {
                     if (x < l) {
-                        assertNull(cmpSet.ceiling(x));
+                        assertNull(comparatorSet.ceiling(x));
                     } else {
-                        assertEquals(Math.min(r, x), cmpSet.ceiling(x));
+                        assertEquals(Math.min(r, x), comparatorSet.ceiling(x));
                     }
                     if (x > r) {
                         assertNull(set.ceiling(x));
@@ -274,7 +274,7 @@ class TreapTest {
             }
             for (int r = l; r <= 10; r++) {
                 set.remove(r);
-                cmpSet.remove(r);
+                comparatorSet.remove(r);
             }
         }
     }
@@ -283,11 +283,11 @@ class TreapTest {
     void testDescendingSet() {
         for (int i = 1; i <= 100; i++) {
             set.add(i);
-            cmpSet.add(i);
+            comparatorSet.add(i);
         }
         var reverseSet = set.descendingSet();
-        var reverseCmpSet = cmpSet.descendingSet();
-        assertArrayEquals(reverseSet.toArray(), cmpSet.toArray());
+        var reverseCmpSet = comparatorSet.descendingSet();
+        assertArrayEquals(reverseSet.toArray(), comparatorSet.toArray());
         assertArrayEquals(reverseCmpSet.toArray(), set.toArray());
     }
 
@@ -295,10 +295,10 @@ class TreapTest {
     void testIterator() {
         for (int i = 1; i <= 100; i++) {
             set.add(i);
-            cmpSet.add(i);
+            comparatorSet.add(i);
         }
         Iterator setIt = set.iterator();
-        Iterator cmpSetIt = cmpSet.iterator();
+        Iterator cmpSetIt = comparatorSet.iterator();
         Iterator finalSetIt = setIt;
         assertThrows(IllegalStateException.class, finalSetIt::remove);
         Iterator finalCmpSetIt = cmpSetIt;
@@ -314,7 +314,7 @@ class TreapTest {
         setIt.remove();
         cmpSetIt.remove();
         setIt = set.iterator();
-        cmpSetIt = cmpSet.iterator();
+        cmpSetIt = comparatorSet.iterator();
         for (int i = 1; i < 100; i += 3) {
             assertEquals(i, setIt.next());
             setIt.remove();
@@ -333,9 +333,9 @@ class TreapTest {
     void testDescendingIterator() {
         for (int i = 1; i <= 100; i++) {
             set.add(i);
-            cmpSet.add(i);
+            comparatorSet.add(i);
         }
-        Iterator setIt = cmpSet.descendingIterator();
+        Iterator setIt = comparatorSet.descendingIterator();
         Iterator cmpSetIt = set.descendingIterator();
         Iterator finalSetIt = setIt;
         assertThrows(IllegalStateException.class, finalSetIt::remove);
@@ -351,7 +351,7 @@ class TreapTest {
         assertFalse(cmpSetIt.hasNext());
         setIt.remove();
         cmpSetIt.remove();
-        setIt = cmpSet.descendingSet().iterator();
+        setIt = comparatorSet.descendingSet().iterator();
         cmpSetIt = set.descendingSet().iterator();
         for (int i = 1; i < 100; i += 3) {
             assertEquals(i, setIt.next());
@@ -379,12 +379,12 @@ class TreapTest {
         assertThrows(ConcurrentModificationException.class, it::next);
         assertThrows(ConcurrentModificationException.class, it::remove);
         for (int i = 1; i <= 10; i++) {
-            cmpSet.add(i);
+            comparatorSet.add(i);
         }
-        var it2 = cmpSet.iterator();
+        var it2 = comparatorSet.iterator();
         assertTrue(it2.hasNext());
         assertEquals(10, it2.next());
-        cmpSet.add(-1);
+        comparatorSet.add(-1);
         assertThrows(ConcurrentModificationException.class, it2::next);
         assertThrows(ConcurrentModificationException.class, it2::remove);
     }
