@@ -13,7 +13,7 @@ import java.util.*;
  * */
 public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
-    private static final Random generator = new Random(153);
+    @NotNull private static final Random generator = new Random(153);
 
     @NotNull private DataHolder data;
     private boolean isAscendingTreapOrder;
