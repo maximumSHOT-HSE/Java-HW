@@ -15,25 +15,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
     private static final Random generator = new Random(153);
 
-    private class DataHolder {
-        @Nullable private Node root;
-        private long version;
-        @NotNull Comparator<? super E> comparator;
-
-        @SuppressWarnings("unchecked")
-        DataHolder() {
-            root = null;
-            version = 0;
-            comparator = (Comparator<? super E>) Comparator.naturalOrder();
-        }
-
-        DataHolder(@NotNull Comparator<? super E> comparator) {
-            root = null;
-            version = 0;
-            this.comparator = comparator;
-        }
-    }
-
     @NotNull private DataHolder data;
     private boolean isAscendingTreapOrder;
     @NotNull private Treap<E> reversedTreap;
@@ -257,6 +238,25 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         data.version++;
         data.root = remove(data.root, (E) o, data.comparator);
         return true;
+    }
+
+    private class DataHolder {
+        @Nullable private Node root;
+        private long version;
+        @NotNull Comparator<? super E> comparator;
+
+        @SuppressWarnings("unchecked")
+        DataHolder() {
+            root = null;
+            version = 0;
+            comparator = (Comparator<? super E>) Comparator.naturalOrder();
+        }
+
+        DataHolder(@NotNull Comparator<? super E> comparator) {
+            root = null;
+            version = 0;
+            this.comparator = comparator;
+        }
     }
 
     private class Node {
