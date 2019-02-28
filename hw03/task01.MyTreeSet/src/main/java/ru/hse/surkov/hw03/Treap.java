@@ -270,11 +270,11 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         }
 
         public boolean isLeftSon() {
-            return parent != null && (parent.left == this);
+            return parent != null && parent.left == this;
         }
 
         public boolean isRightSon() {
-            return parent != null && (parent.right == this);
+            return parent != null && parent.right == this;
         }
 
     }
