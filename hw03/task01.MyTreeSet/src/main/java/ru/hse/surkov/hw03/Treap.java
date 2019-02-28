@@ -247,14 +247,10 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
         @SuppressWarnings("unchecked")
         DataHolder() {
-            root = null;
-            version = 0;
             comparator = (Comparator<? super E>) Comparator.naturalOrder();
         }
 
         DataHolder(@NotNull Comparator<? super E> comparator) {
-            root = null;
-            version = 0;
             this.comparator = comparator;
         }
     }
