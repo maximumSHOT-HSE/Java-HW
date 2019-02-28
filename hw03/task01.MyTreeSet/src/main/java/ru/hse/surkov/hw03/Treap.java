@@ -263,7 +263,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         long priority;
         int subtreeSize; // including current Node
 
-        private Node(@NotNull E value) {
+        public Node(@NotNull E value) {
             this.value = value;
             priority = generator.nextLong();
             subtreeSize = 1;
