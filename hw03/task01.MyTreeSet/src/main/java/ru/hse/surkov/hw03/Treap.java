@@ -263,20 +263,17 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         long priority;
         int subtreeSize; // including current Node
 
-        Node(@NotNull E value) {
-            left = null;
-            right = null;
-            parent = null;
+        private Node(@NotNull E value) {
             this.value = value;
             priority = generator.nextLong();
             subtreeSize = 1;
         }
 
-        boolean isLeftSon() {
+        public boolean isLeftSon() {
             return parent != null && (parent.left == this);
         }
 
-        boolean isRightSon() {
+        public boolean isRightSon() {
             return parent != null && (parent.right == this);
         }
 
