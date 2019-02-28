@@ -110,37 +110,6 @@ class TreapTest {
         }
     }
 
-
-    /*
-    * This code was commented, because of strange behaviour
-    * during testing. Testing from IDE causes OK, testing from gradle command 'test'
-    * causes 'Expected java.lang.IllegalArgumentException to be thrown, but nothing was thrown.'
-    * */
-//    @Test
-//    void testContainsNullable() {
-//        assertThrows(IllegalArgumentException.class, () -> set.contains(null));
-//        assertThrows(IllegalArgumentException.class, () -> cmpSet.contains(null));
-//    }
-
-//    @Test
-//    void testRemoveNullable() {
-//        for (int i = 1; i <= 100; i++) {
-//            for (int j = 1; j <= 50; j++) {
-//                assertEquals(j == 1, set.add(i));
-//                assertEquals(j == 1, cmpSet.add(i));
-//                assertThrows(IllegalArgumentException.class, () -> set.remove(null));
-//                assertThrows(IllegalArgumentException.class, () -> cmpSet.remove(null));
-//            }
-//        }
-//    }
-
-//    @Test
-//    void testAddNullable() {
-//        assertThrows(NullPointerException.class, () -> set.add(null));
-//        set.add(null);
-//        assertThrows(NullPointerException.class, () -> set.add(null));
-//    }
-
     @Test
     void testRemoveDifferentValues() {
         for (int iter = 0; iter < 5; iter++) {
