@@ -23,7 +23,7 @@ public final class Trie implements Serializable {
         if (element == null) {
             throw new IllegalArgumentException("Element to add should not be equal to null");
         }
-        root.incLeafsCounter(+1);
+        root.increaseLeafsCounter(+1);
         Node visitor = root;
         for (int i = 0; i < element.length(); i++) {
             char symbol = element.charAt(i);
@@ -32,11 +32,11 @@ public final class Trie implements Serializable {
                 target = new Node(symbol, visitor);
             }
             visitor = visitor.next(symbol);
-            visitor.incLeafsCounter(+1);
+            visitor.increaseLeafsCounter(+1);
         }
         if (visitor.isLeaf) {
             while (visitor != null) {
-                visitor.incLeafsCounter(-1);
+                visitor.increaseLeafsCounter(-1);
                 visitor = visitor.parent;
             }
             return false;
@@ -84,7 +84,7 @@ public final class Trie implements Serializable {
         }
         visitor.isLeaf = false;
         while (visitor != null) {
-            visitor.incLeafsCounter(-1);
+            visitor.increaseLeafsCounter(-1);
             Node buffer = visitor;
             visitor = visitor.parent;
             if (buffer.parent != null && buffer.subtreeLeavesCount == 0) {
@@ -103,7 +103,7 @@ public final class Trie implements Serializable {
     }
 
     /**
-     * O(|prefix|) time complexity
+     * O(|prefix|) time complexityg
      * @return the number of strings, which starts with such prefix
      * */
     public int howManyStartWithPrefix(String prefix) {
@@ -179,9 +179,9 @@ public final class Trie implements Serializable {
             }
             out.writeInt(arcsToChildren.size());
             out.writeBoolean(isLeaf);
-            for (var elem : arcsToChildren.entrySet()) {
-                char symbol = elem.getKey();
-                Node target = elem.getValue();
+            for (var element : arcsToChildren.entrySet()) {
+                char symbol = element.getKey();
+                Node target = element.getValue();
                 out.writeChar(symbol);
                 target.serialize(out);
             }
@@ -195,7 +195,7 @@ public final class Trie implements Serializable {
             subtreeLeavesCount = 0;
             isLeaf = in.readBoolean();
             if (isLeaf) {
-                incLeafsCounter(+1);
+                increaseLeafsCounter(+1);
             }
             if (size < 0) {
                 throw new IOException("Size (number of arcsToChildren) can not be negative");
@@ -205,7 +205,7 @@ public final class Trie implements Serializable {
                 char symbol = in.readChar();
                 Node target = new Node(symbol, this);
                 target.deserialize(in);
-                incLeafsCounter(+target.subtreeLeavesCount);
+                increaseLeafsCounter(+target.subtreeLeavesCount);
             }
         }
 
@@ -220,9 +220,9 @@ public final class Trie implements Serializable {
                     (isLeaf != other.isLeaf)) {
                 return false;
             }
-            for (var elem : arcsToChildren.entrySet()) {
-                char symbol = elem.getKey();
-                Node thisTarget = elem.getValue();
+            for (var element : arcsToChildren.entrySet()) {
+                char symbol = element.getKey();
+                Node thisTarget = element.getValue();
                 Node otherTarget = other.next(symbol);
                 if (!thisTarget.equals(otherTarget)) {
                     return false;
@@ -237,8 +237,8 @@ public final class Trie implements Serializable {
                     Character.hashCode(parentChar) ^
                     Boolean.hashCode(isLeaf) ^
                     arcsToChildren.hashCode();
-            for (var elem : arcsToChildren.entrySet()) {
-                Node target = elem.getValue();
+            for (var element : arcsToChildren.entrySet()) {
+                Node target = element.getValue();
                 hashCode ^= target.hashCode();
             }
             return hashCode;
@@ -248,7 +248,7 @@ public final class Trie implements Serializable {
             return arcsToChildren.get(symbol);
         }
 
-        private void incLeafsCounter(int diff) {
+        private void increaseLeafsCounter(int diff) {
             subtreeLeavesCount += diff;
         }
 
