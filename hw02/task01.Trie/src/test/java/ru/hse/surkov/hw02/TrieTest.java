@@ -19,7 +19,7 @@ class TrieTest {
 
     @Test
     void testAddNull() {
-        assertFalse(trie.add(null));
+        assertThrows(IllegalArgumentException.class, () -> trie.add(null));
     }
 
     @Test
@@ -181,7 +181,7 @@ class TrieTest {
     @Test
     void testRemoveNull() {
         assertFalse(trie.remove(null));
-        assertFalse(trie.add(null));
+        assertThrows(IllegalArgumentException.class, () -> trie.add(null));
         assertFalse(trie.remove(null));
     }
 
@@ -262,7 +262,7 @@ class TrieTest {
 
     @Test
     void testSizeAfterAddingNull() {
-        assertFalse(trie.add(null));
+        assertThrows(IllegalArgumentException.class, () -> trie.add(null));
         assertEquals(0, trie.size());
     }
 
@@ -324,7 +324,7 @@ class TrieTest {
             assertTrue(trie.add(Integer.toString(i)));
         }
         assertTrue(trie.add("abc"));
-        assertFalse(trie.add(null));
+        assertThrows(IllegalArgumentException.class, () -> trie.add(null));
         assertEquals(0, trie.howManyStartWithPrefix(null));
         assertEquals(1, trie.howManyStartWithPrefix("a"));
     }

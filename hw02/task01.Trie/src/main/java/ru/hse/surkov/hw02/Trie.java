@@ -18,12 +18,12 @@ public final class Trie implements Serializable {
      * Adds a new string (if there was not such element)
      * with O(|element|) time complexity
      * Methods does nothing if there was such element
-     * @return true if element != null and there was not such element,
-     * false -- if there was or element == null
+     * @return true if element there was not such element, otherwise true will be returned
+     * @throws IllegalArgumentException if element to add is equal to null
      * */
     public boolean add(String element) {
         if (element == null) {
-            return false;
+            throw new IllegalArgumentException("Element to add should not be equal to null");
         }
         root.incLeafsCounter(+1);
         Node visitor = root;
