@@ -43,12 +43,17 @@ public class Reflector {
         someClassCode.append("\t".repeat(depth));
         // declaration
         someClassCode.append(
-                getClassDeclarationModifiers(someClass) + "class " +
+                getDeclarationModifiers(someClass.getModifiers()) + "class " +
                         someClass.getSimpleName() + " " +
                         getFullGenericArguments(someClass) +
                         getExtensionString(someClass) +
                         getInterfacesString(someClass) +
                         "{\n"
+        );
+
+        // all fields
+        someClassCode.append(
+            getAllfields(someClass, depth + 1)
         );
 
         someClassCode.append("\t".repeat(depth));
@@ -58,8 +63,19 @@ public class Reflector {
         return someClassCode.toString();
     }
 
-    private static String getClassDeclarationModifiers(Class<?> someClass) {
-        String modifiers = Modifier.toString(someClass.getModifiers());
+    private static String getAllfields(Class<?> someClass, int depth) {
+        StringBuilder fields = new StringBuilder();
+        for (var field : someClass.getDeclaredFields()) {
+            fields.append("\t".repeat(depth));
+            fields.append(getDeclarationModifiers(field.getModifiers())); // modifiers
+            fields.append(field.getGenericType().getTypeName() + " ");
+            fields.append(field.getName() + ";\n");
+        }
+        return fields.toString();
+    }
+
+    private static String getDeclarationModifiers(int modifiersId) {
+        String modifiers = Modifier.toString(modifiersId);
         return modifiers.length() == 0 ? ""  : modifiers + " ";
     }
 

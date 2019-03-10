@@ -25,12 +25,12 @@ class MyBaseClass <K> implements MyInterfaceB {
 
 public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass<Integer> implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
 
-    public static int CONST = 10;
+    public final static int CONST = 10;
     private static Integer INTEGER_CONST = 1010101010;
 
     private String privateString = "private string";
     public Integer publicInteger = 420010;
-    protected Map<? super K,  ? extends T> strangeMap = new TreeMap<>();
+    protected Map<? super K, ? extends T> strangeMap = new TreeMap<>();
     private int primitiveInt = 2103;
     protected double primitiveDouble = 3.1410;
     public char symbol = 'x';
