@@ -3,8 +3,7 @@ package ru.hse.surkov.hw02;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -408,15 +407,15 @@ class TrieTest {
     }
 
     @Test
-    void testSerializeEmptyTrie() {
-        var receivedOs = new ByteArrayOutputStream();
-        assertDoesNotThrow(() -> trie.serialize(receivedOs));
-        var expectedOs = new ByteArrayOutputStream();
-
-        expectedOs.write(0); // arc size
-        expectedOs.write(0); // isLeaf
-
-        assertArrayEquals(expectedOs.toByteArray(), receivedOs.toByteArray());
+    void testSerializeEmptyTrie() throws IOException {
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        try (var objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+            objectOutputStream.writeInt(0);
+            objectOutputStream.writeBoolean(false);
+        }
+        var generatedOutputStream = new ByteArrayOutputStream();
+        assertDoesNotThrow(() -> trie.serialize(generatedOutputStream));
+        assertArrayEquals(byteArrayOutputStream.toByteArray(), generatedOutputStream.toByteArray());
     }
 
     @Test
@@ -425,14 +424,15 @@ class TrieTest {
     }
 
     @Test
-    void testDeserializeEmptyTrie() {
-        byte[] inputStreamArray = {0, 0};
-        var is = new ByteArrayInputStream(inputStreamArray);
-        trie.add("abc");
-        assertEquals(1, trie.size());
-        assertDoesNotThrow(() -> trie.deserialize(is));
-        Trie emptyTrie = new Trie();
-        assertEquals(emptyTrie, trie);
+    void testDeserializeEmptyTrie() throws IOException {
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        try (var objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+            objectOutputStream.writeInt(0);
+            objectOutputStream.writeBoolean(false);
+        }
+        Trie deserializedTrie = new Trie();
+        assertDoesNotThrow(() -> deserializedTrie.deserialize(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())));
+        assertEquals(trie, deserializedTrie);
     }
 
     @Test
@@ -448,58 +448,61 @@ class TrieTest {
     }
 
     @Test
-    void testSerialize() {
+    void testSerialize() throws IOException {
         trie.add("ac");
         trie.add("ad");
         trie.add("b");
 
-        var receivedOs = new ByteArrayOutputStream();
-        var expectedOs = new ByteArrayOutputStream();
+        var expectedByteArrayOutputStream = new ByteArrayOutputStream();
+        var foundByteArrayOutputStream = new ByteArrayOutputStream();
 
-        assertDoesNotThrow(() -> trie.serialize(receivedOs));
+        try (var expectedObjectOutputStream = new ObjectOutputStream(expectedByteArrayOutputStream)) {
+            expectedObjectOutputStream.writeInt(2);
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeChar('a');
+            expectedObjectOutputStream.writeInt(2);
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeChar('c');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+            expectedObjectOutputStream.writeChar('d');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+            expectedObjectOutputStream.writeChar('b');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+        }
 
-        expectedOs.write(2);
-        expectedOs.write(0);
-        expectedOs.write('a');
-        expectedOs.write(2);
-        expectedOs.write(0);
-        expectedOs.write('c');
-        expectedOs.write(0);
-        expectedOs.write(1);
-        expectedOs.write('d');
-        expectedOs.write(0);
-        expectedOs.write(1);
-        expectedOs.write('b');
-        expectedOs.write(0);
-        expectedOs.write(1);
-
-        assertArrayEquals(expectedOs.toByteArray(), receivedOs.toByteArray());
+        assertDoesNotThrow(() -> trie.serialize(foundByteArrayOutputStream));
+        assertArrayEquals(expectedByteArrayOutputStream.toByteArray(), foundByteArrayOutputStream.toByteArray());
     }
 
     @Test
-    void testDeserialize() {
-        var expectedOs = new ByteArrayOutputStream();
+    void testDeserialize() throws IOException {
+        var expectedByteArrayOutputStream = new ByteArrayOutputStream();
 
-        expectedOs.write(3);
-        expectedOs.write(0);
-        expectedOs.write('a');
-        expectedOs.write(2);
-        expectedOs.write(0);
-        expectedOs.write('x');
-        expectedOs.write(0);
-        expectedOs.write(1);
-        expectedOs.write('w');
-        expectedOs.write(1);
-        expectedOs.write(0);
-        expectedOs.write('w');
-        expectedOs.write(0);
-        expectedOs.write(1);
-        expectedOs.write('b');
-        expectedOs.write(0);
-        expectedOs.write(1);
-        expectedOs.write('c');
-        expectedOs.write(0);
-        expectedOs.write(1);
+        try (var expectedObjectOutputStream = new ObjectOutputStream(expectedByteArrayOutputStream)) {
+            expectedObjectOutputStream.writeInt(3);
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeChar('a');
+            expectedObjectOutputStream.writeInt(2);
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeChar('x');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+            expectedObjectOutputStream.writeChar('w');
+            expectedObjectOutputStream.writeInt(1);
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeChar('w');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+            expectedObjectOutputStream.writeChar('b');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+            expectedObjectOutputStream.writeChar('c');
+            expectedObjectOutputStream.writeBoolean(false);
+            expectedObjectOutputStream.writeInt(1);
+        }
 
         var helperTrie = new Trie();
 
@@ -508,8 +511,7 @@ class TrieTest {
         helperTrie.add("b");
         helperTrie.add("c");
 
-        assertDoesNotThrow(() -> trie.deserialize(new ByteArrayInputStream(expectedOs.toByteArray())));
-
+        assertDoesNotThrow(() -> trie.deserialize(new ByteArrayInputStream(expectedByteArrayOutputStream.toByteArray())));
         assertEquals(helperTrie, trie);
     }
 }

@@ -1,8 +1,6 @@
 package ru.hse.surkov.hw02;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -119,7 +117,9 @@ public final class Trie implements Serializable {
         if (out == null) {
             throw new IllegalArgumentException("Output stream for serializing must not be null");
         }
-        root.serialize(out);
+        try (var objectOutputStream = new ObjectOutputStream(out)) {
+            root.serialize(objectOutputStream);
+        }
     }
 
     /** {@link Serializable#deserialize(InputStream)} */
@@ -129,8 +129,10 @@ public final class Trie implements Serializable {
             throw new IllegalArgumentException("Input stream for deserializing must not be null");
         }
         Node inputRoot = new Node();
-        inputRoot.deserialize(in);
-        root = inputRoot;
+        try (var objectInputStream = new ObjectInputStream(in)) {
+            inputRoot.deserialize(objectInputStream);
+            root = inputRoot;
+        }
     }
 
     @Override
@@ -147,7 +149,7 @@ public final class Trie implements Serializable {
         return root.hashCode();
     }
 
-    private class Node implements Serializable {
+    private class Node {
 
         private int subtreeLeavesCount;
         private HashMap<Character, Node> arcsToChildren = new HashMap<>();
@@ -171,32 +173,28 @@ public final class Trie implements Serializable {
          * flag, which shows whether current node is leaf or not (boolean)
          * list of outgoing symbols and similar description of children (symbol1, (...children1...), ...)
          * */
-        @Override
-        public void serialize(OutputStream out) throws IOException {
+        public void serialize(ObjectOutputStream out) throws IOException {
             if (out == null) {
                 throw new IllegalArgumentException("Output stream for serializing must not be null");
             }
-            out.write(arcsToChildren.size());
-            out.write(isLeaf ? 1 : 0);
+            out.writeInt(arcsToChildren.size());
+            out.writeBoolean(isLeaf);
             for (var elem : arcsToChildren.entrySet()) {
                 char symbol = elem.getKey();
                 Node target = elem.getValue();
-                out.write(symbol);
+                out.writeChar(symbol);
                 target.serialize(out);
             }
         }
 
-        @Override
-        public void deserialize(InputStream in) throws IOException {
+        public void deserialize(ObjectInputStream in) throws IOException {
             if (in == null) {
                 throw new IllegalArgumentException("Input stream for deserializing must not be null");
             }
-            int size = in.read();
+            int size = in.readInt();
             subtreeLeavesCount = 0;
-            if (in.read() == 0) { // isLeaf
-                isLeaf = false;
-            } else {
-                isLeaf = true;
+            isLeaf = in.readBoolean();
+            if (isLeaf) {
                 incLeafsCounter(+1);
             }
             if (size < 0) {
@@ -204,7 +202,7 @@ public final class Trie implements Serializable {
             }
             arcsToChildren.clear();
             for (int i = 0; i < size; i++) {
-                char symbol = (char) in.read();
+                char symbol = in.readChar();
                 Node target = new Node(symbol, this);
                 target.deserialize(in);
                 incLeafsCounter(+target.subtreeLeavesCount);
