@@ -43,7 +43,7 @@ public class Reflector {
         someClassCode.append("\t".repeat(depth));
         // declaration
         someClassCode.append(
-                "public class " + getIsFinalString(someClass) +
+                getClassDeclarationModifiers(someClass) + "class " +
                         someClass.getSimpleName() + " " +
                         getFullGenericArguments(someClass) +
                         getExtensionString(someClass) +
@@ -56,6 +56,11 @@ public class Reflector {
         someClassCode.append("}\n");
 
         return someClassCode.toString();
+    }
+
+    private static String getClassDeclarationModifiers(Class<?> someClass) {
+        String modifiers = Modifier.toString(someClass.getModifiers());
+        return modifiers.length() == 0 ? ""  : modifiers + " ";
     }
 
     public static void main(String[] args) throws ClassNotFoundException {
