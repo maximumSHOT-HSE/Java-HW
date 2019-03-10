@@ -191,9 +191,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
         public TreapIterator() {
             trackedVersion = data.version;
-            if (data.root == null) {
-                currentNode = null;
-            } else {
+            if (data.root != null) {
                 currentNode = isAscendingTreapOrder ? moveDeepLeft(data.root) : moveDeepRight(data.root);
             }
         }
