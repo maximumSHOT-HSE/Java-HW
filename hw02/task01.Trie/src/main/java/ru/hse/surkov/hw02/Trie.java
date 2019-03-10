@@ -89,7 +89,7 @@ public final class Trie implements Serializable {
             visitor.incLeafsCounter(-1);
             Node buffer = visitor;
             visitor = visitor.parent;
-            if (buffer.parent != null && buffer.subtreeLeafsCount == 0) {
+            if (buffer.parent != null && buffer.subtreeLeavesCount == 0) {
                 visitor.delArc(buffer.parentChar);
             }
         }
@@ -101,7 +101,7 @@ public final class Trie implements Serializable {
      * @return number of strings
      * */
     public int size() {
-        return root.subtreeLeafsCount;
+        return root.subtreeLeavesCount;
     }
 
     /**
@@ -110,7 +110,7 @@ public final class Trie implements Serializable {
      * */
     public int howManyStartWithPrefix(String prefix) {
         Node visitor = moveTo(prefix);
-        return visitor == null ? 0 : visitor.subtreeLeafsCount;
+        return visitor == null ? 0 : visitor.subtreeLeavesCount;
     }
 
     /** {@link Serializable#serialize(OutputStream)} */
@@ -149,7 +149,7 @@ public final class Trie implements Serializable {
 
     private class Node implements Serializable {
 
-        private int subtreeLeafsCount;
+        private int subtreeLeavesCount;
         private HashMap<Character, Node> arcsToChildren = new HashMap<>();
         private Node parent;
         private char parentChar;
@@ -192,7 +192,7 @@ public final class Trie implements Serializable {
                 throw new IllegalArgumentException("Input stream for deserializing must not be null");
             }
             int size = in.read();
-            subtreeLeafsCount = 0;
+            subtreeLeavesCount = 0;
             if (in.read() == 0) { // isLeaf
                 isLeaf = false;
             } else {
@@ -207,7 +207,7 @@ public final class Trie implements Serializable {
                 char symbol = (char) in.read();
                 Node target = new Node(symbol, this);
                 target.deserialize(in);
-                incLeafsCounter(+target.subtreeLeafsCount);
+                incLeafsCounter(+target.subtreeLeavesCount);
             }
         }
 
@@ -217,7 +217,7 @@ public final class Trie implements Serializable {
                 return false;
             }
             Node other = (Node) obj;
-            if ((subtreeLeafsCount != other.subtreeLeafsCount) ||
+            if ((subtreeLeavesCount != other.subtreeLeavesCount) ||
                     (parentChar != other.parentChar) ||
                     (isLeaf != other.isLeaf)) {
                 return false;
@@ -235,7 +235,7 @@ public final class Trie implements Serializable {
 
         @Override
         public int hashCode() {
-            int hashCode = Integer.hashCode(subtreeLeafsCount) ^
+            int hashCode = Integer.hashCode(subtreeLeavesCount) ^
                     Character.hashCode(parentChar) ^
                     Boolean.hashCode(isLeaf) ^
                     arcsToChildren.hashCode();
@@ -251,7 +251,7 @@ public final class Trie implements Serializable {
         }
 
         private void incLeafsCounter(int diff) {
-            subtreeLeafsCount += diff;
+            subtreeLeavesCount += diff;
         }
 
         private void addArc(char symbol, Node target) {
