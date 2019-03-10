@@ -15,7 +15,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
     @NotNull private static final Random generator = new Random(153);
 
-    @NotNull private DataHolder data;
+    @NotNull private DataHolder data = new DataHolder();
     private boolean isAscendingTreapOrder;
     @NotNull private Treap<E> reversedTreap;
 
@@ -31,7 +31,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
 
     /** {@link java.util.TreeSet#TreeSet()} */
     public Treap() {
-        data = new DataHolder();
         isAscendingTreapOrder = true;
         reversedTreap = new Treap<>(this);
     }
@@ -41,61 +40,6 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         data = new DataHolder(comparator);
         isAscendingTreapOrder = true;
         reversedTreap = new Treap<>(this);
-    }
-
-    private class TreapIterator implements Iterator {
-
-        @Nullable private Node currentNode;
-        private long trackedVersion;
-
-        public TreapIterator() {
-            trackedVersion = data.version;
-            if (data.root == null) {
-                currentNode = null;
-            } else {
-                currentNode = isAscendingTreapOrder ? moveDeepLeft(data.root) : moveDeepRight(data.root);
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            return currentNode != null;
-        }
-
-        @Override
-        @NotNull public Object next() {
-            if (trackedVersion != data.version) {
-                throw new ConcurrentModificationException();
-            }
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            Node buffered = currentNode;
-            currentNode = isAscendingTreapOrder ? getNext(currentNode) : getPrev(currentNode);
-            return buffered.value; // can not be null, because hasNext() == true
-        }
-
-        @Override
-        public void remove() {
-            if (trackedVersion != data.version) {
-                throw new ConcurrentModificationException();
-            }
-            Node candidate;
-            if (currentNode != null) {
-                candidate = isAscendingTreapOrder ? getPrev(currentNode) : getNext(currentNode);
-            } else {
-                if (data.root == null) {
-                    throw new IllegalStateException();
-                }
-                candidate = isAscendingTreapOrder ? moveDeepRight(data.root) : moveDeepLeft(data.root);
-            }
-            if (candidate == null) {
-                throw new IllegalStateException();
-            }
-            data.root = Treap.this.removeNode(candidate);
-            data.version++;
-            trackedVersion++;
-        }
     }
 
     /** {@link java.util.TreeSet#iterator()} */
@@ -159,7 +103,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         if (visitor == null || data.comparator.compare(visitor.value, need) < 0) {
             return visitor == null ? null : visitor.value;
         }
-        visitor = getPrev(visitor);
+        visitor = getPrevious(visitor);
         return visitor == null ? null : visitor.value;
     }
 
@@ -238,6 +182,61 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         data.version++;
         data.root = remove(data.root, (E) o, data.comparator);
         return true;
+    }
+
+    private class TreapIterator implements Iterator {
+
+        @Nullable private Node currentNode;
+        private long trackedVersion;
+
+        public TreapIterator() {
+            trackedVersion = data.version;
+            if (data.root == null) {
+                currentNode = null;
+            } else {
+                currentNode = isAscendingTreapOrder ? moveDeepLeft(data.root) : moveDeepRight(data.root);
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentNode != null;
+        }
+
+        @Override
+        @NotNull public Object next() {
+            if (trackedVersion != data.version) {
+                throw new ConcurrentModificationException();
+            }
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            Node buffered = currentNode;
+            currentNode = isAscendingTreapOrder ? getNext(currentNode) : getPrevious(currentNode);
+            return buffered.value; // can not be null, because hasNext() == true
+        }
+
+        @Override
+        public void remove() {
+            if (trackedVersion != data.version) {
+                throw new ConcurrentModificationException();
+            }
+            Node candidate;
+            if (currentNode != null) {
+                candidate = isAscendingTreapOrder ? getPrevious(currentNode) : getNext(currentNode);
+            } else {
+                if (data.root == null) {
+                    throw new IllegalStateException();
+                }
+                candidate = isAscendingTreapOrder ? moveDeepRight(data.root) : moveDeepLeft(data.root);
+            }
+            if (candidate == null) {
+                throw new IllegalStateException();
+            }
+            data.root = Treap.this.removeNode(candidate);
+            data.version++;
+            trackedVersion++;
+        }
     }
 
     private class DataHolder {
@@ -376,7 +375,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         return visitor;
     }
 
-    @Nullable private Node getPrev(@Nullable Node vertex) {
+    @Nullable private Node getPrevious(@Nullable Node vertex) {
         if (vertex == null) {
             return null;
         }
