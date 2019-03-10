@@ -3,6 +3,8 @@ package ru.hse.surkov;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
 
 class A  {
     static {
@@ -12,7 +14,6 @@ class A  {
 
     }
 }
-
 
 final class finalClass extends A {
 
@@ -56,11 +57,28 @@ public class Reflector {
             getAllfields(someClass, depth + 1)
         );
 
+        someClassCode.append("\n");
+
+        // all methods
+        someClassCode.append(
+            getAllMethods(someClass, depth + 1)
+        );
+
         someClassCode.append("\t".repeat(depth));
         // ending parenthesis
         someClassCode.append("}\n");
 
         return someClassCode.toString();
+    }
+
+    private static String getAllMethods(Class<?> someClass, int depth) {
+        StringBuilder methods = new StringBuilder();
+        for (var method : someClass.getDeclaredMethods()) {
+            methods.append("\t".repeat(depth));
+            methods.append(getDeclarationModifiers(method.getModifiers()));
+            methods.append(method.getReturnType() + " " + method.getName() + "\n");
+        }
+        return methods.toString();
     }
 
     private static String getAllfields(Class<?> someClass, int depth) {
@@ -88,6 +106,10 @@ public class Reflector {
         Reflector.printStructure(finalClass.class);
         System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
         Reflector.printStructure(A.finalInnerAClasss.class);
+//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
+//        Reflector.printStructure(String.class);
+//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
+//        Reflector.printStructure(ArrayList.class);
     }
 
     /**
