@@ -7,23 +7,23 @@ interface MyInterfaceA {
     void methodA();
 }
 
-interface MyInterfaceB {
-    void methodB();
+interface MyInterfaceB <K> {
+    K methodB();
 }
 
 interface MyInterfaceC {
     void methodC();
 }
 
-class MyBaseClass implements MyInterfaceB {
+class MyBaseClass <K> implements MyInterfaceB {
 
     @Override
-    public void methodB() {
-
+    public K methodB() {
+        return null;
     }
 }
 
-public class ComplicatedClass <K, R extends Object, S, T extends Comparable<K>, U> extends MyBaseClass implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
+public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass<Integer> implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
 
     public static int CONST = 10;
     private static Integer INTEGER_CONST = 1010101010;
@@ -45,11 +45,6 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<K>, 
 
     @Override
     public void methodA() {
-
-    }
-
-    @Override
-    public void methodB() {
 
     }
 
