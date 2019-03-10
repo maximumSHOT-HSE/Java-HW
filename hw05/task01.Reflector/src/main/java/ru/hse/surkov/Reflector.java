@@ -1,5 +1,11 @@
 package ru.hse.surkov;
 
+class A {
+    static {
+        System.out.println("Hello");
+    }
+}
+
 /**
  * Class for creating correct (can be compiled) .java file by Class object.
  * Also, this class can compare two classes implementations by their class objects
@@ -16,7 +22,11 @@ public class Reflector {
      * Generic methods and inner classes will save their generic entities.
      * */
     public void printStructure(Class<?> someClass) {
+    }
 
+    public static void main(String[] args) throws ClassNotFoundException {
+        Reflector reflector = new Reflector();
+        Class<?> cl = reflector.getClass();
     }
 
     /**
