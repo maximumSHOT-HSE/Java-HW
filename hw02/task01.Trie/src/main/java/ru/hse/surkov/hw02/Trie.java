@@ -23,7 +23,7 @@ public final class Trie implements Serializable {
         if (element == null) {
             throw new IllegalArgumentException("Element to add should not be equal to null");
         }
-        root.increaseLeafsCounter(+1);
+        root.increaseLeavesCounter(+1);
         Node visitor = root;
         for (int i = 0; i < element.length(); i++) {
             char symbol = element.charAt(i);
@@ -32,11 +32,11 @@ public final class Trie implements Serializable {
                 target = new Node(symbol, visitor);
             }
             visitor = visitor.next(symbol);
-            visitor.increaseLeafsCounter(+1);
+            visitor.increaseLeavesCounter(+1);
         }
         if (visitor.isLeaf) {
             while (visitor != null) {
-                visitor.increaseLeafsCounter(-1);
+                visitor.increaseLeavesCounter(-1);
                 visitor = visitor.parent;
             }
             return false;
@@ -84,7 +84,7 @@ public final class Trie implements Serializable {
         }
         visitor.isLeaf = false;
         while (visitor != null) {
-            visitor.increaseLeafsCounter(-1);
+            visitor.increaseLeavesCounter(-1);
             Node buffer = visitor;
             visitor = visitor.parent;
             if (buffer.parent != null && buffer.subtreeLeavesCount == 0) {
@@ -195,7 +195,7 @@ public final class Trie implements Serializable {
             subtreeLeavesCount = 0;
             isLeaf = in.readBoolean();
             if (isLeaf) {
-                increaseLeafsCounter(+1);
+                increaseLeavesCounter(+1);
             }
             if (size < 0) {
                 throw new IOException("Size (number of arcsToChildren) can not be negative");
@@ -205,7 +205,7 @@ public final class Trie implements Serializable {
                 char symbol = in.readChar();
                 Node target = new Node(symbol, this);
                 target.deserialize(in);
-                increaseLeafsCounter(+target.subtreeLeavesCount);
+                increaseLeavesCounter(+target.subtreeLeavesCount);
             }
         }
 
@@ -248,7 +248,7 @@ public final class Trie implements Serializable {
             return arcsToChildren.get(symbol);
         }
 
-        private void increaseLeafsCounter(int diff) {
+        private void increaseLeavesCounter(int diff) {
             subtreeLeavesCount += diff;
         }
 
