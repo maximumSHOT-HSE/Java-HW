@@ -155,11 +155,11 @@ public final class Trie implements Serializable {
         private char parentChar;
         private boolean isLeaf;
 
-        Node() {
+        public Node() {
 
         }
 
-        Node(char symbol, Node parent) {
+        public Node(char symbol, Node parent) {
             this.parent = parent;
             parentChar = symbol;
             parent.addArc(symbol, this);
