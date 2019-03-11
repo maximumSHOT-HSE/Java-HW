@@ -71,6 +71,7 @@ public class Reflector {
             getAllConstructors(someClass, depth + 1)
         );
 
+
         someClassCode.append("\t".repeat(depth));
         // ending parenthesis
         someClassCode.append("}\n");

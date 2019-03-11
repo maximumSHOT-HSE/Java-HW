@@ -1,5 +1,6 @@
 package ru.hse.surkov;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -68,7 +69,7 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
         return 0;
     }
 
-    public Integer twoArgumentsMethod(Character c, String s) {
+    public Integer twoArgumentsMethod(Character c, String s) throws RuntimeException, IOException {
         return 42;
     }
 
