@@ -6,34 +6,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class A  {
-    static {
-        System.out.println("Hello");
-    }
-
-    protected final class finalInnerAClasss {
-
-    }
-}
-
-final class finalClass extends A {
-
-}
-
-class A1 {
-    int x;
-    void f(Comparable<? extends Integer> c) {
-
-    }
-}
-
-class B1 {
-    int y;
-    void f(Comparable<?> c) {
-
-    }
-}
-
 /**
  * Class for creating correct (can be compiled) .java file by Class object.
  * Also, this class can compare two classes implementations by their class objects
@@ -50,7 +22,6 @@ public class Reflector {
      * Generic methods and inner classes will save their generic entities.
      * */
     public static void printStructure(@NotNull Class<?> someClass) {
-
     }
 
     private static String generateCode(@NotNull Class<?> someClass, Set<String> packages) {
@@ -221,23 +192,6 @@ public class Reflector {
     private static String getDeclarationModifiers(int modifiersId) {
         String modifiers = Modifier.toString(modifiersId);
         return modifiers.length() == 0 ? ""  : modifiers + " ";
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException {
-//        ComplicatedClass<Object, Object, Object, Comparable<? super Object>, Comparable<?>> x = new ComplicatedClass<>();
-//        Reflector.printStructure(x.getClass());
-//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-//        Reflector.printStructure(A.class);
-//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-//        Reflector.printStructure(finalClass.class);
-//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-//        Reflector.printStructure(A.finalInnerAClasss.class);
-
-//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-//        Reflector.printStructure(String.class);
-//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-//        Reflector.printStructure(ArrayList.class);
-        diffClasses(A1.class, B1.class);
     }
 
     private static String getExtensionString(Class<?> someClass, Set<String> packages) {
