@@ -3,9 +3,7 @@ package ru.hse.surkov;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class A  {
@@ -20,6 +18,20 @@ class A  {
 
 final class finalClass extends A {
 
+}
+
+class A1 {
+    int x;
+    void f(Comparable<? extends Integer> c) {
+
+    }
+}
+
+class B1 {
+    int y;
+    void f(Comparable<?> c) {
+
+    }
 }
 
 /**
@@ -38,15 +50,7 @@ public class Reflector {
      * Generic methods and inner classes will save their generic entities.
      * */
     public static void printStructure(@NotNull Class<?> someClass) {
-        Set<String> packages = new TreeSet<>();
-//        System.out.println(generateCode(someClass, packages));
-        String generatedCode = generateCode(someClass, packages);
-//        System.out.println("\npackages:\n");;
-        for (var s : packages) {
-//            System.out.println(s);
-            System.out.println("import " + s + ";");
-        }
-        System.out.println(generatedCode);
+
     }
 
     private static String generateCode(@NotNull Class<?> someClass, Set<String> packages) {
@@ -131,18 +135,24 @@ public class Reflector {
         return constructors.toString();
     }
 
+    private static String getMethodDeclaration(Method method, final Set<String> packages) {
+        StringBuilder methodDeclaration = new StringBuilder();
+        methodDeclaration.append(getDeclarationModifiers(method.getModifiers())); // modifiers
+        methodDeclaration.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
+        methodDeclaration.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
+        methodDeclaration.append(method.getName()); // method name
+        methodDeclaration.append(getParametersDescribing(method.getGenericParameterTypes(), packages)).append(" "); // arguments
+        methodDeclaration.append(getExceptionsThrowableFromMethods(method.getExceptionTypes(), packages)); // exceptions
+        return methodDeclaration.toString();
+    }
+
     private static String getAllMethods(Class<?> someClass, final Set<String> packages) {
         StringBuilder methods = new StringBuilder();
         for (var method : someClass.getDeclaredMethods()) {
             if (method.isSynthetic()) {
                 continue;
             }
-            methods.append(getDeclarationModifiers(method.getModifiers())); // modifiers
-            methods.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
-            methods.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
-            methods.append(method.getName()); // method name
-            methods.append(getParametersDescribing(method.getGenericParameterTypes(), packages)).append(" "); // arguments
-            methods.append(getExceptionsThrowableFromMethods(method.getExceptionTypes(), packages)); // exceptions
+            methods.append(getMethodDeclaration(method, packages));
             if (someClass.isInterface()) {
                 methods.append(";\n");
             } else {
@@ -176,6 +186,14 @@ public class Reflector {
                 );
     }
 
+    private static String getFieldDeclaration(Field field) {
+        StringBuilder fieldDeclaration = new StringBuilder();
+        fieldDeclaration.append(getDeclarationModifiers(field.getModifiers())); // modifiers
+        fieldDeclaration.append(field.getGenericType().getTypeName()).append(" ");
+        fieldDeclaration.append(field.getName());
+        return fieldDeclaration.toString();
+    }
+
     private static String getAllfields(Class<?> someClass, final Set<String> packages) {
         StringBuilder fields = new StringBuilder();
         for (var field : someClass.getDeclaredFields()) {
@@ -183,9 +201,7 @@ public class Reflector {
                 continue;
             }
             packages.add(field.getClass().getCanonicalName());
-            fields.append(getDeclarationModifiers(field.getModifiers())); // modifiers
-            fields.append(field.getGenericType().getTypeName()).append(" ");
-            fields.append(field.getName());
+            fields.append(getFieldDeclaration(field));
             if (Modifier.isFinal(field.getModifiers())) {
                 if (field.getType().isPrimitive()) {
                     if (boolean.class.equals(field.getType())) {
@@ -208,19 +224,20 @@ public class Reflector {
     }
 
     public static void main(String[] args) throws ClassNotFoundException {
-        ComplicatedClass<Object, Object, Object, Comparable<? super Object>, Comparable<?>> x = new ComplicatedClass<>();
-        Reflector.printStructure(x.getClass());
-        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-        Reflector.printStructure(A.class);
-        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-        Reflector.printStructure(finalClass.class);
-        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
-        Reflector.printStructure(A.finalInnerAClasss.class);
+//        ComplicatedClass<Object, Object, Object, Comparable<? super Object>, Comparable<?>> x = new ComplicatedClass<>();
+//        Reflector.printStructure(x.getClass());
+//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
+//        Reflector.printStructure(A.class);
+//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
+//        Reflector.printStructure(finalClass.class);
+//        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
+//        Reflector.printStructure(A.finalInnerAClasss.class);
 
 //        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
 //        Reflector.printStructure(String.class);
 //        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
 //        Reflector.printStructure(ArrayList.class);
+        diffClasses(A1.class, B1.class);
     }
 
     private static String getExtensionString(Class<?> someClass, Set<String> packages) {
@@ -281,11 +298,84 @@ public class Reflector {
         }
     }
 
+    private static String getDifferencesBetwwenHashSets(HashSet<String> leftSet, HashSet<String> rightSet) {
+        StringBuilder log = new StringBuilder();
+        for (var x : leftSet) {
+            if (!rightSet.contains(x)) {
+                log.append("\t").append(x).append("\n");
+            }
+        }
+        return log.toString();
+    }
+
+    /**
+     * {@link Reflector#diffClasses(Class, Class)}
+     * @return text of log as a String without printing anything into console
+     * */
+    public static String getDiffernces(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
+        StringBuilder log = new StringBuilder();
+
+        HashSet<String> leftFields = new HashSet<>();
+        HashSet<String> rightFields = new HashSet<>();
+        HashSet<String> leftMethods = new HashSet<>();
+        HashSet<String> rightMethods = new HashSet<>();
+        Set<String> helper = new TreeSet<>(); // helper -- plug for packages storing
+
+        for (var field : leftClass.getDeclaredFields()) {
+            if (field.isSynthetic()) {
+                continue;
+            }
+            leftFields.add(getFieldDeclaration(field));
+        }
+
+        for (var field : rightClass.getDeclaredFields()) {
+            if (field.isSynthetic()) {
+                continue;
+            }
+            rightFields.add(getFieldDeclaration(field));
+        }
+
+        for (var method : leftClass.getDeclaredMethods()) {
+            if (method.isSynthetic()) {
+                continue;
+            }
+            leftMethods.add(getMethodDeclaration(method, helper));
+        }
+
+        for (var method : rightClass.getDeclaredMethods()) {
+            if (method.isSynthetic()) {
+                continue;
+            }
+            rightMethods.add(getMethodDeclaration(method, helper));
+        }
+
+        log.append("Fields:\n\n");
+
+        log.append(leftClass.getSimpleName()).append("\n");
+        log.append(getDifferencesBetwwenHashSets(leftFields, rightFields));
+        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+        log.append(getDifferencesBetwwenHashSets(rightFields, leftFields));
+
+        log.append("Methods:\n\n");
+
+        log.append(leftClass.getSimpleName()).append("\n");
+        log.append(getDifferencesBetwwenHashSets(leftMethods, rightMethods));
+        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+        log.append(getDifferencesBetwwenHashSets(rightMethods, leftMethods));
+
+        return log.toString();
+    }
+
     /**
      * Method receives two classes to be compared and prints into standard
      * output stream (console) all the different fields and methods.
+     * Format of logging:
+     * 1. Fields --
+     *      firstly, fields of leftClass, which does not exist in rightClass will be printed
+     *      secondly, fields of rightClass, which does not exist in leftClass will be printed
+     * 2. Methods -- format the same as the fields
      * */
     public static void diffClasses(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
-
+        System.out.println(getDiffernces(leftClass, rightClass));
     }
 }
