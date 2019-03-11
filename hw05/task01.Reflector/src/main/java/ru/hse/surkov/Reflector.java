@@ -253,7 +253,7 @@ public class Reflector {
         StringBuilder arguments = new StringBuilder();
         for (var x : typesVariable) {
             if (arguments.length() > 0) {
-                arguments.append("& ");
+                arguments.append(", ");
             }
             arguments.append(x.getTypeName());
             if (x.getBounds().length == 0) {
