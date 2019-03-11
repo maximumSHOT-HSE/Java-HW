@@ -1,7 +1,12 @@
 package ru.hse.surkov;
 
+import ru.hse.test.helperClasses.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +26,26 @@ public class Reflector {
      * Returned types of all methods will be the same as the originals.
      * Generic methods and inner classes will save their generic entities.
      * */
-    public static void printStructure(@NotNull Class<?> someClass) {
+    public static void printStructure(@NotNull Class<?> someClass) throws IOException {
+        File source = new File(someClass.getSimpleName() + ".java");
+        Set<String> packages = new TreeSet<>();
+        String generatedCode = generateCode(someClass, packages);
+        try (FileWriter fileWriter = new FileWriter(source)) {
+            for (var necessaryPackage : packages) {
+                fileWriter.write("import " + necessaryPackage + ";\n");
+            }
+            fileWriter.write(generatedCode);
+        } catch (FileNotFoundException ignored) {
+            // impossible situation
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+//        printStructure(ru.hse.test.helperClasses.ComplicatedClass.class); // OK
+//        printStructure(MyBaseClass.class); // OK
+//        printStructure(MyPair.class);
+//        printStructure(HashTable.class);
+//        printStructure(MyList.class);g
     }
 
     private static String generateCode(@NotNull Class<?> someClass, Set<String> packages) {
@@ -129,7 +153,9 @@ public class Reflector {
             } else {
                 methods.append(" {\n");
                 if (!void.class.equals(method.getReturnType())) {
-                    if (method.getReturnType().isPrimitive()) {
+                    if (boolean.class.equals(method.getReturnType())) {
+                        methods.append("return false;\n");
+                    } else if (method.getReturnType().isPrimitive()) {
                         methods.append("return 0;\n");
                     } else {
                         methods.append("return null;\n");

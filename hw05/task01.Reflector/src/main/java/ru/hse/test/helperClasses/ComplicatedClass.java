@@ -1,30 +1,10 @@
-package ru.hse.surkov;
+package ru.hse.test.helperClasses;
 
 import jdk.jshell.spi.ExecutionControl;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-
-interface MyInterfaceA {
-    void methodA();
-}
-
-interface MyInterfaceB {
-    void methodB();
-}
-
-interface MyInterfaceC {
-    void methodC();
-}
-
-class MyBaseClass implements MyInterfaceA {
-
-    @Override
-    public void methodA() {
-
-    }
-}
 
 public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
 
