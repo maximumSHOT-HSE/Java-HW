@@ -2,8 +2,8 @@ package ru.hse.surkov;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -67,14 +67,37 @@ public class Reflector {
         );
 
         // constructors
-
-
+        someClassCode.append(
+            getAllConstructors(someClass, depth + 1)
+        );
 
         someClassCode.append("\t".repeat(depth));
         // ending parenthesis
         someClassCode.append("}\n");
 
         return someClassCode.toString();
+    }
+
+    private static String getParametersDescribing(Type[] parameters) {
+        final Counter counter = new Counter();
+        return Arrays.stream(parameters)
+                .map(p -> {
+                    counter.increment();
+                    return p.getTypeName() + " a" + counter.getCounter();
+                })
+                .collect(Collectors.joining(", ", "(", ") {\n"));
+    }
+
+    private static String getAllConstructors(Class<?> someClass, int depth) {
+        StringBuilder constructors = new StringBuilder();
+
+        for (var constructor : someClass.getDeclaredConstructors()) {
+            constructors.append("\t".repeat(depth));
+            constructors.append(Modifier.toString(constructor.getModifiers())).append(" ").append(someClass.getSimpleName());
+            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes())).append("\t".repeat(depth)).append("}\n\n");
+        }
+
+        return constructors.toString();
     }
 
     private static String getAllMethods(Class<?> someClass, int depth) {
@@ -85,15 +108,7 @@ public class Reflector {
             methods.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
             methods.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
             methods.append(method.getName()); // method name
-            final Counter counter = new Counter();
-            methods.append(
-                Arrays.stream(method.getGenericParameterTypes())
-                .map(p -> {
-                    counter.increment();
-                    return p.getTypeName() + " a" + counter.getCounter();
-                })
-                .collect(Collectors.joining(", ", "(", ") {\n"))
-            );
+            methods.append(getParametersDescribing(method.getGenericParameterTypes()));
             if(!void.class.equals(method.getReturnType())) {
                 if (method.getReturnType().isPrimitive()) {
                     methods.append("\t".repeat(depth + 1)).append("return 0;\n");

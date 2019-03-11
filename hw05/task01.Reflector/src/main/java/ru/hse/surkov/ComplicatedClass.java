@@ -32,7 +32,7 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
 
     }
 
-    protected ComplicatedClass(Integer value, TreeSet<? super  K> set) {g
+    protected ComplicatedClass(Integer value, TreeSet<? super  K> set) {
     }
 
     public final static int CONST = 10;
