@@ -39,7 +39,7 @@ public class Reflector {
         }
     }
 
-    private static String generateCode(@NotNull Class<?> someClass, Set<String> packages) {
+    @NotNull private static String generateCode(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
         StringBuilder someClassCode = new StringBuilder();
 
         // declaration
@@ -75,7 +75,7 @@ public class Reflector {
         return someClassCode.toString();
     }
 
-    private static String getClassDeclaration(Class<?> someClass, final Set<String> packages) {
+    @NotNull private static String getClassDeclaration(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         return getDeclarationModifiers(someClass.getModifiers()) +
                 (someClass.isInterface() ? "" : "class ") +
                 someClass.getSimpleName() + " " +
@@ -85,7 +85,7 @@ public class Reflector {
                 "{\n";
     }
 
-    private static String getAllSubClasses(Class<?> someClass, Set<String> packages) {
+    @NotNull private static String getAllSubClasses(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
         StringBuilder classes = new StringBuilder();
         for (var clazz : someClass.getDeclaredClasses()) {
             classes.append(Reflector.generateCode(clazz, packages)).append("\n");
@@ -93,7 +93,7 @@ public class Reflector {
         return classes.toString();
     }
 
-    private static String getParametersDescribing(Type[] parameters, final Set<String> packages) {
+    @NotNull private static String getParametersDescribing(@NotNull Type[] parameters, @NotNull final Set<String> packages) {
         final Counter counter = new Counter();
         return Arrays.stream(parameters)
                 .map(p -> {
@@ -104,7 +104,7 @@ public class Reflector {
                 .collect(Collectors.joining(", ", "(", ")"));
     }
 
-    private static String getAllConstructors(Class<?> someClass, final Set<String> packages) {
+    @NotNull private static String getAllConstructors(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         StringBuilder constructors = new StringBuilder();
 
         for (var constructor : someClass.getDeclaredConstructors()) {
@@ -121,7 +121,7 @@ public class Reflector {
         return constructors.toString();
     }
 
-    private static String getMethodDeclaration(Method method, final Set<String> packages) {
+    @NotNull private static String getMethodDeclaration(@NotNull Method method, @NotNull final Set<String> packages) {
         StringBuilder methodDeclaration = new StringBuilder();
         methodDeclaration.append(getDeclarationModifiers(method.getModifiers())); // modifiers
         methodDeclaration.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
@@ -132,7 +132,7 @@ public class Reflector {
         return methodDeclaration.toString();
     }
 
-    private static String getAllMethods(Class<?> someClass, final Set<String> packages) {
+    @NotNull private static String getAllMethods(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         StringBuilder methods = new StringBuilder();
         for (var method : someClass.getDeclaredMethods()) {
             if (method.isSynthetic()) {
@@ -158,7 +158,7 @@ public class Reflector {
         return methods.toString();
     }
 
-    private static String getExceptionsThrowableFromMethods(Class<?>[] exceptions, final Set<String> packages) {
+    @NotNull private static String getExceptionsThrowableFromMethods(@NotNull Class<?>[] exceptions, @NotNull final Set<String> packages) {
         if (exceptions.length == 0) {
             return "";
         }
@@ -174,7 +174,7 @@ public class Reflector {
                 );
     }
 
-    private static String getFieldDeclaration(Field field) {
+    @NotNull private static String getFieldDeclaration(@NotNull Field field) {
         StringBuilder fieldDeclaration = new StringBuilder();
         fieldDeclaration.append(getDeclarationModifiers(field.getModifiers())); // modifiers
         fieldDeclaration.append(field.getGenericType().getTypeName()).append(" ");
@@ -182,7 +182,7 @@ public class Reflector {
         return fieldDeclaration.toString();
     }
 
-    private static String getAllfields(Class<?> someClass, final Set<String> packages) {
+    @NotNull private static String getAllfields(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         StringBuilder fields = new StringBuilder();
         for (var field : someClass.getDeclaredFields()) {
             if (field.isSynthetic()) {
@@ -206,12 +206,12 @@ public class Reflector {
         return fields.toString();
     }
 
-    private static String getDeclarationModifiers(int modifiersId) {
+    @NotNull private static String getDeclarationModifiers(int modifiersId) {
         String modifiers = Modifier.toString(modifiersId);
         return modifiers.length() == 0 ? ""  : modifiers + " ";
     }
 
-    private static String getSuperClassInformation(Class<?> someClass, Set<String> packages) {
+    @NotNull private static String getSuperClassInformation(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
         Class<?> superClass = someClass.getSuperclass();
         if (superClass != null && superClass.getSuperclass() != null) {
             packages.add(someClass.getSuperclass().getCanonicalName());
@@ -226,7 +226,7 @@ public class Reflector {
     * which are there in class declaration
     * and returns it in java valid format
     * */
-    private static String getInterfacesForImplementing(Class<?> someClass, final Set<String> packages) {
+    @NotNull private static String getInterfacesForImplementing(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         Class<?>[] interfaces = someClass.getInterfaces();
         StringBuilder interfacesString = new StringBuilder();
         if (interfaces.length == 0) {
@@ -246,7 +246,7 @@ public class Reflector {
     * Method gets a type, explores it's bounds
     * and returns full java valid generic type with all dependencies.
     * */
-    private static String getFullGenericArguments(TypeVariable<?>[] typesVariable) {
+    @NotNull private static String getFullGenericArguments(@NotNull TypeVariable<?>[] typesVariable) {
         if (typesVariable.length == 0) {
             return "";
         }
@@ -287,7 +287,7 @@ public class Reflector {
     * Method finds all Strings in leftSet, which does not exist in rightSet
     * and collects all such String in one big string.
     * */
-    private static String getDifferencesBetwwenHashSets(HashSet<String> leftSet, HashSet<String> rightSet) {
+    @NotNull private static String getDifferencesBetwwenHashSets(@NotNull HashSet<String> leftSet, @NotNull HashSet<String> rightSet) {
         StringBuilder log = new StringBuilder();
         for (var x : leftSet) {
             if (!rightSet.contains(x)) {
@@ -301,7 +301,7 @@ public class Reflector {
      * {@link Reflector#diffClasses(Class, Class)}
      * @return text of log as a String without printing anything into console
      * */
-    public static String getDiffernces(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
+    @NotNull public static String getDiffernces(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
         StringBuilder log = new StringBuilder();
 
         HashSet<String> leftFields = new HashSet<>();
