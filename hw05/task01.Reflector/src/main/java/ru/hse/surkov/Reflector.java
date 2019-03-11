@@ -2,6 +2,7 @@ package ru.hse.surkov;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -12,6 +13,7 @@ class A  {
     static {
         System.out.println("Hello");
     }
+
     protected final class finalInnerAClasss {
 
     }
@@ -71,7 +73,6 @@ public class Reflector {
             getAllConstructors(someClass, depth + 1)
         );
 
-
         someClassCode.append("\t".repeat(depth));
         // ending parenthesis
         someClassCode.append("}\n");
@@ -86,7 +87,7 @@ public class Reflector {
                     counter.increment();
                     return p.getTypeName() + " a" + counter.getCounter();
                 })
-                .collect(Collectors.joining(", ", "(", ") {\n"));
+                .collect(Collectors.joining(", ", "(", ")"));
     }
 
     private static String getAllConstructors(Class<?> someClass, int depth) {
@@ -95,7 +96,7 @@ public class Reflector {
         for (var constructor : someClass.getDeclaredConstructors()) {
             constructors.append("\t".repeat(depth));
             constructors.append(Modifier.toString(constructor.getModifiers())).append(" ").append(someClass.getSimpleName());
-            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes())).append("\t".repeat(depth)).append("}\n\n");
+            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes())).append(" {\n\t".repeat(depth)).append("}\n\n");
         }
 
         return constructors.toString();
@@ -109,7 +110,8 @@ public class Reflector {
             methods.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
             methods.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
             methods.append(method.getName()); // method name
-            methods.append(getParametersDescribing(method.getGenericParameterTypes()));
+            methods.append(getParametersDescribing(method.getGenericParameterTypes())).append(" "); // arguments
+            methods.append(getExceptionsThrowableFromMethod(method)).append(" {\n");
             if(!void.class.equals(method.getReturnType())) {
                 if (method.getReturnType().isPrimitive()) {
                     methods.append("\t".repeat(depth + 1)).append("return 0;\n");
@@ -122,6 +124,19 @@ public class Reflector {
         return methods.toString();
     }
 
+    private static String getExceptionsThrowableFromMethod (Method method) {
+        if (method.getExceptionTypes().length == 0) {
+            return "";
+        }
+        return Arrays.stream(method.getExceptionTypes())
+                .map(e -> e.getTypeName())
+                .collect(
+                    Collectors.joining(
+                        ", ", "throws ", " "
+                    )
+                );
+    }
+
     private static String getAllfields(Class<?> someClass, int depth) {
         StringBuilder fields = new StringBuilder();
         for (var field : someClass.getDeclaredFields()) {
@@ -131,7 +146,11 @@ public class Reflector {
             fields.append(field.getName());
             if (Modifier.isFinal(field.getModifiers())) {
                 if (field.getType().isPrimitive()) {
-                    fields.append(" = 0");
+                    if (boolean.class.equals(field.getType())) {
+                        fields.append(" = false");
+                    } else {
+                        fields.append(" = 0");
+                    }
                 } else {
                     fields.append(" = null");
                 }

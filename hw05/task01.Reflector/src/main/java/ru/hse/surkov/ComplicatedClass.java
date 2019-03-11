@@ -8,23 +8,23 @@ interface MyInterfaceA {
     void methodA();
 }
 
-interface MyInterfaceB <K> {
-    K methodB();
+interface MyInterfaceB {
+    void methodB();
 }
 
 interface MyInterfaceC {
     void methodC();
 }
 
-class MyBaseClass <K> implements MyInterfaceB {
+class MyBaseClass implements MyInterfaceA {
 
     @Override
-    public K methodB() {
-        return null;
+    public void methodA() {
+
     }
 }
 
-public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass<Integer> implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
+public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
 
     public ComplicatedClass() {
     }
@@ -36,7 +36,9 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
     protected ComplicatedClass(Integer value, TreeSet<? super  K> set) {
     }
 
+    public final static char CONST_CHAR = 0;
     public final static int CONST = 10;
+    public final static boolean FLAG = false;
     protected final static String STRING_CONST = "STRING CONST";
     private static Integer INTEGER_CONST = 1010101010;
 
@@ -73,8 +75,17 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
         return 42;
     }
 
+    public static void someFunction() {
+        // TODO
+    }
+
     protected List protectedMethod(Comparable<? extends  K> comparable) {
         return new LinkedList();
+    }
+
+    @Override
+    public void methodB() {
+
     }
 
 //    private <U extends K> Comparator<U> generciMethod() {
