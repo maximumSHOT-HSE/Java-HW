@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 class A  {
@@ -36,37 +38,45 @@ public class Reflector {
      * Generic methods and inner classes will save their generic entities.
      * */
     public static void printStructure(@NotNull Class<?> someClass) {
-        System.out.println(generateCode(someClass));
+        Set<String> packages = new TreeSet<>();
+//        System.out.println(generateCode(someClass, packages));
+        String generatedCode = generateCode(someClass, packages);
+//        System.out.println("\npackages:\n");;
+        for (var s : packages) {
+//            System.out.println(s);
+            System.out.println("import " + s + ";");
+        }
+        System.out.println(generatedCode);
     }
 
-    private static String generateCode(@NotNull Class<?> someClass) {
+    private static String generateCode(@NotNull Class<?> someClass, Set<String> packages) {
         StringBuilder someClassCode = new StringBuilder();
 
         // declaration
         someClassCode.append(
-            getClassDeclaration(someClass)
+            getClassDeclaration(someClass, packages)
         );
 
         // all fields
         someClassCode.append(
-            getAllfields(someClass)
+            getAllfields(someClass, packages)
         );
 
         someClassCode.append("\n");
 
         // all methods
         someClassCode.append(
-            getAllMethods(someClass)
+            getAllMethods(someClass, packages)
         );
 
         // constructors
         someClassCode.append(
-            getAllConstructors(someClass)
+            getAllConstructors(someClass, packages)
         );
 
         // inner/nested classes/interfaces
         someClassCode.append(
-            getAllClasses(someClass)
+            getAllClasses(someClass, packages)
         );
 
         // ending parenthesis
@@ -75,35 +85,36 @@ public class Reflector {
         return someClassCode.toString();
     }
 
-    private static String getClassDeclaration(Class<?> someClass) {
+    private static String getClassDeclaration(Class<?> someClass, final Set<String> packages) {
         return getDeclarationModifiers(someClass.getModifiers()) +
                 (someClass.isInterface() ? "" : "class ") +
                 someClass.getSimpleName() + " " +
                 getFullGenericArguments(someClass.getTypeParameters()) +
-                getExtensionString(someClass) +
-                getInterfacesString(someClass) +
+                getExtensionString(someClass, packages) +
+                getInterfacesString(someClass, packages) +
                 "{\n";
     }
 
-    private static String getAllClasses(Class<?> someClass) {
+    private static String getAllClasses(Class<?> someClass, Set<String> packages) {
         StringBuilder classes = new StringBuilder();
         for (var clazz : someClass.getDeclaredClasses()) {
-            classes.append(Reflector.generateCode(clazz)).append("\n");
+            classes.append(Reflector.generateCode(clazz, packages)).append("\n");
         }
         return classes.toString();
     }
 
-    private static String getParametersDescribing(Type[] parameters) {
+    private static String getParametersDescribing(Type[] parameters, final Set<String> packages) {
         final Counter counter = new Counter();
         return Arrays.stream(parameters)
                 .map(p -> {
                     counter.increment();
+//                    packages.add(p.getClass().getPackageName());
                     return p.getTypeName() + " a" + counter.getCounter();
                 })
                 .collect(Collectors.joining(", ", "(", ")"));
     }
 
-    private static String getAllConstructors(Class<?> someClass) {
+    private static String getAllConstructors(Class<?> someClass, final Set<String> packages) {
         StringBuilder constructors = new StringBuilder();
 
         for (var constructor : someClass.getDeclaredConstructors()) {
@@ -112,15 +123,15 @@ public class Reflector {
             }
             constructors.append(Modifier.toString(constructor.getModifiers())).append(" ") // modifiers
                     .append(someClass.getSimpleName()); // name
-            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes())).append(" ")
-                    .append(getExceptionsThrowableFromMethods(constructor.getExceptionTypes())) // exceptions
+            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes(), packages)).append(" ")
+                    .append(getExceptionsThrowableFromMethods(constructor.getExceptionTypes(), packages)) // exceptions
                     .append(" {\n").append("}\n\n"); // parameters
         }
 
         return constructors.toString();
     }
 
-    private static String getAllMethods(Class<?> someClass) {
+    private static String getAllMethods(Class<?> someClass, final Set<String> packages) {
         StringBuilder methods = new StringBuilder();
         for (var method : someClass.getDeclaredMethods()) {
             if (method.isSynthetic()) {
@@ -130,8 +141,8 @@ public class Reflector {
             methods.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
             methods.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
             methods.append(method.getName()); // method name
-            methods.append(getParametersDescribing(method.getGenericParameterTypes())).append(" "); // arguments
-            methods.append(getExceptionsThrowableFromMethods(method.getExceptionTypes()));
+            methods.append(getParametersDescribing(method.getGenericParameterTypes(), packages)).append(" "); // arguments
+            methods.append(getExceptionsThrowableFromMethods(method.getExceptionTypes(), packages)); // exceptions
             if (someClass.isInterface()) {
                 methods.append(";\n");
             } else {
@@ -149,12 +160,15 @@ public class Reflector {
         return methods.toString();
     }
 
-    private static String getExceptionsThrowableFromMethods(Class<?>[] exceptions) {
+    private static String getExceptionsThrowableFromMethods(Class<?>[] exceptions, final Set<String> packages) {
         if (exceptions.length == 0) {
             return "";
         }
         return Arrays.stream(exceptions)
-                .map(Class::getCanonicalName)
+                .map(p -> {
+                    packages.add(p.getCanonicalName());
+                    return p.getCanonicalName();
+                })
                 .collect(
                     Collectors.joining(
                         ", ", "throws ", " "
@@ -162,12 +176,13 @@ public class Reflector {
                 );
     }
 
-    private static String getAllfields(Class<?> someClass) {
+    private static String getAllfields(Class<?> someClass, final Set<String> packages) {
         StringBuilder fields = new StringBuilder();
         for (var field : someClass.getDeclaredFields()) {
             if (field.isSynthetic()) {
                 continue;
             }
+            packages.add(field.getClass().getCanonicalName());
             fields.append(getDeclarationModifiers(field.getModifiers())); // modifiers
             fields.append(field.getGenericType().getTypeName()).append(" ");
             fields.append(field.getName());
@@ -208,36 +223,30 @@ public class Reflector {
 //        Reflector.printStructure(ArrayList.class);
     }
 
-    private static String getExtensionString(Class<?> someClass) {
+    private static String getExtensionString(Class<?> someClass, Set<String> packages) {
         Class<?> superClass = someClass.getSuperclass();
         if (superClass != null && superClass.getSuperclass() != null) {
+            packages.add(someClass.getSuperclass().getCanonicalName());
             return "extends " + superClass.getSimpleName() + " ";
         } else {
             return "";
         }
     }
 
-    private static String getInterfacesString(Class<?> someClass) {
+    private static String getInterfacesString(Class<?> someClass, final Set<String> packages) {
         Class<?>[] interfaces = someClass.getInterfaces();
         StringBuilder interfacesString = new StringBuilder();
         if (interfaces.length == 0) {
             return "";
         }
         for (var receivedInterface : interfaces) {
+            packages.add(receivedInterface.getCanonicalName());
             if (interfacesString.length() > 0) {
                 interfacesString.append(", ");
             }
             interfacesString.append(receivedInterface.getSimpleName());
         }
         return "implements " + interfacesString.toString() + " ";
-    }
-
-    private static String getIsFinalString(Class<?> someClass) {
-        if (Modifier.isFinal(someClass.getModifiers())) {
-            return "final ";
-        } else {
-            return "";
-        }
     }
 
     private static String getFullGenericArguments(TypeVariable<?>[] typesVariable) {

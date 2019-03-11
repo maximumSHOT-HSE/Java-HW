@@ -2,6 +2,14 @@ package ru.hse.surkov;
 
 import jdk.jshell.spi.ExecutionControl;
 
+import java.io.IOException;
+import java.lang.RuntimeException;
+import java.lang.reflect.Field;
+import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import ru.hse.surkov.MyBaseClass;
+import ru.hse.surkov.MyInterfaceA;
+import ru.hse.surkov.MyInterfaceB;
+import ru.hse.surkov.MyInterfaceC;
 class ComplicatedClass <K extends java.lang.Object, R extends java.lang.Object, S extends java.lang.Object, T extends java.lang.Comparable<? super K>, U extends java.lang.Comparable<? extends S>> extends MyBaseClass implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
     public static final char CONST_CHAR = 0;
     public static final int CONST = 0;
@@ -51,10 +59,10 @@ class ComplicatedClass <K extends java.lang.Object, R extends java.lang.Object, 
     public <W extends K>  void voidMethod(W a1)  {
     }
 
-    private ComplicatedClass(K a1) throws jdk.jshell.spi.ExecutionControl.NotImplementedException  {
+    protected ComplicatedClass(java.lang.Integer a1, java.util.TreeSet<? super K> a2)  {
     }
 
-    protected ComplicatedClass(java.lang.Integer a1, java.util.TreeSet<? super K> a2)  {
+    private ComplicatedClass(K a1) throws jdk.jshell.spi.ExecutionControl.NotImplementedException  {
     }
 
     public ComplicatedClass()  {
