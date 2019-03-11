@@ -1,6 +1,5 @@
 package ru.hse.surkov;
 
-import ru.hse.test.helperClasses.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -75,7 +74,7 @@ public class Reflector {
 
         // inner/nested classes/interfaces
         someClassCode.append(
-            getAllClasses(someClass, packages)
+            getAllSubClasses(someClass, packages)
         );
 
         // ending parenthesis
@@ -89,12 +88,12 @@ public class Reflector {
                 (someClass.isInterface() ? "" : "class ") +
                 someClass.getSimpleName() + " " +
                 getFullGenericArguments(someClass.getTypeParameters()) +
-                getExtensionString(someClass, packages) +
-                getInterfacesString(someClass, packages) +
+                getSuperClassInformation(someClass, packages) +
+                getInterfacesForImplementing(someClass, packages) +
                 "{\n";
     }
 
-    private static String getAllClasses(Class<?> someClass, Set<String> packages) {
+    private static String getAllSubClasses(Class<?> someClass, Set<String> packages) {
         StringBuilder classes = new StringBuilder();
         for (var clazz : someClass.getDeclaredClasses()) {
             classes.append(Reflector.generateCode(clazz, packages)).append("\n");
@@ -220,7 +219,7 @@ public class Reflector {
         return modifiers.length() == 0 ? ""  : modifiers + " ";
     }
 
-    private static String getExtensionString(Class<?> someClass, Set<String> packages) {
+    private static String getSuperClassInformation(Class<?> someClass, Set<String> packages) {
         Class<?> superClass = someClass.getSuperclass();
         if (superClass != null && superClass.getSuperclass() != null) {
             packages.add(someClass.getSuperclass().getCanonicalName());
@@ -230,7 +229,12 @@ public class Reflector {
         }
     }
 
-    private static String getInterfacesString(Class<?> someClass, final Set<String> packages) {
+    /*
+    * Method retrieves a sequence of interfaces
+    * which are there in class declaration
+    * and returns it in java valid format
+    * */
+    private static String getInterfacesForImplementing(Class<?> someClass, final Set<String> packages) {
         Class<?>[] interfaces = someClass.getInterfaces();
         StringBuilder interfacesString = new StringBuilder();
         if (interfaces.length == 0) {
@@ -246,6 +250,10 @@ public class Reflector {
         return "implements " + interfacesString.toString() + " ";
     }
 
+    /*
+    * Method gets a type, explores it's bounds
+    * and returns full java valid generic type with all dependencies.
+    * */
     private static String getFullGenericArguments(TypeVariable<?>[] typesVariable) {
         if (typesVariable.length == 0) {
             return "";
@@ -253,7 +261,7 @@ public class Reflector {
         StringBuilder arguments = new StringBuilder();
         for (var x : typesVariable) {
             if (arguments.length() > 0) {
-                arguments.append(", ");
+                arguments.append("& ");
             }
             arguments.append(x.getTypeName());
             if (x.getBounds().length == 0) {
@@ -268,8 +276,13 @@ public class Reflector {
         return "<" + arguments.toString() + "> ";
     }
 
+    /*
+    * Helper class in creating names for variables,
+    * should be use in java streams.
+    * */
     private static class Counter {
         private int count;
+
         public void increment() {
             count++;
         }
@@ -278,6 +291,10 @@ public class Reflector {
         }
     }
 
+    /*
+    * Method finds all Strings in leftSet, which does not exist in rightSet
+    * and collects all such String in one big string.
+    * */
     private static String getDifferencesBetwwenHashSets(HashSet<String> leftSet, HashSet<String> rightSet) {
         StringBuilder log = new StringBuilder();
         for (var x : leftSet) {
