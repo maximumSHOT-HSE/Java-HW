@@ -1,5 +1,7 @@
 package ru.hse.surkov;
 
+import jdk.jshell.spi.ExecutionControl;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
@@ -29,7 +31,7 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
     public ComplicatedClass() {
     }
 
-    private ComplicatedClass(K k) {
+    private ComplicatedClass(K k) throws ExecutionControl.NotImplementedException {
 
     }
 
@@ -53,6 +55,8 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
     public  boolean flagTrue = true;
     protected boolean flagFalse = false;
     String someString = "ten";
+    public int[] vars;
+    protected Set<Integer> sets[];
 
     public Set<? extends Comparable<Character>> set = new TreeSet<>();
     protected List<? extends Object> list = new LinkedList<>();
@@ -96,6 +100,12 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
         private int x = 10;
         private int y = 10;
         public String openField;
+
+//        protected final class NestedInnerClass {
+//            public void foo() {
+//
+//            }
+//        }
     }
 
     class InnerPackageLevelClass {

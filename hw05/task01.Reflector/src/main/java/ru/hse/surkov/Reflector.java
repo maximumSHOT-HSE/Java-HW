@@ -2,10 +2,7 @@ package ru.hse.surkov;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -39,45 +36,61 @@ public class Reflector {
      * Generic methods and inner classes will save their generic entities.
      * */
     public static void printStructure(@NotNull Class<?> someClass) {
-        System.out.println(generateCode(someClass, 0));
+        System.out.println(generateCode(someClass));
     }
 
-    private static String generateCode(@NotNull Class<?> someClass, int depth) {
+    private static String generateCode(@NotNull Class<?> someClass) {
         StringBuilder someClassCode = new StringBuilder();
 
-        someClassCode.append("\t".repeat(depth));
         // declaration
         someClassCode.append(
-                getDeclarationModifiers(someClass.getModifiers()) + "class " +
-                        someClass.getSimpleName() + " " +
-                        getFullGenericArguments(someClass.getTypeParameters()) +
-                        getExtensionString(someClass) +
-                        getInterfacesString(someClass) +
-                        "{\n"
+            getClassDeclaration(someClass)
         );
 
         // all fields
         someClassCode.append(
-            getAllfields(someClass, depth + 1)
+            getAllfields(someClass)
         );
 
         someClassCode.append("\n");
 
         // all methods
         someClassCode.append(
-            getAllMethods(someClass, depth + 1)
+            getAllMethods(someClass)
         );
 
         // constructors
         someClassCode.append(
-            getAllConstructors(someClass, depth + 1)
+            getAllConstructors(someClass)
         );
 
-        someClassCode.append("\t".repeat(depth));
+        // inner/nested classes/interfaces
+        someClassCode.append(
+            getAllClasses(someClass)
+        );
+
         // ending parenthesis
         someClassCode.append("}\n");
 
         return someClassCode.toString();
+    }
+
+    private static String getClassDeclaration(Class<?> someClass) {
+        return getDeclarationModifiers(someClass.getModifiers()) +
+                (someClass.isInterface() ? "" : "class ") +
+                someClass.getSimpleName() + " " +
+                getFullGenericArguments(someClass.getTypeParameters()) +
+                getExtensionString(someClass) +
+                getInterfacesString(someClass) +
+                "{\n";
+    }
+
+    private static String getAllClasses(Class<?> someClass) {
+        StringBuilder classes = new StringBuilder();
+        for (var clazz : someClass.getDeclaredClasses()) {
+            classes.append(Reflector.generateCode(clazz)).append("\n");
+        }
+        return classes.toString();
     }
 
     private static String getParametersDescribing(Type[] parameters) {
@@ -90,46 +103,58 @@ public class Reflector {
                 .collect(Collectors.joining(", ", "(", ")"));
     }
 
-    private static String getAllConstructors(Class<?> someClass, int depth) {
+    private static String getAllConstructors(Class<?> someClass) {
         StringBuilder constructors = new StringBuilder();
 
         for (var constructor : someClass.getDeclaredConstructors()) {
-            constructors.append("\t".repeat(depth));
-            constructors.append(Modifier.toString(constructor.getModifiers())).append(" ").append(someClass.getSimpleName());
-            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes())).append(" {\n\t".repeat(depth)).append("}\n\n");
+            if (constructor.isSynthetic()) {
+                continue;
+            }
+            constructors.append(Modifier.toString(constructor.getModifiers())).append(" ") // modifiers
+                    .append(someClass.getSimpleName()); // name
+            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes())).append(" ")
+                    .append(getExceptionsThrowableFromMethods(constructor.getExceptionTypes())) // exceptions
+                    .append(" {\n").append("}\n\n"); // parameters
         }
 
         return constructors.toString();
     }
 
-    private static String getAllMethods(Class<?> someClass, int depth) {
+    private static String getAllMethods(Class<?> someClass) {
         StringBuilder methods = new StringBuilder();
         for (var method : someClass.getDeclaredMethods()) {
-            methods.append("\t".repeat(depth)); // tabs
+            if (method.isSynthetic()) {
+                continue;
+            }
             methods.append(getDeclarationModifiers(method.getModifiers())); // modifiers
             methods.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
             methods.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
             methods.append(method.getName()); // method name
             methods.append(getParametersDescribing(method.getGenericParameterTypes())).append(" "); // arguments
-            methods.append(getExceptionsThrowableFromMethod(method)).append(" {\n");
-            if(!void.class.equals(method.getReturnType())) {
-                if (method.getReturnType().isPrimitive()) {
-                    methods.append("\t".repeat(depth + 1)).append("return 0;\n");
-                } else {
-                    methods.append("\t".repeat(depth + 1)).append("return null;\n");
+            methods.append(getExceptionsThrowableFromMethods(method.getExceptionTypes()));
+            if (someClass.isInterface()) {
+                methods.append(";\n");
+            } else {
+                methods.append(" {\n");
+                if (!void.class.equals(method.getReturnType())) {
+                    if (method.getReturnType().isPrimitive()) {
+                        methods.append("return 0;\n");
+                    } else {
+                        methods.append("return null;\n");
+                    }
                 }
+                methods.append("}\n\n");
             }
-            methods.append("\t".repeat(depth)).append("}\n\n");
         }
         return methods.toString();
     }
 
-    private static String getExceptionsThrowableFromMethod (Method method) {
-        if (method.getExceptionTypes().length == 0) {
+    private static String getExceptionsThrowableFromMethods(Class<?>[] exceptions) {
+        if (exceptions.length == 0) {
             return "";
         }
-        return Arrays.stream(method.getExceptionTypes())
-                .map(e -> e.getTypeName())
+        return Arrays.stream(exceptions)
+                .map(Class::getCanonicalName)
                 .collect(
                     Collectors.joining(
                         ", ", "throws ", " "
@@ -137,10 +162,12 @@ public class Reflector {
                 );
     }
 
-    private static String getAllfields(Class<?> someClass, int depth) {
+    private static String getAllfields(Class<?> someClass) {
         StringBuilder fields = new StringBuilder();
         for (var field : someClass.getDeclaredFields()) {
-            fields.append("\t".repeat(depth));
+            if (field.isSynthetic()) {
+                continue;
+            }
             fields.append(getDeclarationModifiers(field.getModifiers())); // modifiers
             fields.append(field.getGenericType().getTypeName()).append(" ");
             fields.append(field.getName());
@@ -174,18 +201,11 @@ public class Reflector {
         Reflector.printStructure(finalClass.class);
         System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
         Reflector.printStructure(A.finalInnerAClasss.class);
+
 //        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
 //        Reflector.printStructure(String.class);
 //        System.out.println("\n\n\n\n--------------NEXT TEST---------------\n\n\n");
 //        Reflector.printStructure(ArrayList.class);
-    }
-
-    /**
-     * Method receives two classes to be compared and prints into standard
-     * output stream (console) all the different fields and methods.
-     * */
-    public static void diffClasses(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
-
     }
 
     private static String getExtensionString(Class<?> someClass) {
@@ -250,5 +270,13 @@ public class Reflector {
         public int getCounter() {
             return count;
         }
+    }
+
+    /**
+     * Method receives two classes to be compared and prints into standard
+     * output stream (console) all the different fields and methods.
+     * */
+    public static void diffClasses(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
+
     }
 }
