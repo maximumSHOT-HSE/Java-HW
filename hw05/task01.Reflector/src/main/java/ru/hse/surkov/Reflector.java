@@ -39,14 +39,6 @@ public class Reflector {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-//        printStructure(ru.hse.test.helperClasses.ComplicatedClass.class); // OK
-//        printStructure(MyBaseClass.class); // OK
-//        printStructure(MyPair.class);
-//        printStructure(HashTable.class);
-//        printStructure(MyList.class);g
-    }
-
     private static String generateCode(@NotNull Class<?> someClass, Set<String> packages) {
         StringBuilder someClassCode = new StringBuilder();
 
