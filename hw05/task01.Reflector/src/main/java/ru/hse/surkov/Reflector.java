@@ -2,9 +2,11 @@ package ru.hse.surkov;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 class A  {
     static {
@@ -46,7 +48,7 @@ public class Reflector {
         someClassCode.append(
                 getDeclarationModifiers(someClass.getModifiers()) + "class " +
                         someClass.getSimpleName() + " " +
-                        getFullGenericArguments(someClass) +
+                        getFullGenericArguments(someClass.getTypeParameters()) +
                         getExtensionString(someClass) +
                         getInterfacesString(someClass) +
                         "{\n"
@@ -64,6 +66,10 @@ public class Reflector {
             getAllMethods(someClass, depth + 1)
         );
 
+        // constructors
+
+
+
         someClassCode.append("\t".repeat(depth));
         // ending parenthesis
         someClassCode.append("}\n");
@@ -74,9 +80,28 @@ public class Reflector {
     private static String getAllMethods(Class<?> someClass, int depth) {
         StringBuilder methods = new StringBuilder();
         for (var method : someClass.getDeclaredMethods()) {
-            methods.append("\t".repeat(depth));
-            methods.append(getDeclarationModifiers(method.getModifiers()));
-            methods.append(method.getReturnType() + " " + method.getName() + "\n");
+            methods.append("\t".repeat(depth)); // tabs
+            methods.append(getDeclarationModifiers(method.getModifiers())); // modifiers
+            methods.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
+            methods.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
+            methods.append(method.getName()); // method name
+            final Counter counter = new Counter();
+            methods.append(
+                Arrays.stream(method.getGenericParameterTypes())
+                .map(p -> {
+                    counter.increment();
+                    return p.getTypeName() + " a" + counter.getCounter();
+                })
+                .collect(Collectors.joining(", ", "(", ") {\n"))
+            );
+            if(!void.class.equals(method.getReturnType())) {
+                if (method.getReturnType().isPrimitive()) {
+                    methods.append("\t".repeat(depth + 1)).append("return 0;\n");
+                } else {
+                    methods.append("\t".repeat(depth + 1)).append("return null;\n");
+                }
+            }
+            methods.append("\t".repeat(depth)).append("}\n\n");
         }
         return methods.toString();
     }
@@ -86,8 +111,16 @@ public class Reflector {
         for (var field : someClass.getDeclaredFields()) {
             fields.append("\t".repeat(depth));
             fields.append(getDeclarationModifiers(field.getModifiers())); // modifiers
-            fields.append(field.getGenericType().getTypeName() + " ");
-            fields.append(field.getName() + ";\n");
+            fields.append(field.getGenericType().getTypeName()).append(" ");
+            fields.append(field.getName());
+            if (Modifier.isFinal(field.getModifiers())) {
+                if (field.getType().isPrimitive()) {
+                    fields.append(" = 0");
+                } else {
+                    fields.append(" = null");
+                }
+            }
+            fields.append(";\n");
         }
         return fields.toString();
     }
@@ -152,12 +185,12 @@ public class Reflector {
         }
     }
 
-    private static String getFullGenericArguments(Class<?> someClass) {
-        if (someClass.getTypeParameters().length == 0) {
+    private static String getFullGenericArguments(TypeVariable<?>[] typesVariable) {
+        if (typesVariable.length == 0) {
             return "";
         }
         StringBuilder arguments = new StringBuilder();
-        for (var x : someClass.getTypeParameters()) {
+        for (var x : typesVariable) {
             if (arguments.length() > 0) {
                 arguments.append(", ");
             }
@@ -172,5 +205,15 @@ public class Reflector {
             System.out.println();
         }
         return "<" + arguments.toString() + "> ";
+    }
+
+    private static class Counter {
+        private int count;
+        public void increment() {
+            count++;
+        }
+        public int getCounter() {
+            return count;
+        }
     }
 }

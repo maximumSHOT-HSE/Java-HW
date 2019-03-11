@@ -25,7 +25,18 @@ class MyBaseClass <K> implements MyInterfaceB {
 
 public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass<Integer> implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
 
+    public ComplicatedClass() {
+    }
+
+    private ComplicatedClass(K k) {
+
+    }
+
+    protected ComplicatedClass(Integer value, TreeSet<? super  K> set) {g
+    }
+
     public final static int CONST = 10;
+    protected final static String STRING_CONST = "STRING CONST";
     private static Integer INTEGER_CONST = 1010101010;
 
     private String privateString = "private string";
@@ -53,17 +64,21 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
 
     }
 
-    public int publicMethod() {
+    public int publicMethod(List<Set<Integer>> set, Integer count) {
         return 0;
     }
 
-    protected List protectedMethod() {
+    public Integer twoArgumentsMethod(Character c, String s) {
+        return 42;
+    }
+
+    protected List protectedMethod(Comparable<? extends  K> comparable) {
         return new LinkedList();
     }
 
-    private <U extends K> Comparator<U> generciMethod() {
-        return (o1, o0) -> 0; // lambda
-    }
+//    private <U extends K> Comparator<U> generciMethod() {
+//        return (o1, o0) -> 0; // lambda
+//    }
 
     public static class NestedClass {
         private int x = 10;
@@ -75,7 +90,8 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
         protected String name = "TEN";
     }
 
-    public void voidMethod() {
+
+    public <W extends K> void voidMethod(W xxx) {
         new Iterator<>() { // anonymous class
 
             @Override
