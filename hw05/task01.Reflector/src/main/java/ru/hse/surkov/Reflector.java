@@ -2,12 +2,13 @@ package ru.hse.surkov;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -26,16 +27,13 @@ public class Reflector {
      * Generic methods and inner classes will save their generic entities.
      * */
     public static void printStructure(@NotNull Class<?> someClass) throws IOException {
-        File source = new File(someClass.getSimpleName() + ".java");
         Set<String> packages = new TreeSet<>();
         String generatedCode = generateCode(someClass, packages);
-        try (FileWriter fileWriter = new FileWriter(source)) {
+        try (FileWriter fileWriter = new FileWriter(someClass.getSimpleName() + ".java")) {
             for (var necessaryPackage : packages) {
                 fileWriter.write("import " + necessaryPackage + ";\n");
             }
             fileWriter.write(generatedCode);
-        } catch (FileNotFoundException ignored) {
-            // impossible situation
         }
     }
 

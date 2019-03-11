@@ -8,6 +8,9 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -17,19 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ReflectorTest {
 
     private JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-
-    private void createFile(Class<?> clazz) {
-        assertDoesNotThrow(() -> Reflector.printStructure(clazz));
-        assertTrue(Files.exists(Paths.get(clazz.getSimpleName() + ".java")));
-    }
-
-    private void deleteFile(Class<?> clazz) {
-        assertDoesNotThrow(() -> Files.delete(Paths.get(clazz.getSimpleName() + ".java")));
-    }
-
-    private void testCompile(Class<?> clazz) {
-        assertEquals(0, javaCompiler.run(null, null, null, new File(clazz.getSimpleName() + ".java").getAbsolutePath()));
-    }
 
     @AfterEach
     void deleteClassFiles() {
@@ -41,47 +31,73 @@ public class ReflectorTest {
                 // no processing
             }
         }
+        for (File file : Objects.requireNonNull(currentDirectory.listFiles(pathname -> pathname.getName().endsWith(".java")))) {
+            try {
+                Files.deleteIfExists(Paths.get(file.getAbsolutePath()));
+            } catch (IOException ignored) {
+                // no processing
+            }
+        }
+    }
+
+    private String getNoDiffString(Class<?> leftClass, Class<?> rightClass) {
+        StringBuilder log = new StringBuilder();
+
+        log.append("Fields:\n\n");
+
+        log.append(leftClass.getSimpleName()).append("\n");
+        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+
+        log.append("Methods:\n\n");
+
+        log.append(leftClass.getSimpleName()).append("\n");
+        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+
+        return log.toString();
+    }
+
+    void testGenerateCompileLoadDiff(Class<?> clazz) throws MalformedURLException, ClassNotFoundException {
+        assertDoesNotThrow(() -> Reflector.printStructure(clazz));
+        JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
+        javaCompiler.run(null, null, null, clazz.getSimpleName() + ".java");
+
+        URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] {
+            new File(".").toURI().toURL()
+        });
+
+        Class<?> generatedClazz = Class.forName(clazz.getSimpleName(), true, urlClassLoader);
+
+        assertEquals(getNoDiffString(clazz, clazz), Reflector.getDiffernces(clazz, generatedClazz));
+        assertEquals(getNoDiffString(clazz, clazz), Reflector.getDiffernces(generatedClazz, clazz));
     }
 
     @Test
     void testPairClass() {
-        createFile(MyPair.class);
-        testCompile(MyPair.class);
-        assertDoesNotThrow(() -> deleteFile(MyPair.class));
+        assertDoesNotThrow(() -> testGenerateCompileLoadDiff(MyPair.class));
     }
 
     @Test
-    void testHashTableClass() {
-        createFile(HashTable.class);
-        testCompile(HashTable.class);
-        assertDoesNotThrow(() -> deleteFile(HashTable.class));
+    void testHashTable() {
+        assertDoesNotThrow(() -> testGenerateCompileLoadDiff(HashTable.class));
+    }
+
+    @Test
+    void testMyList() {
+        assertDoesNotThrow(() -> testGenerateCompileLoadDiff(MyList.class));
     }
 
     @Test
     void testComplicatedClass() {
-        createFile(ComplicatedClass.class);
-        testCompile(ComplicatedClass.class);
-        assertDoesNotThrow(() -> deleteFile(ComplicatedClass.class));
+        assertDoesNotThrow(() -> testGenerateCompileLoadDiff(ComplicatedClass.class));
     }
 
     @Test
     void testMyBaseClass() {
-        createFile(MyBaseClass.class);
-        testCompile(MyBaseClass.class);
-        assertDoesNotThrow(() -> deleteFile(MyBaseClass.class));
+        assertDoesNotThrow(() -> testGenerateCompileLoadDiff(MyBaseClass.class));
     }
 
     @Test
-    void testMyInterface() {
-        createFile(MyInterfaceA.class);
-        testCompile(MyInterfaceA.class);
-        assertDoesNotThrow(() -> deleteFile(MyInterfaceA.class));
-    }
-
-    @Test
-    void testMyListClass() {
-        createFile(MyList.class);
-        testCompile(MyList.class);
-        assertDoesNotThrow(() -> deleteFile(MyList.class));
+    void tesyMyInterface() {
+        assertDoesNotThrow(() -> testGenerateCompileLoadDiff(MyInterfaceA.class));
     }
 }
