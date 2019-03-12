@@ -15,7 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReflectorTest {
 
@@ -23,6 +24,7 @@ public class ReflectorTest {
 
     @AfterEach
     void deleteClassFiles() {
+        // delete all generated *.class files
         File currentDirectory = new File(".");
         for (File file : Objects.requireNonNull(currentDirectory.listFiles(pathname -> pathname.getName().endsWith(".class")))) {
             try {
@@ -31,6 +33,7 @@ public class ReflectorTest {
                 // no processing
             }
         }
+        // delete all generated *.java files
         for (File file : Objects.requireNonNull(currentDirectory.listFiles(pathname -> pathname.getName().endsWith(".java")))) {
             try {
                 Files.deleteIfExists(Paths.get(file.getAbsolutePath()));

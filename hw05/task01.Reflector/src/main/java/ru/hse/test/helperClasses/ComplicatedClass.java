@@ -3,10 +3,12 @@ package ru.hse.test.helperClasses;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
+public class ComplicatedClass <K, R extends Object, S extends K, T extends Comparable<? super K>, U extends Comparable<? extends S>> extends MyBaseClass implements MyInterfaceA, MyInterfaceB, MyInterfaceC {
 
     public ComplicatedClass() {
     }
@@ -63,7 +65,7 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
         // TODO
     }
 
-    protected List protectedMethod(Comparable<? extends  K> comparable) {
+    protected List protectedMethod(Comparable<? extends K> comparable) {
         return new LinkedList();
     }
 
@@ -81,17 +83,29 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
         private int y = 10;
         public String openField;
 
-//        protected final class NestedInnerClass {
-//            public void foo() {
-//
-//            }
-//        }
+        protected final class NestedInnerClass {
+
+            public void foo() {
+
+            }
+        }
+
+        public static interface TrickyInterface {
+            default void defaultMethod() {
+
+            }
+        }
     }
 
     class InnerPackageLevelClass {
         protected String name = "TEN";
     }
 
+    class ClassWithGenericMethod {
+        public <K extends Runnable & Serializable> K func() {
+            return null;
+        }
+    }
 
     public <W extends K> void voidMethod(W xxx) {
         new Iterator<>() { // anonymous class
@@ -124,5 +138,9 @@ public class ComplicatedClass <K, R extends Object, S, T extends Comparable<? su
 
     protected static interface NestedInterface <K> {
         Comparator<K> oneMoreAwesomeInterface();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(NestedClass.NestedInnerClass.class.getEnclosingClass() != null && !Modifier.isStatic(NestedClass.NestedInnerClass.class.getModifiers()));
     }
 }

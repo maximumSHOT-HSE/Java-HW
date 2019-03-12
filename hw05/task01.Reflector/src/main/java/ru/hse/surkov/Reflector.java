@@ -1,14 +1,15 @@
 package ru.hse.surkov;
 
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
 import org.jetbrains.annotations.NotNull;
+import ru.hse.test.helperClasses.ComplicatedClass;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.sql.Ref;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,23 +21,44 @@ public class Reflector {
 
     /**
      * Method creates new correct (valid) compilable .java file with
-     * code of someClass.
+     * code of someClass
+     * (file will be created (or will be replaced) at the same place as
+     * the directory where Reflector has been executed).
      * In the created file all fields, methods, inner and nested classes and interfaces
      * will be declared with modifiers equivalent to the original class.
      * Returned types of all methods will be the same as the originals.
      * Generic methods and inner classes will save their generic entities.
+     * @throws IOException if there is some problems with creating .java file
+     * (for instance, problems with permission)
      * */
-    public static void printStructure(@NotNull Class<?> someClass) throws IOException {
-        Set<String> packages = new TreeSet<>();
-        String generatedCode = generateCode(someClass, packages);
+    public static void printStructure(@NotNull Class<?> someClass) throws IOException, FormatterException {
         try (FileWriter fileWriter = new FileWriter(someClass.getSimpleName() + ".java")) {
-            for (var necessaryPackage : packages) {
-                fileWriter.write("import " + necessaryPackage + ";\n");
-            }
-            fileWriter.write(generatedCode);
+            String generatedCode = getGeneratedCode(someClass);
+            fileWriter.write(new Formatter().formatSource(generatedCode).replaceAll("  ", "    "));
         }
     }
 
+    /**
+     * Methods the same as the {@link Reflector#printStructure(Class)}, but
+     * @return generated code as a String instead of printing it into file
+     * */
+    public static String getGeneratedCode(@NotNull Class<?> someClass) {
+        Set<String> packages = new TreeSet<>();
+        String generatedCode = generateCode(someClass, packages);
+        StringBuilder importPackagesCode = new StringBuilder();
+        for (var necessaryPackage : packages) {
+            importPackagesCode
+                .append("import ")
+                .append(necessaryPackage)
+                .append(";\n");
+        }
+        return importPackagesCode + generatedCode;
+    }
+
+    /*
+    * Method generates code of someClass, stores it in the String and returns generated String
+    * @param packages needed for storing necessary packages for correct compilation
+    * */
     @NotNull private static String generateCode(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
         StringBuilder someClassCode = new StringBuilder();
 
@@ -91,15 +113,19 @@ public class Reflector {
         return classes.toString();
     }
 
-    @NotNull private static String getParametersDescribing(@NotNull Type[] parameters, @NotNull final Set<String> packages) {
+    @NotNull private static String getParametersDescribing(@NotNull Type[] parameters, boolean isNestedClass) {
+        var stream = isNestedClass ? Arrays.stream(parameters).skip(1) : Arrays.stream(parameters);
         final Counter counter = new Counter();
-        return Arrays.stream(parameters)
+        return stream
                 .map(p -> {
                     counter.increment();
-//                    packages.add(p.getClass().getPackageName());
                     return p.getTypeName() + " a" + counter.getCounter();
                 })
                 .collect(Collectors.joining(", ", "(", ")"));
+    }
+
+    private static boolean isInner(@NotNull Class<?> clazz) {
+        return clazz.getEnclosingClass() != null && !Modifier.isStatic(clazz.getModifiers());
     }
 
     @NotNull private static String getAllConstructors(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
@@ -109,11 +135,15 @@ public class Reflector {
             if (constructor.isSynthetic()) {
                 continue;
             }
-            constructors.append(Modifier.toString(constructor.getModifiers())).append(" ") // modifiers
+            constructors
+                    .append(Modifier.toString(constructor.getModifiers())).append(" ") // modifiers
                     .append(someClass.getSimpleName()); // name
-            constructors.append(getParametersDescribing(constructor.getGenericParameterTypes(), packages)).append(" ")
+            constructors
+                    .append(getParametersDescribing(constructor.getGenericParameterTypes(), isInner(someClass))) // parameters
+                    .append(" ")
                     .append(getExceptionsThrowableFromMethods(constructor.getExceptionTypes(), packages)) // exceptions
-                    .append(" {\n").append("}\n\n"); // parameters
+                    .append(" {\n")
+                    .append("}\n\n");
         }
 
         return constructors.toString();
@@ -125,7 +155,7 @@ public class Reflector {
         methodDeclaration.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
         methodDeclaration.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
         methodDeclaration.append(method.getName()); // method name
-        methodDeclaration.append(getParametersDescribing(method.getGenericParameterTypes(), packages)).append(" "); // arguments
+        methodDeclaration.append(getParametersDescribing(method.getGenericParameterTypes(), false)).append(" "); // arguments
         methodDeclaration.append(getExceptionsThrowableFromMethods(method.getExceptionTypes(), packages)); // exceptions
         return methodDeclaration.toString();
     }
@@ -136,8 +166,13 @@ public class Reflector {
             if (method.isSynthetic()) {
                 continue;
             }
-            methods.append(getMethodDeclaration(method, packages));
             if (someClass.isInterface()) {
+                if (method.isDefault()) {
+                    methods.append("default ");
+                }
+            }
+            methods.append(getMethodDeclaration(method, packages));
+            if (someClass.isInterface() && !method.isDefault()) {
                 methods.append(";\n");
             } else {
                 methods.append(" {\n");
@@ -175,8 +210,8 @@ public class Reflector {
     @NotNull private static String getFieldDeclaration(@NotNull Field field) {
         StringBuilder fieldDeclaration = new StringBuilder();
         fieldDeclaration.append(getDeclarationModifiers(field.getModifiers())); // modifiers
-        fieldDeclaration.append(field.getGenericType().getTypeName()).append(" ");
-        fieldDeclaration.append(field.getName());
+        fieldDeclaration.append(field.getGenericType().getTypeName()).append(" "); // type name
+        fieldDeclaration.append(field.getName()); // field name
         return fieldDeclaration.toString();
     }
 
@@ -209,6 +244,11 @@ public class Reflector {
         return modifiers.length() == 0 ? ""  : modifiers + " ";
     }
 
+    /*
+     * Method retrieves a super class name (extends ..., if such extension there exists)
+     * which are there in class declaration
+     * and returns it in java valid format
+     * */
     @NotNull private static String getSuperClassInformation(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
         Class<?> superClass = someClass.getSuperclass();
         if (superClass != null && superClass.getSuperclass() != null) {
@@ -254,20 +294,17 @@ public class Reflector {
                 arguments.append(", ");
             }
             arguments.append(x.getTypeName());
-            if (x.getBounds().length == 0) {
-                continue;
-            }
-            for (var y : x.getBounds()) {
-                arguments.append(" extends ");
-                arguments.append(y.getTypeName());
-            }
-            System.out.println();
+            arguments.append(
+                Arrays.stream(x.getBounds())
+                .map(Type::getTypeName)
+                .collect(Collectors.joining(" & ", " extends ", ""))
+            );
         }
         return "<" + arguments.toString() + "> ";
     }
 
     /*
-    * Helper class in creating names for variables,
+    * Class for helping during creating names for variables,
     * should be use in java streams.
     * */
     private static class Counter {
@@ -276,6 +313,7 @@ public class Reflector {
         public void increment() {
             count++;
         }
+
         public int getCounter() {
             return count;
         }
@@ -358,8 +396,8 @@ public class Reflector {
      * output stream (console) all the different fields and methods.
      * Format of logging:
      * 1. Fields --
-     *      firstly, fields of leftClass, which does not exist in rightClass will be printed
-     *      secondly, fields of rightClass, which does not exist in leftClass will be printed
+     *      firstly, fields of leftClass, which do not exist in rightClass will be printed
+     *      secondly, fields of rightClass, which do not exist in leftClass will be printed
      * 2. Methods -- format the same as the fields
      * */
     public static void diffClasses(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
