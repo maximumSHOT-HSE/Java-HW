@@ -3,13 +3,14 @@ package ru.hse.surkov;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
 import org.jetbrains.annotations.NotNull;
-import ru.hse.test.helperClasses.ComplicatedClass;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.sql.Ref;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
