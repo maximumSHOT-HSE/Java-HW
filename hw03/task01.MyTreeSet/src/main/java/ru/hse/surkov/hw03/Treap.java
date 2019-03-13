@@ -168,7 +168,7 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         data.version++;
         E need = (E) o;
         Pair<Node, Node> splitted = split(data.root, need);
-        data.root = merge(merge(splitted.first, new Node(need)), splitted.second);
+        data.root = merge(merge(splitted.getFirst(), new Node(need)), splitted.getSecond());
         return true;
     }
 
@@ -313,15 +313,15 @@ public final class Treap<E> extends AbstractSet implements MyTreeSet {
         Pair<Node, Node> splitted;
         if (data.comparator.compare(vertex.value, separator) < 0) {
             splitted = split(vertex.right, separator);
-            vertex.right = splitted.first;
-            splitted.first = vertex;
+            vertex.right = splitted.getFirst();
+            splitted.setFirst(vertex);
         } else {
             splitted = split(vertex.left, separator);
-            vertex.left = splitted.second;
-            splitted.second = vertex;
+            vertex.left = splitted.getSecond();
+            splitted.setSecond(vertex);
         }
-        updateNode(splitted.first, true);
-        updateNode(splitted.second, true);
+        updateNode(splitted.getFirst(), true);
+        updateNode(splitted.getSecond(), true);
         return splitted;
     }
 
