@@ -3,5 +3,5 @@ jdk: oraclejdk11
 os:
 - linux
 env:
-- PROJECT_DIR=hw03/task01.MyTreeSet
+- PROJECT_DIR=hw06/task01.QSort
 script: cd $PROJECT_DIR && ./gradlew check
