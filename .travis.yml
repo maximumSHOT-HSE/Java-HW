@@ -10,5 +10,4 @@ env:
 - PROJECT_DIR=hw02/task01.Trie
 - PROJECT_DIR=hw03/task01.MyTreeSet
 - PROJECT_DIR=hw04/task01.DataBase
-- PROJECT_DIR=hw05/task01.Reflector
 script: cd $PROJECT_DIR && ./gradlew check
