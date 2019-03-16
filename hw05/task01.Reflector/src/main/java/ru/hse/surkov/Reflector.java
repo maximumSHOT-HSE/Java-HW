@@ -334,6 +334,15 @@ public class Reflector {
         return log.toString();
     }
 
+    private static String getDifferenceBetweenClassProperties(Class<?> leftClass, Class<?> rightClass, HashSet<String> leftProperty, HashSet<String> rightProperty) {
+        StringBuilder log = new StringBuilder();
+        log.append(leftClass.getSimpleName()).append("\n");
+        log.append(getDifferencesBetwwenHashSets(leftProperty, rightProperty));
+        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+        log.append(getDifferencesBetwwenHashSets(rightProperty, leftProperty));
+        return log.toString();
+    }
+
     /**
      * {@link Reflector#diffClasses(Class, Class)}
      * @return text of log as a String without printing anything into console
@@ -377,17 +386,15 @@ public class Reflector {
 
         log.append("Fields:\n\n");
 
-        log.append(leftClass.getSimpleName()).append("\n");
-        log.append(getDifferencesBetwwenHashSets(leftFields, rightFields));
-        log.append("\n").append(rightClass.getSimpleName()).append("\n");
-        log.append(getDifferencesBetwwenHashSets(rightFields, leftFields));
+        log.append(
+            getDifferenceBetweenClassProperties(leftClass, rightClass, leftFields, rightFields)
+        );
 
         log.append("Methods:\n\n");
 
-        log.append(leftClass.getSimpleName()).append("\n");
-        log.append(getDifferencesBetwwenHashSets(leftMethods, rightMethods));
-        log.append("\n").append(rightClass.getSimpleName()).append("\n");
-        log.append(getDifferencesBetwwenHashSets(rightMethods, leftMethods));
+        log.append(
+            getDifferenceBetweenClassProperties(leftClass, rightClass, leftMethods, rightMethods)
+        );
 
         return log.toString();
     }
