@@ -148,12 +148,7 @@ public class QSorter {
                 return;
             }
             if (left == right) {
-                lock.lock();
-                try {
-                    latch.countDown();
-                } finally {
-                    lock.unlock();
-                }
+                decreaseLatch(1);
                 return;
             }
             int segmentLength = right - left + 1;
