@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public final class Main {
 
@@ -141,7 +143,7 @@ public final class Main {
         }
     }
 
-    private static void changeFieldNameOfRecord() {
+    private static void changeField(String fieldName, TriFunction<String, String, String, Boolean> changeFieldMethod) {
         System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
         String name = inputScanner.next();
         String phoneNumber = inputScanner.next();
@@ -149,30 +151,21 @@ public final class Main {
             System.out.println(DOES_NOT_EXISTS);
             return;
         }
-        System.out.println(ENTER + " new " + FIELD_NAME + ": ");
-        String newName = inputScanner.next();
-        if (phoneBook.changeName(name, phoneNumber, newName)) {
-            System.out.println(FIELD_NAME + " " + HAS_BEEN_CHANGED);
+        System.out.println(ENTER + " new " + fieldName + ": ");
+        String newFieldValue = inputScanner.next();
+        if (changeFieldMethod.apply(name, phoneNumber, newFieldValue)) {
+            System.out.println(fieldName + " " + HAS_BEEN_CHANGED);
         } else {
             System.out.println(RECORD_ALREADY_EXISTS);
         }
     }
 
+    private static void changeFieldNameOfRecord() {
+        changeField(FIELD_NAME, phoneBook::changeName);
+    }
+
     private static void changeFieldPhoneNumberOfRecord() {
-        System.out.println(ENTER_NAME_AND_PHONE_NUMBER);
-        String name = inputScanner.next();
-        String phoneNumber = inputScanner.next();
-        if (!phoneBook.contains(name, phoneNumber)) {
-            System.out.println(DOES_NOT_EXISTS);
-            return;
-        }
-        System.out.println(ENTER + " new " + FIELD_PHONE_NUMBER + ": ");
-        String newPhoneNumber = inputScanner.next();
-        if (phoneBook.changePhoneNumber(name, phoneNumber, newPhoneNumber)) {
-            System.out.println(FIELD_PHONE_NUMBER + " " + HAS_BEEN_CHANGED);
-        } else {
-            System.out.println(RECORD_ALREADY_EXISTS);
-        }
+        changeField(FIELD_PHONE_NUMBER, phoneBook::changePhoneNumber);
     }
 
     private static void printAllRecords() {
