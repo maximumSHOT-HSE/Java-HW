@@ -62,24 +62,33 @@ public final class Main {
                 System.out.println(UNSUPPORTED_COMMAND);
                 continue;
             }
-            if (queryType == 0) { // exit
-                Main.exit();
-            } else if (queryType == 1) { // add record
-                addRecord();
-            } else if (queryType == 2) { // find phone numbers by name
-                findPhoneNumbersByName();
-            } else if (queryType == 3) { // find names by phone number
-                findNamesByPhoneNumber();
-            } else if (queryType == 4) { // delete record
-                deleteRecord();
-            } else if (queryType == 5) { // change field 'name' of record
-                changeFieldNameOfRecord();
-            } else if (queryType == 6) { // change field 'phone number' of record
-                changeFieldPhoneNumberOfRecord();
-            } else if (queryType == 7) { // print all records
-                printAllRecords();
-            } else { // unsupported
-                System.out.println(UNSUPPORTED_COMMAND);
+            switch (queryType) {
+                case 0: // exit
+                    Main.exit();
+                    break;
+                case 1: // add record
+                    addRecord();
+                    break;
+                case 2: // find phone numbers by name
+                    findPhoneNumbersByName();
+                    break;
+                case 3: // find names by phone number
+                    findNamesByPhoneNumber();
+                    break;
+                case 4: // delete record
+                    deleteRecord();
+                    break;
+                case 5: // change field 'name' of record
+                    changeFieldNameOfRecord();
+                    break;
+                case 6: // change field 'phone number' of record
+                    changeFieldPhoneNumberOfRecord();
+                    break;
+                case 7: // print all records
+                    printAllRecords();
+                    break;
+                default: // unsupported
+                    System.out.println(UNSUPPORTED_COMMAND);
             }
         }
     }
