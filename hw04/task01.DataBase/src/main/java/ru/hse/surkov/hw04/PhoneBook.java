@@ -112,6 +112,20 @@ public class PhoneBook {
         return true;
     }
 
+    /*
+    * Method checks if there exists record with given
+    * name and phoneNumber and if there is no such record then
+    * NoSuchElementException will be thrown.
+    * Otherwise method will return true if there is no record with
+    * newName and newPhoneNumber and false otherwise.
+    * */
+    private boolean isValid(@NotNull String name, @NotNull String phoneNumber, @NotNull String newName, @NotNull String newPhoneNumber) throws NoSuchElementException {
+        if (!contains(name, phoneNumber)) {
+            throw new NoSuchElementException("Record (" + name + ", " + phoneNumber + ") does not exists in data base");
+        }
+        return !contains(newName, newPhoneNumber);
+    }
+
     /**
      * Method checks if there exists record with given number and if there was
      * such record then it's name will be updated and changes will be stored in data base.
@@ -120,10 +134,7 @@ public class PhoneBook {
      * @throws NoSuchElementException if there was no record in data base to modify
      * */
     public boolean changeName(@NotNull String name, @NotNull String phoneNumber, @NotNull String newName) throws NoSuchElementException {
-        if (!contains(name, phoneNumber)) {
-            throw new NoSuchElementException("Record (" + name + ", " + phoneNumber + ") does not exists in data base");
-        }
-        if (contains(newName, phoneNumber)) {
+        if (!isValid(name, phoneNumber, newName, phoneNumber)) {
             return false;
         }
         UpdateOperations<Record> updateOperations = datastore
@@ -141,10 +152,7 @@ public class PhoneBook {
      * @throws NoSuchElementException if there was no record in data base to modify
      * */
     public boolean changePhoneNumber(@NotNull String name, @NotNull String phoneNumber, @NotNull String newPhoneNumber) throws NoSuchElementException {
-        if (!contains(name, phoneNumber)) {
-            throw new NoSuchElementException("Record (" + name + ", " + phoneNumber + ") does not exists in data base");
-        }
-        if (contains(name, newPhoneNumber)) {
+        if (!isValid(name, phoneNumber, name, newPhoneNumber)) {
             return false;
         }
         UpdateOperations<Record> updateOperations = datastore
