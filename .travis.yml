@@ -1,7 +1,5 @@
-language: 
-- java
-jdk: 
-- oraclejdk11
+language: java
+jdk: oraclejdk11
 os:
 - linux
 services: 
