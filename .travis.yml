@@ -6,4 +6,5 @@ services:
 - mongodb
 env:
 - PROJECT_DIR=hw04/task01.DataBase
+- PROJECT_DIR=hw03/task01.MyTreeSet
 script: cd $PROJECT_DIR && ./gradlew check
