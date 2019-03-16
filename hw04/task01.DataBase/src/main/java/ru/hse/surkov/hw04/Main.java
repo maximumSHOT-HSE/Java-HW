@@ -135,7 +135,6 @@ public final class Main {
         String phoneNumber = inputScanner.next();
         if (!phoneBook.contains(name, phoneNumber)) {
             System.out.println(DOES_NOT_EXISTS);
-            return;
         } else {
             System.out.println(DELETING_RECORD);
             phoneBook.deleteRecord(name, phoneNumber);
