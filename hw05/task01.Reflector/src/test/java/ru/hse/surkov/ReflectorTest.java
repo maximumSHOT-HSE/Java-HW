@@ -24,7 +24,9 @@ public class ReflectorTest {
     void deleteClassFiles() {
         // delete all generated *.class files
         File currentDirectory = new File(".");
-        for (File file : Objects.requireNonNull(currentDirectory.listFiles(pathname -> pathname.getName().endsWith(".class")))) {
+        for (File file : Objects.requireNonNull(
+                currentDirectory.listFiles(
+                        pathname -> pathname.getName().endsWith(".class")))) {
             try {
                 Files.deleteIfExists(Paths.get(file.getAbsolutePath()));
             } catch (IOException ignored) {
@@ -32,7 +34,9 @@ public class ReflectorTest {
             }
         }
         // delete all generated *.java files
-        for (File file : Objects.requireNonNull(currentDirectory.listFiles(pathname -> pathname.getName().endsWith(".java")))) {
+        for (File file : Objects.requireNonNull(
+                currentDirectory.listFiles(
+                        pathname -> pathname.getName().endsWith(".java")))) {
             try {
                 Files.deleteIfExists(Paths.get(file.getAbsolutePath()));
             } catch (IOException ignored) {
@@ -57,7 +61,8 @@ public class ReflectorTest {
         return log.toString();
     }
 
-    void testGenerateCompileLoadDiff(Class<?> clazz) throws MalformedURLException, ClassNotFoundException {
+    void testGenerateCompileLoadDiff(Class<?> clazz) throws
+            MalformedURLException, ClassNotFoundException {
         assertDoesNotThrow(() -> Reflector.printStructure(clazz));
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
         javaCompiler.run(null, null, null, clazz.getSimpleName() + ".java");

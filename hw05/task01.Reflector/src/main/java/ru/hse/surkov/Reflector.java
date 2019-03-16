@@ -1,9 +1,5 @@
 package ru.hse.surkov;
 
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -12,6 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for creating correct (can be compiled) .java file by Class object.
@@ -32,15 +32,19 @@ public class Reflector {
      * @throws IOException if there is some problems with creating .java file
      * (for instance, problems with permission)
      * */
-    public static void printStructure(@NotNull Class<?> someClass) throws IOException, FormatterException {
+    public static void printStructure(@NotNull Class<?> someClass) throws
+            IOException,
+            FormatterException {
         try (FileWriter fileWriter = new FileWriter(someClass.getSimpleName() + ".java")) {
             String generatedCode = getGeneratedCode(someClass);
-            fileWriter.write(new Formatter().formatSource(generatedCode).replaceAll("  ", "    "));
+            fileWriter.write(
+                new Formatter().formatSource(generatedCode).replaceAll(" {2}", "    ")
+            );
         }
     }
 
     /**
-     * Methods the same as the {@link Reflector#printStructure(Class)}, but
+     * Methods the same as the {@link Reflector#printStructure(Class)}.
      * @return generated code as a String instead of printing it into file
      * */
     public static String getGeneratedCode(@NotNull Class<?> someClass) {
@@ -60,7 +64,10 @@ public class Reflector {
     * Method generates code of someClass, stores it in the String and returns generated String
     * @param packages needed for storing necessary packages for correct compilation
     * */
-    @NotNull private static String generateCode(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
+    @NotNull private static String generateCode(
+            @NotNull Class<?> someClass,
+            @NotNull Set<String> packages
+    ) {
         StringBuilder someClassCode = new StringBuilder();
 
         // declaration
@@ -96,17 +103,21 @@ public class Reflector {
         return someClassCode.toString();
     }
 
-    @NotNull private static String getClassDeclaration(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
-        return getDeclarationModifiers(someClass.getModifiers()) +
-                (someClass.isInterface() ? "" : "class ") +
-                someClass.getSimpleName() + " " +
-                getFullGenericArguments(someClass.getTypeParameters()) +
-                getSuperClassInformation(someClass, packages) +
-                getInterfacesForImplementing(someClass, packages) +
-                "{\n";
+    @NotNull private static String getClassDeclaration(
+        @NotNull Class<?> someClass,
+        @NotNull final Set<String> packages
+    ) {
+        return getDeclarationModifiers(someClass.getModifiers())
+                + (someClass.isInterface() ? "" : "class ")
+                + someClass.getSimpleName() + " "
+                + getFullGenericArguments(someClass.getTypeParameters())
+                + getSuperClassInformation(someClass, packages)
+                + getInterfacesForImplementing(someClass, packages)
+                + "{\n";
     }
 
-    @NotNull private static String getAllSubClasses(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
+    @NotNull private static String getAllSubClasses(
+            @NotNull Class<?> someClass, @NotNull Set<String> packages) {
         StringBuilder classes = new StringBuilder();
         for (var clazz : someClass.getDeclaredClasses()) {
             classes.append(Reflector.generateCode(clazz, packages)).append("\n");
@@ -114,7 +125,8 @@ public class Reflector {
         return classes.toString();
     }
 
-    @NotNull private static String getParametersDescribing(@NotNull Type[] parameters, boolean isNestedClass) {
+    @NotNull private static String getParametersDescribing(
+            @NotNull Type[] parameters, boolean isNestedClass) {
         var stream = isNestedClass ? Arrays.stream(parameters).skip(1) : Arrays.stream(parameters);
         final Counter counter = new Counter();
         return stream
@@ -129,7 +141,8 @@ public class Reflector {
         return clazz.getEnclosingClass() != null && !Modifier.isStatic(clazz.getModifiers());
     }
 
-    @NotNull private static String getAllConstructors(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
+    @NotNull private static String getAllConstructors(
+            @NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         StringBuilder constructors = new StringBuilder();
 
         for (var constructor : someClass.getDeclaredConstructors()) {
@@ -140,9 +153,11 @@ public class Reflector {
                     .append(Modifier.toString(constructor.getModifiers())).append(" ") // modifiers
                     .append(someClass.getSimpleName()); // name
             constructors
-                    .append(getParametersDescribing(constructor.getGenericParameterTypes(), isInner(someClass))) // parameters
+                    .append(getParametersDescribing(
+                            constructor.getGenericParameterTypes(), isInner(someClass))) // parameters
                     .append(" ")
-                    .append(getExceptionsThrowableFromMethods(constructor.getExceptionTypes(), packages)) // exceptions
+                    .append(getExceptionsThrowableFromMethods(
+                            constructor.getExceptionTypes(), packages)) // exceptions
                     .append(" {\n")
                     .append("}\n\n");
         }
@@ -150,18 +165,35 @@ public class Reflector {
         return constructors.toString();
     }
 
-    @NotNull private static String getMethodDeclaration(@NotNull Method method, @NotNull final Set<String> packages) {
+    @NotNull private static String getMethodDeclaration(
+            @NotNull Method method, @NotNull final Set<String> packages) {
         StringBuilder methodDeclaration = new StringBuilder();
-        methodDeclaration.append(getDeclarationModifiers(method.getModifiers())); // modifiers
-        methodDeclaration.append(getFullGenericArguments(method.getTypeParameters())).append(" "); // generic args of returned type
-        methodDeclaration.append(method.getGenericReturnType().getTypeName()).append(" "); // return type
-        methodDeclaration.append(method.getName()); // method name
-        methodDeclaration.append(getParametersDescribing(method.getGenericParameterTypes(), false)).append(" "); // arguments
-        methodDeclaration.append(getExceptionsThrowableFromMethods(method.getExceptionTypes(), packages)); // exceptions
+        methodDeclaration
+        .append(getDeclarationModifiers(method.getModifiers())); // modifiers
+        methodDeclaration
+        .append(getFullGenericArguments(
+                method.getTypeParameters())).append(" "); // generic args of returned type
+        methodDeclaration
+        .append(method.getGenericReturnType().getTypeName()).append(" "); // return type
+        methodDeclaration
+        .append(method.getName()); // method name
+        methodDeclaration
+        .append(
+            getParametersDescribing(
+                method
+                .getGenericParameterTypes(),
+                false
+            )
+        )
+        .append(" "); // arguments
+        methodDeclaration.append(
+                getExceptionsThrowableFromMethods(
+                        method.getExceptionTypes(), packages)); // exceptions
         return methodDeclaration.toString();
     }
 
-    @NotNull private static String getAllMethods(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
+    @NotNull private static String getAllMethods(
+            @NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         StringBuilder methods = new StringBuilder();
         for (var method : someClass.getDeclaredMethods()) {
             if (method.isSynthetic()) {
@@ -192,7 +224,8 @@ public class Reflector {
         return methods.toString();
     }
 
-    @NotNull private static String getExceptionsThrowableFromMethods(@NotNull Class<?>[] exceptions, @NotNull final Set<String> packages) {
+    @NotNull private static String getExceptionsThrowableFromMethods(
+            @NotNull Class<?>[] exceptions, @NotNull final Set<String> packages) {
         if (exceptions.length == 0) {
             return "";
         }
@@ -216,7 +249,8 @@ public class Reflector {
         return fieldDeclaration.toString();
     }
 
-    @NotNull private static String getAllfields(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
+    @NotNull private static String getAllfields(
+            @NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         StringBuilder fields = new StringBuilder();
         for (var field : someClass.getDeclaredFields()) {
             if (field.isSynthetic()) {
@@ -250,7 +284,8 @@ public class Reflector {
      * which are there in class declaration
      * and returns it in java valid format
      * */
-    @NotNull private static String getSuperClassInformation(@NotNull Class<?> someClass, @NotNull Set<String> packages) {
+    @NotNull private static String getSuperClassInformation(
+            @NotNull Class<?> someClass, @NotNull Set<String> packages) {
         Class<?> superClass = someClass.getSuperclass();
         if (superClass != null && superClass.getSuperclass() != null) {
             packages.add(someClass.getSuperclass().getCanonicalName());
@@ -265,7 +300,8 @@ public class Reflector {
     * which are there in class declaration
     * and returns it in java valid format
     * */
-    @NotNull private static String getInterfacesForImplementing(@NotNull Class<?> someClass, @NotNull final Set<String> packages) {
+    @NotNull private static String getInterfacesForImplementing(
+            @NotNull Class<?> someClass, @NotNull final Set<String> packages) {
         Class<?>[] interfaces = someClass.getInterfaces();
         StringBuilder interfacesString = new StringBuilder();
         if (interfaces.length == 0) {
@@ -285,7 +321,8 @@ public class Reflector {
     * Method gets a type, explores it's bounds
     * and returns full java valid generic type with all dependencies.
     * */
-    @NotNull private static String getFullGenericArguments(@NotNull TypeVariable<?>[] typesVariable) {
+    @NotNull private static String getFullGenericArguments(
+            @NotNull TypeVariable<?>[] typesVariable) {
         if (typesVariable.length == 0) {
             return "";
         }
@@ -324,7 +361,8 @@ public class Reflector {
     * Method finds all Strings in leftSet, which does not exist in rightSet
     * and collects all such String in one big string.
     * */
-    @NotNull private static String getDifferencesBetwwenHashSets(@NotNull HashSet<String> leftSet, @NotNull HashSet<String> rightSet) {
+    @NotNull private static String getDifferencesBetwwenHashSets(
+            @NotNull HashSet<String> leftSet, @NotNull HashSet<String> rightSet) {
         StringBuilder log = new StringBuilder();
         for (var x : leftSet) {
             if (!rightSet.contains(x)) {
@@ -334,7 +372,9 @@ public class Reflector {
         return log.toString();
     }
 
-    private static String getDifferenceBetweenClassProperties(Class<?> leftClass, Class<?> rightClass, HashSet<String> leftProperty, HashSet<String> rightProperty) {
+    private static String getDifferenceBetweenClassProperties(
+            Class<?> leftClass, Class<?> rightClass,
+            HashSet<String> leftProperty, HashSet<String> rightProperty) {
         StringBuilder log = new StringBuilder();
         log.append(leftClass.getSimpleName()).append("\n");
         log.append(getDifferencesBetwwenHashSets(leftProperty, rightProperty));
@@ -347,7 +387,8 @@ public class Reflector {
      * {@link Reflector#diffClasses(Class, Class)}
      * @return text of log as a String without printing anything into console
      * */
-    @NotNull public static String getDiffernces(@NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
+    @NotNull public static String getDiffernces(
+            @NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
         StringBuilder log = new StringBuilder();
 
         HashSet<String> leftFields = new HashSet<>();
@@ -387,13 +428,19 @@ public class Reflector {
         log.append("Fields:\n\n");
 
         log.append(
-            getDifferenceBetweenClassProperties(leftClass, rightClass, leftFields, rightFields)
+            getDifferenceBetweenClassProperties(
+                    leftClass, rightClass,
+                    leftFields, rightFields
+            )
         );
 
         log.append("Methods:\n\n");
 
         log.append(
-            getDifferenceBetweenClassProperties(leftClass, rightClass, leftMethods, rightMethods)
+            getDifferenceBetweenClassProperties(
+                    leftClass, rightClass,
+                    leftMethods, rightMethods
+            )
         );
 
         return log.toString();
