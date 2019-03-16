@@ -28,8 +28,8 @@ class PhoneBookTest {
     @Test
     void testAddRecordPhoneBook() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 50;phoneNumber < 100; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 50; phoneNumber < 100; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                     iter == 0,
                         phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -42,8 +42,8 @@ class PhoneBookTest {
     @Test
     void testContainsFilledPhoneBook() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -52,8 +52,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'z'; name++) {
-            for (int phoneNumber = 0;phoneNumber < 20; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 0; phoneNumber < 20; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             name <= 'h' && 5 <= phoneNumber && phoneNumber < 10,
                             phoneBook.contains(Character.toString(name), Integer.toString(phoneNumber))
@@ -66,8 +66,8 @@ class PhoneBookTest {
     @Test
     void testDeleteRecord() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -76,8 +76,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name += 2) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber += 2) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber += 2) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.deleteRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -86,8 +86,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'z'; name++) {
-            for (int phoneNumber = 0;phoneNumber < 20; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 0; phoneNumber < 20; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             name <= 'h' && 5 <= phoneNumber &&
                                     phoneNumber < 10 &&
@@ -102,8 +102,8 @@ class PhoneBookTest {
     @Test
     void testChangeName() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -112,8 +112,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     for (char newName = 'a'; newName <= 'h'; newName++) {
                         assertFalse(phoneBook.changeName(
                                 Character.toString(name),
@@ -125,8 +125,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     if (iter == 0) {
                         assertTrue(
                             phoneBook.changeName(
@@ -151,8 +151,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertFalse(
                         phoneBook.contains(
                             Character.toString(name),
@@ -173,8 +173,8 @@ class PhoneBookTest {
     @Test
     void testChangeNameException() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -195,8 +195,8 @@ class PhoneBookTest {
     @Test
     void testChangePhoneNumber() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
@@ -205,8 +205,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     for (int newPhneNumber = 5; newPhneNumber < 10; newPhneNumber++) {
                         assertFalse(phoneBook.changePhoneNumber(
                                 Character.toString(name),
@@ -218,8 +218,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     if (iter == 0) {
                         assertTrue(
                             phoneBook.changePhoneNumber(
@@ -244,8 +244,8 @@ class PhoneBookTest {
             }
         }
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertFalse(
                             phoneBook.contains(
                                     Character.toString(name),
@@ -266,8 +266,8 @@ class PhoneBookTest {
     @Test
     void testChangePhoneNumberException() {
         for (char name = 'a'; name <= 'h'; name++) {
-            for (int phoneNumber = 5;phoneNumber < 10; phoneNumber++) {
-                for (int iter = 0;iter < 3;iter++) {
+            for (int phoneNumber = 5; phoneNumber < 10; phoneNumber++) {
+                for (int iter = 0; iter < 3;iter++) {
                     assertEquals(
                             iter == 0,
                             phoneBook.addRecord(Character.toString(name), Integer.toString(phoneNumber))
