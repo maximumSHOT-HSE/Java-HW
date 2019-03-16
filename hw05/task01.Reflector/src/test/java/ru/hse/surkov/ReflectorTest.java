@@ -141,7 +141,7 @@ public class ReflectorTest {
     void testDifferenceBetweenEmptyInterfaces() throws FileNotFoundException {
         assertDoesNotThrow(() -> testDifference(
             MyInterfaceA.class, MyInterfaceB.class,
-            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testSimpleDifference"
+            "./src/test/resources/testSimpleDifference"
         ));
     }
 
@@ -149,7 +149,7 @@ public class ReflectorTest {
     void testDiffGenericArguments() {
         assertDoesNotThrow(() -> testDifference(
             A.class, B.class,
-            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testDiffGenericArguments"
+            "./src/test/resources/testDiffGenericArguments"
         ));
     }
 
@@ -157,7 +157,7 @@ public class ReflectorTest {
     void testDifferencesFields() {
         assertDoesNotThrow(() -> testDifference(
             FieldA.class, FieldB.class,
-            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testDifferencesFields"
+            "./src/test/resources/testDifferencesFields"
         ));
     }
 
@@ -165,7 +165,7 @@ public class ReflectorTest {
     void testDifferencesMethods() throws FileNotFoundException {
         assertDoesNotThrow(() -> testDifference(
             MethodsA.class, MethodsB.class,
-            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testDifferencesMethods"
+            "./src/test/resources/testDifferencesMethods"
         ));
     }
 }
