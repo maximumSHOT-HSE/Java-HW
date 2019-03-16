@@ -4,5 +4,4 @@ os:
 - linux
 env:
 - PROJECT_DIR=hw05/task01.Reflector
-- PROJECT_DIR=hw03/task01.MyTreeSet
 script: cd $PROJECT_DIR && ./gradlew check
