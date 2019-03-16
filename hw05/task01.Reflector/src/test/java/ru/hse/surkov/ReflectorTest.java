@@ -20,8 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ReflectorTest {
 
-    private JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
-
     @AfterEach
     void deleteClassFiles() {
         // delete all generated *.class files
