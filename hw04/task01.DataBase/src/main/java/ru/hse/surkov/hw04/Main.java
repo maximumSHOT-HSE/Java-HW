@@ -12,13 +12,13 @@ public final class Main {
     }
 
     @NotNull private static final String COMMAND_INTERFACE =
-            "0 - exit\n" +
-            "1 - add record (name and phone number)\n" +
-            "2 - find phone numbers by name\n" +
-            "3 - find names by phone number\n" +
-            "4 - delete record (name and phone number)\n" +
-            "5 - change field 'name' of record\n" +
-            "6 - change field 'phone number' of record\n" +
+            "0 - exit" + System.lineSeparator() +
+            "1 - add record (name and phone number)" + System.lineSeparator() +
+            "2 - find phone numbers by name" + System.lineSeparator() +
+            "3 - find names by phone number" + System.lineSeparator() +
+            "4 - delete record (name and phone number)" + System.lineSeparator() +
+            "5 - change field 'name' of record" + System.lineSeparator() +
+            "6 - change field 'phone number' of record" + System.lineSeparator() +
             "7 - print all records";
 
     @NotNull private static String APPLICATION_NAME = "|--------Console phone book--------|";
@@ -47,7 +47,7 @@ public final class Main {
     @NotNull private static PhoneBook phoneBook;
 
     public static void main(String[] args) {
-        System.out.println(APPLICATION_NAME + "\n" + DESCIPTION + "\n" + COMMAND_INTERFACE + "\n");
+        System.out.println(APPLICATION_NAME + System.lineSeparator() + DESCIPTION + System.lineSeparator() + COMMAND_INTERFACE + System.lineSeparator());
         commandInterfaceStatus = CommandInterfaceStatus.IN_PROCESS;
         createPhoneBook();
         while (commandInterfaceStatus != CommandInterfaceStatus.FINISHED) {
