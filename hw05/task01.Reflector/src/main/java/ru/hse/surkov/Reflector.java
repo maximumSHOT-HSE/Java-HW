@@ -1,17 +1,16 @@
 package ru.hse.surkov;
 
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for creating correct (can be compiled) .java file by Class object.
@@ -361,8 +360,8 @@ public class Reflector {
     * Method finds all Strings in leftSet, which does not exist in rightSet
     * and collects all such String in one big string.
     * */
-    @NotNull private static String getDifferencesBetwwenHashSets(
-            @NotNull HashSet<String> leftSet, @NotNull HashSet<String> rightSet) {
+    @NotNull private static String getDifferencesBetwwenTreeSets(
+            @NotNull TreeSet<String> leftSet, @NotNull TreeSet<String> rightSet) {
         StringBuilder log = new StringBuilder();
         for (var x : leftSet) {
             if (!rightSet.contains(x)) {
@@ -374,12 +373,12 @@ public class Reflector {
 
     private static String getDifferenceBetweenClassProperties(
             Class<?> leftClass, Class<?> rightClass,
-            HashSet<String> leftProperty, HashSet<String> rightProperty) {
+            TreeSet<String> leftProperty, TreeSet<String> rightProperty) {
         StringBuilder log = new StringBuilder();
         log.append(leftClass.getSimpleName()).append("\n");
-        log.append(getDifferencesBetwwenHashSets(leftProperty, rightProperty));
+        log.append(getDifferencesBetwwenTreeSets(leftProperty, rightProperty));
         log.append("\n").append(rightClass.getSimpleName()).append("\n");
-        log.append(getDifferencesBetwwenHashSets(rightProperty, leftProperty));
+        log.append(getDifferencesBetwwenTreeSets(rightProperty, leftProperty));
         return log.toString();
     }
 
@@ -391,10 +390,10 @@ public class Reflector {
             @NotNull Class<?> leftClass, @NotNull Class<?> rightClass) {
         StringBuilder log = new StringBuilder();
 
-        HashSet<String> leftFields = new HashSet<>();
-        HashSet<String> rightFields = new HashSet<>();
-        HashSet<String> leftMethods = new HashSet<>();
-        HashSet<String> rightMethods = new HashSet<>();
+        TreeSet<String> leftFields = new TreeSet<>();
+        TreeSet<String> rightFields = new TreeSet<>();
+        TreeSet<String> leftMethods = new TreeSet<>();
+        TreeSet<String> rightMethods = new TreeSet<>();
         Set<String> helper = new TreeSet<>(); // helper -- plug for packages storing
 
         for (var field : leftClass.getDeclaredFields()) {

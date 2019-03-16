@@ -7,6 +7,8 @@ import ru.hse.test.helperClasses.*;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +16,8 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -105,5 +109,63 @@ public class ReflectorTest {
     @Test
     void tesyMyInterface() {
         assertDoesNotThrow(() -> testGenerateCompileLoadDiff(MyInterfaceA.class));
+    }
+
+    private static String deleteSeparators(String string) {
+        return
+            string
+            .chars()
+            .filter(c ->
+                    !Character.isSpaceChar(c) &&
+                    (char) c != '\t' &&
+                    !Character.toString(c).equals(System.lineSeparator()))
+            .mapToObj(Character::toString)
+            .collect(Collectors.joining());
+    }
+
+    void testDifference(Class<?> leftClass, Class<?> rightClass, String fileWithDifferences) throws FileNotFoundException {
+        String generatedDifference = Reflector.getDiffernces(leftClass, rightClass);
+        System.out.println(generatedDifference);
+        generatedDifference = deleteSeparators(generatedDifference);
+        try (Scanner scanner = new Scanner(new FileInputStream(fileWithDifferences))) {
+            StringBuilder helper = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                helper.append(scanner.nextLine()).append(System.lineSeparator());
+            }
+            String expectedDifferences = deleteSeparators(helper.toString());
+            assertEquals(expectedDifferences, generatedDifference);
+        }
+    }
+
+    @Test
+    void testDifferenceBetweenEmptyInterfaces() throws FileNotFoundException {
+        assertDoesNotThrow(() -> testDifference(
+            MyInterfaceA.class, MyInterfaceB.class,
+            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testSimpleDifference"
+        ));
+    }
+
+    @Test
+    void testDiffGenericArguments() {
+        assertDoesNotThrow(() -> testDifference(
+            A.class, B.class,
+            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testDiffGenericArguments"
+        ));
+    }
+
+    @Test
+    void testDifferencesFields() {
+        assertDoesNotThrow(() -> testDifference(
+            FieldA.class, FieldB.class,
+            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testDifferencesFields"
+        ));
+    }
+
+    @Test
+    void testDifferencesMethods() throws FileNotFoundException {
+        assertDoesNotThrow(() -> testDifference(
+            MethodsA.class, MethodsB.class,
+            "/home/maximumshot/HSE/Java/Java-HW/hw05/task01.Reflector/src/test/resources/testDifferencesMethods"
+        ));
     }
 }

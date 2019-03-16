@@ -1,0 +1,12 @@
+Fields:
+
+MyInterfaceA
+
+MyInterfaceB
+Methods:
+
+MyInterfaceA
+	public abstract  void methodA()
+
+MyInterfaceB
+	public abstract  void methodB()
