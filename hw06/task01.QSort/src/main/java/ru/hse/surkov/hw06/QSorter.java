@@ -1,16 +1,12 @@
 package ru.hse.surkov.hw06;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.IntStream;
 
 /**
  * Class with method of sorting
@@ -43,22 +39,6 @@ public class QSorter {
         array[j] = helper;
     }
 
-    public static void main(String[] args) {
-        Integer[] a = random.ints().limit(1000000).boxed().toArray(Integer[]::new);
-        Integer[] b = Arrays.copyOf(a, a.length);
-
-        long t1 = System.currentTimeMillis();
-        Arrays.sort(b);
-        long t2 = System.currentTimeMillis();
-        System.out.println((t2 - t1) + " ms standard sort execution time");
-
-        long startTime = System.currentTimeMillis();
-        quickSort(a, 100, 2);
-        System.out.println(IntStream.range(1, a.length).allMatch(i -> a[i - 1] <= a[i]));
-        System.out.println((System.currentTimeMillis() - startTime) + " ms");
-//        Arrays.stream(a).forEach(System.out::println);
-    }
-
     /**
      * Sorts given array using the concurrent
      * quick sort algorithm.
@@ -70,13 +50,16 @@ public class QSorter {
      * @param threadsNumber indicates how many threads should be used during sorting.
      * @param comparator is necessary for specifying order of sorting
      * */
-    public static <T> void quickSort(T[] array, int minElementsNumber, int threadsNumber, Comparator<? super T> comparator) {
+    public static <T> void quickSort(
+            T[] array, int minElementsNumber, int threadsNumber,
+            Comparator<? super T> comparator) {
         if (array.length == 0) {
             return;
         }
         ExecutorService pool = Executors.newFixedThreadPool(threadsNumber);
         CountDownLatch latch = new CountDownLatch(array.length);
-        pool.submit(new Task<>(array, 0, array.length - 1, pool, latch, minElementsNumber, comparator));
+        pool.submit(new Task<>(array, 0, array.length - 1,
+                pool, latch, minElementsNumber, comparator));
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -90,13 +73,22 @@ public class QSorter {
      * Method the same as the {@link QSorter#quickSort(Object[], int, int, Comparator)},
      * but instead of comparator this methods requires from type T to be comparable.
      * */
-    public static <T extends Comparable<? super T>> void quickSort(T[] array, int minElementsNumber, int threadsNumber) {
+    public static <T extends Comparable<? super T>> void quickSort(
+            T[] array, int minElementsNumber, int threadsNumber) {
         quickSort(array, minElementsNumber, threadsNumber, Comparator.naturalOrder());
     }
 
+    /*
+    * Task of sorting subarray from left to right inclusively
+    * */
     private static class Task <T> implements Runnable {
 
-        private static final int QSORT_MIN_ELEMENTS = 30;
+        /*
+        * Minimum number of elements for using quick sort algorithm, hence
+        * if subarray length less than this constant then
+        * insertion sorting algorithm will be used.
+        * */
+        private static final int QUICK_SORT_MIN_ELEMENTS = 30;
 
         Lock lock = new ReentrantLock();
         private T[] array;
@@ -122,12 +114,14 @@ public class QSorter {
 
         private void insertionSort() {
             for (int i = left + 1; i <= right; i++) {
-                for (int j = i; j > left && comparator.compare(array[j], array[j - 1]) < 0; j--) {
+                for (int j = i; j > left &&
+                        comparator.compare(array[j], array[j - 1]) < 0; j--) {
                     swap(array, j, j - 1);
                 }
             }
         }
 
+        // Decrease latch by max(0, value)
         private void decreaseLatch(int value) {
             if (value < 0) {
                 value = 0;
@@ -156,17 +150,20 @@ public class QSorter {
             partition(separator);
             int leftPointer = getLowerPointer(separator);
             int rightPointer = getUpperPointer(separator);
-            Task<T> leftTask = new Task<>(array, left, leftPointer, pool, latch, minElementsNumber, comparator);
-            Task<T> rightTask = new Task<>(array, rightPointer, right, pool, latch, minElementsNumber, comparator);
-            if (segmentLength < minElementsNumber && segmentLength < QSORT_MIN_ELEMENTS) {
+            Task<T> leftTask = new Task<>(array, left, leftPointer,
+                    pool, latch, minElementsNumber, comparator);
+            Task<T> rightTask = new Task<>(array, rightPointer, right,
+                    pool, latch, minElementsNumber, comparator);
+            if (segmentLength < minElementsNumber &&
+                    segmentLength < QUICK_SORT_MIN_ELEMENTS) {
                 insertionSort();
                 decreaseLatch(segmentLength);
             } else {
                 decreaseLatch(rightPointer - leftPointer - 1);
-                if (segmentLength < minElementsNumber) {
+                if (segmentLength < minElementsNumber) { // non-concurrent version
                     leftTask.run();
                     rightTask.run();
-                } else {
+                } else { // concurrent version
                     pool.submit(leftTask);
                     pool.submit(rightTask);
                 }
