@@ -121,7 +121,7 @@ public class QSorter {
             if (concurrentExecutionTime < nonConcurrentExecutionTime) {
                 System.out.println("Concurrent wins!");
             } else {
-                System.out.println("Nno-concurrent wins!");
+                System.out.println("Non-concurrent wins!");
             }
             System.out.println("----------------");
         }
