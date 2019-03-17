@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QSorterTest {
 
@@ -112,5 +112,10 @@ class QSorterTest {
         Comparator<A> comparator = Comparator.comparingInt(A::getSum);
         QSorter.quickSort(a, 30, 4, comparator);
         assertTrue(isSorted(a, comparator));
+    }
+
+    @Test
+    void testComparingSorts() {
+        QSorter.compareSorts();
     }
 }

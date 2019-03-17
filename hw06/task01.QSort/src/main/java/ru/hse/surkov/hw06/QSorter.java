@@ -1,5 +1,6 @@
 package ru.hse.surkov.hw06;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -14,8 +15,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * */
 public class QSorter {
 
+    private static final int ARRAY_SIZE_STEP = 100_000;
+    private static final int MAXIMUM_ARRAY_SIZE = 1_000_000;
+    private static final int BENCHMARKING_THREADS_NUMBER = 8;
     private static final int SEED = 42;
     private volatile static Random random = new Random(SEED);
+    private static final int BENCHMARKING_SEED = 153;
+    private static Random benchmarking_random = new Random(BENCHMARKING_SEED);
 
     /*
     * Generates random value in range between left and right inclusively
@@ -76,6 +82,49 @@ public class QSorter {
     public static <T extends Comparable<? super T>> void quickSort(
             T[] array, int minElementsNumber, int threadsNumber) {
         quickSort(array, minElementsNumber, threadsNumber, Comparator.naturalOrder());
+    }
+
+    private static long measureExecutionTime(Runnable task) {
+        long startTime = System.currentTimeMillis();
+        task.run();
+        long finishTime = System.currentTimeMillis();
+        return finishTime - startTime;
+    }
+
+    /**
+     * Method finds an array size wherein a concurrent version of sorting
+     * algorithm for the Integers will win by the time
+     * against a non-concurrent version.
+     * */
+    public static <T> void compareSorts() {
+        for (int size = ARRAY_SIZE_STEP;
+             size <= MAXIMUM_ARRAY_SIZE; size += ARRAY_SIZE_STEP) {
+            Integer[] a = benchmarking_random
+                    .ints()
+                    .limit(size)
+                    .boxed()
+                    .toArray(Integer[]::new);
+            Integer[] b = Arrays.copyOf(a, a.length);
+            long nonConcurrentExecutionTime = measureExecutionTime(
+                () -> Arrays.sort(a)
+            );
+            long concurrentExecutionTime = measureExecutionTime(
+                () -> quickSort(b, 30, BENCHMARKING_THREADS_NUMBER)
+            );
+            System.out.println("----------------");
+            System.out.println("Array size: " + size);
+            System.out.println("Concurrent quick sort execution time: "
+                    + concurrentExecutionTime + " ms");
+            System.out.println("Non-concurrent quick sort execution time: "
+                    + nonConcurrentExecutionTime + " ms");
+            System.out.println("----------------");
+            if (concurrentExecutionTime < nonConcurrentExecutionTime) {
+                System.out.println("Concurrent wins!");
+            } else {
+                System.out.println("Nno-concurrent wins!");
+            }
+            System.out.println("----------------");
+        }
     }
 
     /*
