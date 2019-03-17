@@ -3,23 +3,20 @@ jdk: oraclejdk11
 services: mongodb
 os:
 - linux
-
 script: 
-  for PROJECT_DIR in */
-  do 
-    cd $PROJECT_DIR
-    for TASK_DIR in */
-    do
-        cd $TASK_DIR
-        if [[ -f "gradlew" ]]
-        then
-            ./gradlew check
-        fi
-        cd ..
-    done
-    cd ..
-  done
-  
-  
+- for PROJECT_DIR in */
+- do 
+-   cd $PROJECT_DIR
+-   for TASK_DIR in */
+-   do
+-       cd $TASK_DIR
+-       if [[ -f "gradlew" ]]
+-       then
+-           ./gradlew check
+-       fi
+-       cd ..
+-   done
+-   cd ..
+- done 
 notifications:
     email: false
