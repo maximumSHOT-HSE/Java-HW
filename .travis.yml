@@ -1,7 +1,8 @@
 language: java
 jdk: oraclejdk11
+services: mongodb
 os:
 - linux
-env:
-- PROJECT_DIR=hw05/task01.Reflector
-script: cd $PROJECT_DIR && ./gradlew check
+script: "bash check_script.sh"
+notifications:
+    email: false
