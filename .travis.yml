@@ -1,7 +1,22 @@
 language: java
 jdk: oraclejdk11
+services: mongodb
 os:
 - linux
-env:
-- PROJECT_DIR=hw06/task01.QSort
-script: cd $PROJECT_DIR && ./gradlew check
+script: 
+- for PROJECT_DIR in */
+- do 
+-   cd $PROJECT_DIR
+-   for TASK_DIR in */
+-   do
+-       cd $TASK_DIR
+-       if [[ -f "gradlew" ]]
+-       then
+-           ./gradlew check
+-       fi
+-       cd ..
+-   done
+-   cd ..
+- done 
+notifications:
+    email: false
