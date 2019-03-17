@@ -3,10 +3,23 @@ jdk: oraclejdk11
 services: mongodb
 os:
 - linux
-env:
-- PROJECT_DIR=hw01/task01.HashTable
-- PROJECT_DIR=hw02/task01.Trie
-- PROJECT_DIR=hw03/task01.MyTreeSet
-- PROJECT_DIR=hw04/task01.DataBase
-- PROJECT_DIR=hw05/task01.Reflector
-script: cd $PROJECT_DIR && ./gradlew check
+
+script: 
+  for PROJECT_DIR in */
+  do 
+    cd $PROJECT_DIR
+    for TASK_DIR in */
+    do
+        cd $TASK_DIR
+        if [[ -f "gradlew" ]]
+        then
+            ./gradlew check
+        fi
+        cd ..
+    done
+    cd ..
+  done
+  
+  
+notifications:
+    email: false
