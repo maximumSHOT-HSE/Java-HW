@@ -1,4 +1,4 @@
-package ru.hse.test.helperClasses;
+package ru.hse.surkov.helperClasses;
 
 import java.io.IOException;
 

@@ -2,7 +2,7 @@ package ru.hse.surkov;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import ru.hse.test.helperClasses.*;
+import ru.hse.surkov.helperClasses.*;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -52,15 +52,33 @@ public class ReflectorTest {
     private String getNoDiffString(Class<?> leftClass, Class<?> rightClass) {
         StringBuilder log = new StringBuilder();
 
-        log.append("Fields:\n\n");
+        log
+        .append("Fields:")
+        .append(System.lineSeparator())
+        .append(System.lineSeparator());
 
-        log.append(leftClass.getSimpleName()).append("\n");
-        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+        log
+        .append(leftClass.getSimpleName())
+        .append(System.lineSeparator());
 
-        log.append("Methods:\n\n");
+        log.
+        append(System.lineSeparator())
+        .append(rightClass.getSimpleName())
+        .append(System.lineSeparator());
 
-        log.append(leftClass.getSimpleName()).append("\n");
-        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+        log
+        .append("Methods:")
+        .append(System.lineSeparator())
+        .append(System.lineSeparator());
+
+        log
+        .append(leftClass.getSimpleName())
+        .append(System.lineSeparator());
+
+        log
+        .append(System.lineSeparator())
+        .append(rightClass.getSimpleName())
+        .append(System.lineSeparator());
 
         return log.toString();
     }
@@ -125,7 +143,6 @@ public class ReflectorTest {
 
     void testDifference(Class<?> leftClass, Class<?> rightClass, String fileWithDifferences) throws FileNotFoundException {
         String generatedDifference = Reflector.getDiffernces(leftClass, rightClass);
-        System.out.println(generatedDifference);
         generatedDifference = deleteSeparators(generatedDifference);
         try (Scanner scanner = new Scanner(new FileInputStream(fileWithDifferences))) {
             StringBuilder helper = new StringBuilder();
@@ -138,7 +155,7 @@ public class ReflectorTest {
     }
 
     @Test
-    void testDifferenceBetweenEmptyInterfaces() throws FileNotFoundException {
+    void testDifferenceBetweenEmptyInterfaces() {
         assertDoesNotThrow(() -> testDifference(
             MyInterfaceA.class, MyInterfaceB.class,
             "./src/test/resources/testSimpleDifference"
@@ -162,7 +179,7 @@ public class ReflectorTest {
     }
 
     @Test
-    void testDifferencesMethods() throws FileNotFoundException {
+    void testDifferencesMethods() {
         assertDoesNotThrow(() -> testDifference(
             MethodsA.class, MethodsB.class,
             "./src/test/resources/testDifferencesMethods"

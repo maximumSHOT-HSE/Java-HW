@@ -54,7 +54,8 @@ public class Reflector {
             importPackagesCode
                 .append("import ")
                 .append(necessaryPackage)
-                .append(";\n");
+                .append(";")
+                .append(System.lineSeparator());
         }
         return importPackagesCode + generatedCode;
     }
@@ -79,7 +80,7 @@ public class Reflector {
             getAllfields(someClass, packages)
         );
 
-        someClassCode.append("\n");
+        someClassCode.append(System.lineSeparator());
 
         // all methods
         someClassCode.append(
@@ -97,7 +98,7 @@ public class Reflector {
         );
 
         // ending parenthesis
-        someClassCode.append("}\n");
+        someClassCode.append("}").append(System.lineSeparator());
 
         return someClassCode.toString();
     }
@@ -112,14 +113,16 @@ public class Reflector {
                 + getFullGenericArguments(someClass.getTypeParameters())
                 + getSuperClassInformation(someClass, packages)
                 + getInterfacesForImplementing(someClass, packages)
-                + "{\n";
+                + "{" + System.lineSeparator();
     }
 
     @NotNull private static String getAllSubClasses(
             @NotNull Class<?> someClass, @NotNull Set<String> packages) {
         StringBuilder classes = new StringBuilder();
         for (var clazz : someClass.getDeclaredClasses()) {
-            classes.append(Reflector.generateCode(clazz, packages)).append("\n");
+            classes
+            .append(Reflector.generateCode(clazz, packages))
+            .append(System.lineSeparator());
         }
         return classes.toString();
     }
@@ -157,8 +160,10 @@ public class Reflector {
                     .append(" ")
                     .append(getExceptionsThrowableFromMethods(
                             constructor.getExceptionTypes(), packages)) // exceptions
-                    .append(" {\n")
-                    .append("}\n\n");
+                    .append(" {").append(System.lineSeparator())
+                    .append("}")
+                    .append(System.lineSeparator())
+                    .append(System.lineSeparator());
         }
 
         return constructors.toString();
@@ -205,19 +210,22 @@ public class Reflector {
             }
             methods.append(getMethodDeclaration(method, packages));
             if (someClass.isInterface() && !method.isDefault()) {
-                methods.append(";\n");
+                methods.append(";").append(System.lineSeparator());
             } else {
-                methods.append(" {\n");
+                methods.append(" {").append(System.lineSeparator());
                 if (!void.class.equals(method.getReturnType())) {
                     if (boolean.class.equals(method.getReturnType())) {
-                        methods.append("return false;\n");
+                        methods.append("return false;").append(System.lineSeparator());
                     } else if (method.getReturnType().isPrimitive()) {
-                        methods.append("return 0;\n");
+                        methods.append("return 0;").append(System.lineSeparator());
                     } else {
-                        methods.append("return null;\n");
+                        methods.append("return null;").append(System.lineSeparator());
                     }
                 }
-                methods.append("}\n\n");
+                methods
+                .append("}")
+                .append(System.lineSeparator())
+                .append(System.lineSeparator());
             }
         }
         return methods.toString();
@@ -268,7 +276,7 @@ public class Reflector {
                     fields.append(" = null");
                 }
             }
-            fields.append(";\n");
+            fields.append(";").append(System.lineSeparator());
         }
         return fields.toString();
     }
@@ -365,7 +373,7 @@ public class Reflector {
         StringBuilder log = new StringBuilder();
         for (var x : leftSet) {
             if (!rightSet.contains(x)) {
-                log.append("\t").append(x).append("\n");
+                log.append("\t").append(x).append(System.lineSeparator());
             }
         }
         return log.toString();
@@ -375,9 +383,12 @@ public class Reflector {
             Class<?> leftClass, Class<?> rightClass,
             TreeSet<String> leftProperty, TreeSet<String> rightProperty) {
         StringBuilder log = new StringBuilder();
-        log.append(leftClass.getSimpleName()).append("\n");
+        log.append(leftClass.getSimpleName()).append(System.lineSeparator());
         log.append(getDifferencesBetwwenTreeSets(leftProperty, rightProperty));
-        log.append("\n").append(rightClass.getSimpleName()).append("\n");
+        log
+            .append(System.lineSeparator())
+            .append(rightClass.getSimpleName())
+            .append(System.lineSeparator());
         log.append(getDifferencesBetwwenTreeSets(rightProperty, leftProperty));
         return log.toString();
     }
@@ -424,7 +435,10 @@ public class Reflector {
             rightMethods.add(getMethodDeclaration(method, helper));
         }
 
-        log.append("Fields:\n\n");
+        log
+        .append("Fields:")
+        .append(System.lineSeparator())
+        .append(System.lineSeparator());
 
         log.append(
             getDifferenceBetweenClassProperties(
@@ -433,7 +447,10 @@ public class Reflector {
             )
         );
 
-        log.append("Methods:\n\n");
+        log
+        .append("Methods:")
+        .append(System.lineSeparator())
+        .append(System.lineSeparator());
 
         log.append(
             getDifferenceBetweenClassProperties(
