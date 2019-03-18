@@ -18,4 +18,3 @@ MethodsB
 	public  void arguments1(int a1, int a2, int a3)
 	public  void t2() throws java.io.IOException, java.util.NoSuchElementException
 	public <B extends java.lang.Object>  B h2()
-
