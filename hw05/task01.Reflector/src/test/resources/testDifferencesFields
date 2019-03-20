@@ -1,0 +1,18 @@
+Fields:
+
+FieldA
+	private java.lang.Character c
+	private java.lang.Integer x
+	protected java.lang.String s
+	public final int xxx
+
+FieldB
+	private char c
+	protected static java.lang.String s
+	public int xxx
+	public java.lang.Integer x
+Methods:
+
+FieldA
+
+FieldB
