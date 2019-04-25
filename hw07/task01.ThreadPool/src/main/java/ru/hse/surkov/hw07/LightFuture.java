@@ -28,6 +28,8 @@ public interface LightFuture<T> {
      * result of such composition should be returned. This function
      * takes a result of source task and convert it to another LightFuture
      * object (convert to new task)
+     * @throws LightExecutionException if calculation of result has finished
+     * with Exception
      * */
-    <U> LightFuture<U> thenApply(Function<? super T, LightFuture<U>> function);
+    <U> LightFuture<U> thenApply(Function<? super T, U> function);
 }
