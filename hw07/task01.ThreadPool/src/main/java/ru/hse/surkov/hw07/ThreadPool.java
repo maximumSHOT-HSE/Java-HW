@@ -1,11 +1,13 @@
 package ru.hse.surkov.hw07;
 
+import java.util.Arrays;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Simple pool of workers with fixed number of workers inside.
@@ -13,195 +15,148 @@ import java.util.function.Supplier;
 public class ThreadPool {
 
     @NotNull private Thread[] workers;
-    @NotNull public final Queue<Task<?>> queryQueue = new LinkedList<>();
+    @NotNull private ConcurrentQueue<Task<?>> queue = new ConcurrentQueue<>();
 
-    public ThreadPool(int threadsNumber) {
-        if (threadsNumber <= 0) {
+    public ThreadPool(int numberOfThreads) {
+        if (numberOfThreads <= 0) {
             throw new IllegalArgumentException(
-                    "number of workers should be positive values");
+                    "Number of workers should be a positive number, but found " + numberOfThreads);
         }
-        workers = new Thread[threadsNumber];
+        workers = new Thread[numberOfThreads];
         for (int i = 0; i < workers.length; i++) {
-            workers[i] = new Thread(this::workerWorkFlow);
+            workers[i] = new Thread(this::workerForkFlow);
             workers[i].start();
         }
     }
 
-    private void workerWorkFlow() {
-        while (true) {
-            Task<?> task = null;
-            synchronized (queryQueue) {
-                while (queryQueue.isEmpty()) {
-                    try {
-                        queryQueue.wait();
-                    } catch (InterruptedException ignored) {
-                        /*
-                        * Requirement of the problem, hence
-                        * thread should be terminated successfully.
-                        * */
-                        return;
-                    }
-                }
-                task = queryQueue.poll();
+    private void workerForkFlow() {
+        try {
+            while (!Thread.interrupted()) {
+                Task<?> task = queue.pop();
+                task.process();
             }
-            task.calculate();
+        } catch (InterruptedException ignored) {
+            /*
+            * According to the requirements of the problem,
+            * in this case worker should be finished without
+            * any exceptions.
+            * */
         }
     }
 
-    /**
-     * Adds a new task into pool.
-     * @param supplier which corresponds to the task
-     * */
-    @NotNull public <T> LightFuture<T> addTask(@NotNull Supplier<T> supplier) {
-        Task<T> task = new Task<T>(supplier, TaskState.READY_TO_START);
-        synchronized (queryQueue) {
-            queryQueue.add(task);
-            queryQueue.notifyAll();
-        }
+    public <T> Task<T> submit(@NotNull Supplier<T> supplier) {
+        Task<T> task = new Task<>(supplier);
+        queue.push(task);
         return task;
     }
 
-    /**
-     * Interrupts work of all workers.
-     * */
     public void shutdown() {
         Arrays.stream(workers).forEach(Thread::interrupt);
     }
 
-    private enum TaskState {
+    public enum TaskState {
         NOT_READY_TO_START,
         READY_TO_START,
-        IN_PROGRESS,
+        IN_PROCESS,
         FINISHED_SUCCESSFULLY,
         FINISHED_WITH_EXCEPTION
     }
 
     private class Task<T> implements LightFuture<T> {
 
+        @Nullable private Task<?> parentTask;
         @Nullable private Object parentFunction;
+
+        @Nullable private T data;
+        @Nullable private LightExecutionException exception;
+
         @Nullable private Supplier<T> supplier;
-        @NotNull private TaskState state;
-        @NotNull private DataHolder<T> ownDataHolder = new DataHolder<>();
-        @NotNull private final List<Task<?>> dependentTasks = new ArrayList<>();
 
-        public Task(@Nullable Supplier<T> supplier, @NotNull TaskState state) {
-            this.supplier = supplier;
-            this.state = state;
-        }
+        @NotNull private volatile TaskState state = TaskState.NOT_READY_TO_START;
 
-        @NotNull public synchronized TaskState getState() {
-            return state;
-        }
-
-        public synchronized void setState(@NotNull TaskState state) {
-            this.state = state;
-        }
-
-        /**
-         * Receives data, which should be put into parent function and
-         * using it constructs appropriate supplier.
-         * */
         @SuppressWarnings("unchecked")
-        public synchronized  <U> void receiveParentResult(U parentData) {
-            final Function<U, T> function = (Function<U, T>) parentFunction;
+        public <U> Supplier<U> generateDependentSupplier(@NotNull Task<U> dependentTask) {
+            final T finalData = data;
+            final Function<? super  T, U> function =
+                    (Function<? super T, U>) dependentTask.parentFunction;
             if (function == null) {
-                throw new IllegalStateException("Parent function should be Non Null");
+                throw new IllegalStateException("Parent function should not be a null");
             }
-            supplier = () -> function.apply(parentData);
+            return () -> function.apply(finalData);
         }
 
-        public synchronized void setParentFunction(Object parentFunction) {
+        public <U> Task(@NotNull Task<U> parentTask,
+                        @NotNull Function<? super U, T> parentFunction) {
+            this.parentTask = parentTask;
             this.parentFunction = parentFunction;
         }
 
-        public synchronized void calculate() {
-            state = TaskState.IN_PROGRESS;
-            try {
-                if (supplier == null) {
-                    throw new IllegalStateException("supplier should be Non Null");
-                }
-                ownDataHolder.assignValue(supplier.get());
-                state = TaskState.FINISHED_SUCCESSFULLY;
-            } catch (Exception e) {
-                ownDataHolder.assignException(new LightExecutionException(e));
-                state = TaskState.FINISHED_WITH_EXCEPTION;
-            }
-            synchronized (dependentTasks) {
-                var iterator = dependentTasks.iterator();
-                while (iterator.hasNext()) {
-                    var dependentTask = iterator.next();
-                    dependentTask.setState(TaskState.READY_TO_START);
-                    dependentTask.receiveParentResult(ownDataHolder.getData());
-                    synchronized (queryQueue) {
-                        queryQueue.add(dependentTask);
-                        queryQueue.notifyAll();
-                    }
-                    iterator.remove();
-                }
-            }
+        public Task(@NotNull Supplier<T> supplier) {
+            this.supplier = supplier;
+            state = TaskState.READY_TO_START;
         }
 
         @Override
-        public synchronized boolean isReady() {
-            return state.equals(TaskState.FINISHED_SUCCESSFULLY) ||
-                    state.equals(TaskState.FINISHED_WITH_EXCEPTION);
+        public boolean isReady() {
+            return state.equals(TaskState.FINISHED_SUCCESSFULLY)
+                    || state.equals(TaskState.FINISHED_WITH_EXCEPTION);
         }
 
         @Override
-        @Nullable public synchronized T get() throws LightExecutionException {
-            if (!isReady()) {
-                calculate();
+        @NotNull public T get() throws LightExecutionException {
+            while (!isReady()) {
+                try {
+                    ThreadPool.this.wait();
+                } catch (Exception e) {
+                    throw new LightExecutionException(e);
+                }
             }
             if (state.equals(TaskState.FINISHED_SUCCESSFULLY)) {
-                return ownDataHolder.getData();
+                if (data == null) {
+                    throw new IllegalStateException("Data should not be a null");
+                }
+                return data;
             } else {
-                throw ownDataHolder.getException();
+                if (exception == null) {
+                    throw new IllegalStateException("Exception should not be a null");
+                }
+                throw exception;
             }
         }
 
         @Override
-        public synchronized <U> LightFuture<U> thenApply(Function<? super T, U> function) {
-            if (!isReady()) {
-                System.out.println("LOL");
-                Task<U> dependentTask = new Task<>(null, TaskState.NOT_READY_TO_START);
-                dependentTask.setParentFunction(function);
-                dependentTasks.add(dependentTask);
-                if (!isReady()) {
-                    System.out.println("?? " + dependentTasks.size());
+        public <U> LightFuture<U> thenApply(@NotNull Function<? super T, U> function) {
+            Task<U> task = new Task<>(this, function);
+            queue.push(task);
+            return task;
+        }
+
+        public void process() {
+            if (isReady()) {
+                notifyAll();
+                return;
+            }
+            if (state.equals(TaskState.NOT_READY_TO_START)) {
+                if (parentTask == null || !parentTask.isReady()) {
+                    queue.push(this);
+                    return;
                 }
-                return dependentTask;
-            } else {
-                System.out.println("KEK");
-                final T data = ownDataHolder.getData();
-                return addTask(() -> function.apply(data));
+                supplier = parentTask.generateDependentSupplier(this);
+                state = TaskState.READY_TO_START;
+                queue.push(this);
+            } else if (state.equals(TaskState.READY_TO_START)) {
+                try {
+                    if (supplier == null) {
+                        throw new IllegalStateException("Supplier should not be a null");
+                    }
+                    state = TaskState.IN_PROCESS;
+                    data = supplier.get();
+                    state = TaskState.FINISHED_SUCCESSFULLY;
+                } catch (Exception e) {
+                    exception = new LightExecutionException(e);
+                    state = TaskState.FINISHED_WITH_EXCEPTION;
+                }
             }
-        }
-    }
-
-    private class DataHolder<T> {
-
-        @Nullable private T data;
-        @Nullable LightExecutionException exception;
-
-        public void assignValue(@Nullable T data) {
-            this.data = data;
-            exception = null;
-        }
-
-        public void assignException(@Nullable LightExecutionException exception) {
-            data = null;
-            this.exception = exception;
-        }
-
-        @Nullable public T getData() {
-            return data;
-        }
-
-        @NotNull public LightExecutionException getException() {
-            if (exception == null) {
-                throw new IllegalStateException("Holded exception should be Non Null");
-            }
-            return exception;
         }
     }
 }

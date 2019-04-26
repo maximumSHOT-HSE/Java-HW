@@ -6,6 +6,7 @@ public interface LightFuture<T> {
 
     /**
      * Defines whether task is done or not.
+     *
      * @return true if task is done and false otherwise
      * */
     boolean isReady();
@@ -24,12 +25,11 @@ public interface LightFuture<T> {
     /**
      * Uses given function, which takes a result of source task and convert it
      * to another LightFuture object (convert to new task).
-     * @param function, which can be applied to result of given and
+     *
+     * @param function, which should be applied to result of given and
      * result of such composition should be returned. This function
      * takes a result of source task and convert it to another LightFuture
      * object (convert to new task)
-     * @throws LightExecutionException if calculation of result has finished
-     * with Exception
      * */
     <U> LightFuture<U> thenApply(Function<? super T, U> function);
 }
