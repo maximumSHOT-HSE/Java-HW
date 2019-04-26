@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 /**
  * Simple pool of workers with fixed number of workers inside.
  * */
@@ -16,6 +15,7 @@ public class ThreadPool {
 
     @NotNull private Thread[] workers;
     @NotNull private ConcurrentQueue<Task<?>> queue = new ConcurrentQueue<>();
+    private volatile boolean shutdown = false;
 
     public ThreadPool(int numberOfThreads) {
         if (numberOfThreads <= 0) {
@@ -44,17 +44,30 @@ public class ThreadPool {
         }
     }
 
-    public <T> Task<T> submit(@NotNull Supplier<T> supplier) {
+    /**
+     * Adds a new task into pool.
+     *
+     * @param supplier which corresponds to the task
+     * */
+    @NotNull public <T> Task<T> submit(@NotNull Supplier<T> supplier) {
+        if (shutdown) {
+            throw new IllegalCallerException(
+                    "Shutdown has been already executed, hence pool is not able to calculate any task");
+        }
         Task<T> task = new Task<>(supplier);
         queue.push(task);
         return task;
     }
 
+    /**
+     * Interrupts work of all workers.
+     * */
     public void shutdown() {
+        shutdown = true;
         Arrays.stream(workers).forEach(Thread::interrupt);
     }
 
-    public enum TaskState {
+    private enum TaskState {
         NOT_READY_TO_START,
         READY_TO_START,
         IN_PROCESS,
@@ -65,7 +78,7 @@ public class ThreadPool {
     private class Task<T> implements LightFuture<T> {
 
         @Nullable private Task<?> parentTask;
-        @Nullable private Object parentFunction;
+        @Nullable private Function<?, T> parentFunction;
 
         @Nullable private T data;
         @Nullable private LightExecutionException exception;
@@ -74,8 +87,13 @@ public class ThreadPool {
 
         @NotNull private volatile TaskState state = TaskState.NOT_READY_TO_START;
 
+        /*
+        * Takes dependent tasks and generates supplier for it
+        * by applying function, which is stored in the
+        * dependent task to the current task's data.
+        * */
         @SuppressWarnings("unchecked")
-        public <U> Supplier<U> generateDependentSupplier(@NotNull Task<U> dependentTask) {
+        @NotNull public <U> Supplier<U> generateDependentSupplier(@NotNull Task<U> dependentTask) {
             final T finalData = data;
             final Function<? super  T, U> function =
                     (Function<? super T, U>) dependentTask.parentFunction;
@@ -85,12 +103,20 @@ public class ThreadPool {
             return () -> function.apply(finalData);
         }
 
+        /*
+        * This constructor used, when task to be constructed depends on
+        * some other task and function, which should be applied to the
+        * result of parent task calculation.
+        * */
         public <U> Task(@NotNull Task<U> parentTask,
                         @NotNull Function<? super U, T> parentFunction) {
             this.parentTask = parentTask;
             this.parentFunction = parentFunction;
         }
 
+        /*
+        * Constructs independent task using given supplier.
+        * */
         public Task(@NotNull Supplier<T> supplier) {
             this.supplier = supplier;
             state = TaskState.READY_TO_START;
@@ -125,12 +151,19 @@ public class ThreadPool {
         }
 
         @Override
-        public <U> LightFuture<U> thenApply(@NotNull Function<? super T, U> function) {
+        @NotNull public <U> LightFuture<U> thenApply(@NotNull Function<? super T, U> function) {
             Task<U> task = new Task<>(this, function);
             queue.push(task);
             return task;
         }
 
+        /*
+        * If task is already done then broadcast notification
+        * will be executed. If task depends on some other task then
+        * methods will check whether parent task is ready to provide data
+        * for generating supplier for current task. Finally, if current task
+        * is ready to start then corresponded supplier will be executed.
+        * */
         public void process() {
             if (isReady()) {
                 notifyAll();
