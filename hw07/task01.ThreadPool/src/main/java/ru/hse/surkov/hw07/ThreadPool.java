@@ -62,9 +62,15 @@ public class ThreadPool {
     /**
      * Interrupts work of all workers.
      * */
-    public void shutdown() {
+    public void shutdown() throws InterruptedException {
+        if (shutdown) {
+            return;
+        }
         shutdown = true;
         Arrays.stream(workers).forEach(Thread::interrupt);
+        for (Thread worker : workers) {
+            worker.join();
+        }
     }
 
     private enum TaskState {
