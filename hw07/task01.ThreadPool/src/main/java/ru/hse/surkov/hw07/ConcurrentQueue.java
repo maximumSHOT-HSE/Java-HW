@@ -27,7 +27,7 @@ public class ConcurrentQueue<T> {
 
     /**
      * Waits until queue will be a non-empty, then
-     * retrieves element from queue head, deletes and returns it.
+     * retrieves element from queue head, deletes link from queue and returns it.
      *
      * @return retrieved element
      * */

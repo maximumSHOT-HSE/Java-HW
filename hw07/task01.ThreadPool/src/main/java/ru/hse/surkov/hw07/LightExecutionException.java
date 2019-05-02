@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  * */
 public class LightExecutionException extends Exception {
 
-    @Nullable Exception parentException;
+    @Nullable private Exception parentException;
 
     public LightExecutionException(Exception e) {
         this.parentException = e;

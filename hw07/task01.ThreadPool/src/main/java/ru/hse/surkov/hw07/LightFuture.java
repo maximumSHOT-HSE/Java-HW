@@ -2,6 +2,9 @@ package ru.hse.surkov.hw07;
 
 import java.util.function.Function;
 
+/**
+ * Abstraction for tasks to be calculated.
+ * */
 public interface LightFuture<T> {
 
     /**
