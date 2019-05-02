@@ -31,7 +31,7 @@ public class ThreadPool {
 
     private void workerForkFlow() {
         try {
-            while (!Thread.interrupted()) {
+            while (!Thread.interrupted() && !shutdown) {
                 Task<?> task = queue.pop();
                 task.process();
             }
@@ -62,15 +62,12 @@ public class ThreadPool {
     /**
      * Interrupts work of all workers.
      * */
-    public void shutdown() throws InterruptedException {
+    public void shutdown() {
         if (shutdown) {
             return;
         }
         shutdown = true;
         Arrays.stream(workers).forEach(Thread::interrupt);
-        for (Thread worker : workers) {
-            worker.join();
-        }
     }
 
     private enum TaskState {
