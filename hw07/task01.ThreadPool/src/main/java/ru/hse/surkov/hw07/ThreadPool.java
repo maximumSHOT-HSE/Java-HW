@@ -60,14 +60,22 @@ public class ThreadPool {
     }
 
     /**
-     * Interrupts work of all workers.
+     * Interrupts work of all workers and waits until threads finish.
      * */
-    public void shutdown() {
+    public void shutdown() throws InterruptedException {
         if (shutdown) {
             return;
         }
-        shutdown = true;
-        Arrays.stream(workers).forEach(Thread::interrupt);
+        synchronized (workers) {
+            if (shutdown) {
+                return;
+            }
+            shutdown = true;
+            Arrays.stream(workers).forEach(Thread::interrupt);
+            for (var worker : workers) {
+                worker.join();
+            }
+        }
     }
 
     private enum TaskState {
