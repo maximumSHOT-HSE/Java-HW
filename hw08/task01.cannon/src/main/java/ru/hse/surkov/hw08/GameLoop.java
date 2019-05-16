@@ -33,7 +33,7 @@ public class GameLoop {
     }
 
     public void handle(long currentNanoTime) {
-        double deltaTime = TimeUnit.NANOSECONDS.toSeconds(currentNanoTime - previousNanoTime);
+        double deltaTime = (currentNanoTime - previousNanoTime) * 1e-3;
         previousNanoTime = currentNanoTime;
         for (var engine : engines) {
             engine.update(deltaTime);

@@ -2,12 +2,11 @@ package ru.hse.surkov.hw08;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class GameState implements Drawable {
+
+    private static final double VELOCITY_COEFFICIENT = 7;
 
     /*
     * Game work is a rectangle,
@@ -20,16 +19,32 @@ public class GameState implements Drawable {
 
     private Landscape landscape;
     private Cannon cannon;
-    private List<Target> targets = new ArrayList<>();
-    private List<Bullet> bullets = new ArrayList<>();
+    private Set<Target> targets = new HashSet<>();
+    private Set<Bullet> bullets = new HashSet<>();
     private Set<String> activeKeys = new TreeSet<>();
+    private Set<Detonation> detonations = new HashSet<>();
+
+    public void addBoom(double x, double radius) {
+        detonations.add(
+            new Detonation(
+                fieldWidth,
+                fieldHeight,
+                new Vector2D(x, landscape.getY(x)),
+                radius
+            )
+        );
+    }
+
+    public Set<Bullet> getBullets() {
+        return bullets;
+    }
 
     public double getFieldWidth() {
         return fieldWidth;
     }
 
-    public double getFieldHeight() {
-        return fieldHeight;
+    public Landscape getLandscape() {
+        return landscape;
     }
 
     public Set<String> getActiveKeys() {
@@ -37,7 +52,11 @@ public class GameState implements Drawable {
     }
 
     void addKey(String keyCode) {
-        activeKeys.add(keyCode);
+        if (keyCode.equals("ENTER")) {
+            fire();
+        } else {
+            activeKeys.add(keyCode);
+        }
     }
 
     void removeKey(String keyCode) {
@@ -68,6 +87,16 @@ public class GameState implements Drawable {
         for (Target target : targets) {
             target.draw(graphicsContext);
         }
+        var iterator = detonations.iterator();
+        while (iterator.hasNext()) {
+            var detonation = iterator.next();
+            if (detonation.getRemainingLifeTime() < 0) {
+                iterator.remove();
+                continue;
+            }
+            detonation.decreaseLifeTime();
+            detonation.draw(graphicsContext);
+        }
     }
 
     public void moveCannon(double deltaX) {
@@ -85,12 +114,17 @@ public class GameState implements Drawable {
     }
 
     public void fire() {
-        System.out.println("FIRE");
-//        Bullet bullet = new Bullet(
-//                cannon.getBase(),
-//                cannon.getGunWidth(),
-//                new Vector2D(0, 0),
-//                1
-//        );
+        Bullet bullet = new Bullet(
+                fieldWidth,
+                fieldHeight,
+                cannon.getGunpointPosition(),
+                cannon.getGunWidth() / 2,
+                cannon
+                        .getGunpointPosition()
+                        .difference(cannon.getBase())
+                        .multiply(VELOCITY_COEFFICIENT),
+                1
+        );
+        bullets.add(bullet);
     }
 }

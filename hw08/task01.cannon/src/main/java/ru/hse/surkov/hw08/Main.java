@@ -20,13 +20,13 @@ public class Main extends Application {
                 Toolkit
                         .getDefaultToolkit()
                         .getScreenSize()
-                        .getWidth() * 0.4
+                        .getWidth() * 0.8
         );
         primaryStage.setHeight(
                 Toolkit
                         .getDefaultToolkit()
                         .getScreenSize()
-                        .getHeight() * 0.5
+                        .getHeight() * 0.6
         );
         var gameState = new GameState(
                 primaryStage.getWidth(),

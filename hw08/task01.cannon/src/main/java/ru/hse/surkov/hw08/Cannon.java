@@ -24,7 +24,7 @@ public class Cannon implements Drawable {
         this.gunWidth = gunWidth;
     }
 
-    private Vector2D getGunpointPosition() {
+    public Vector2D getGunpointPosition() {
         return new Vector2D(
                 base.getX() + gunHeight * Math.sin(angle),
                 base.getY() + gunHeight * Math.cos(angle)
@@ -81,7 +81,7 @@ public class Cannon implements Drawable {
             xs[i] = vertices.get(i).getX();
             ys[i] = fieldHeight - vertices.get(i).getY();
         }
-        graphicsContext.setFill(Color.RED);
+        graphicsContext.setFill(Color.rgb(200, 200, 0));
         graphicsContext.fillPolygon(xs, ys, 4);
     }
 }
