@@ -1,8 +1,9 @@
 package ru.hse.surkov.hw08;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
 
-public class Target {
+public class Target implements Drawable {
 
     private Circle body;
 
@@ -16,5 +17,10 @@ public class Target {
 
     public void setBody(Circle body) {
         this.body = body;
+    }
+
+    @Override
+    public void draw(GraphicsContext graphicsContext) {
+
     }
 }

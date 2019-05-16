@@ -1,40 +1,23 @@
 package ru.hse.surkov.hw08;
 
-import javafx.scene.shape.Circle;
+import javafx.scene.canvas.GraphicsContext;
 
-public class Bullet {
+public class Bullet implements Drawable {
 
-    private Circle body;
+    private Vector2D center;
+    private double radius;
     private Vector2D velocity;
     private double mass;
 
-    public Bullet(Circle body, Vector2D velocity, double mass) {
-        this.body = body;
+    public Bullet(Vector2D center, double radius, Vector2D velocity, double mass) {
+        this.center = center;
+        this.radius = radius;
         this.velocity = velocity;
         this.mass = mass;
     }
 
-    public Circle getBody() {
-        return body;
-    }
+    @Override
+    public void draw(GraphicsContext graphicsContext) {
 
-    public void setBody(Circle body) {
-        this.body = body;
-    }
-
-    public Vector2D getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Vector2D velocity) {
-        this.velocity = velocity;
-    }
-
-    public double getMass() {
-        return mass;
-    }
-
-    public void setMass(double mass) {
-        this.mass = mass;
     }
 }

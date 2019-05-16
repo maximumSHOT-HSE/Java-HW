@@ -28,7 +28,10 @@ public class RenderEngine implements Engine {
             Color.GRAY
         );
         scene.setOnKeyPressed(
-            event -> gameState.pressKey(event.getCode().toString())
+            event -> gameState.addKey(event.getCode().toString())
+        );
+        scene.setOnKeyReleased(
+            event -> gameState.removeKey(event.getCode().toString())
         );
         primaryStage.setScene(scene);
         canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());

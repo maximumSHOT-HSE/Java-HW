@@ -4,11 +4,10 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class GameState implements Drawable {
-
-    private static final double RATIO_DELTA_X_PER_TOUCH = 0.01;
-    private static final double RATIO_DELTA_ANGLE_PER_TOUCH = 0.05;
 
     /*
     * Game work is a rectangle,
@@ -23,25 +22,26 @@ public class GameState implements Drawable {
     private Cannon cannon;
     private List<Target> targets = new ArrayList<>();
     private List<Bullet> bullets = new ArrayList<>();
+    private Set<String> activeKeys = new TreeSet<>();
 
-    void pressKey(String keyCode) {
-        switch (keyCode) {
-            case "LEFT":
-                moveCannon(-RATIO_DELTA_X_PER_TOUCH * fieldWidth);
-                break;
-            case "RIGHT":
-                moveCannon(RATIO_DELTA_X_PER_TOUCH * fieldWidth);
-                break;
-            case "UP":
-                rotateCannon(RATIO_DELTA_ANGLE_PER_TOUCH * Math.PI / 2);
-                break;
-            case "DOWN":
-                rotateCannon(-RATIO_DELTA_ANGLE_PER_TOUCH * Math.PI / 2);
-                break;
-            case "ENTER":
-                fire();
-                break;
-        }
+    public double getFieldWidth() {
+        return fieldWidth;
+    }
+
+    public double getFieldHeight() {
+        return fieldHeight;
+    }
+
+    public Set<String> getActiveKeys() {
+        return activeKeys;
+    }
+
+    void addKey(String keyCode) {
+        activeKeys.add(keyCode);
+    }
+
+    void removeKey(String keyCode) {
+        activeKeys.remove(keyCode);
     }
 
     public GameState(double fieldWidth, double fieldHeight) {
@@ -62,13 +62,20 @@ public class GameState implements Drawable {
     public void draw(GraphicsContext graphicsContext) {
         landscape.draw(graphicsContext);
         cannon.draw(graphicsContext);
+        for (Bullet bullet : bullets) {
+            bullet.draw(graphicsContext);
+        }
+        for (Target target : targets) {
+            target.draw(graphicsContext);
+        }
     }
 
     public void moveCannon(double deltaX) {
         Vector2D cannonBase = cannon.getBase();
+        double targetX = Math.max(0.0, Math.min(fieldWidth, cannonBase.getX() + deltaX));
         cannon.setBase(new Vector2D(
-                cannonBase.getX() + deltaX,
-                landscape.getY(cannonBase.getX() + deltaX)
+                targetX,
+                landscape.getY(targetX)
         ));
     }
 
@@ -79,5 +86,11 @@ public class GameState implements Drawable {
 
     public void fire() {
         System.out.println("FIRE");
+//        Bullet bullet = new Bullet(
+//                cannon.getBase(),
+//                cannon.getGunWidth(),
+//                new Vector2D(0, 0),
+//                1
+//        );
     }
 }

@@ -16,6 +16,14 @@ public class Cannon implements Drawable {
     private double angle;
     private Vector2D base;
 
+    public double getGunWidth() {
+        return gunWidth;
+    }
+
+    public void setGunWidth(double gunWidth) {
+        this.gunWidth = gunWidth;
+    }
+
     private Vector2D getGunpointPosition() {
         return new Vector2D(
                 base.getX() + gunHeight * Math.sin(angle),
@@ -35,38 +43,6 @@ public class Cannon implements Drawable {
         this.gunHeight = gunHeight;
         this.angle = angle;
         this.base = base;
-    }
-
-    public double getFieldWidth() {
-        return fieldWidth;
-    }
-
-    public void setFieldWidth(double fieldWidth) {
-        this.fieldWidth = fieldWidth;
-    }
-
-    public double getFieldHeight() {
-        return fieldHeight;
-    }
-
-    public void setFieldHeight(double fieldHeight) {
-        this.fieldHeight = fieldHeight;
-    }
-
-    public double getGunWidth() {
-        return gunWidth;
-    }
-
-    public void setGunWidth(double gunWidth) {
-        this.gunWidth = gunWidth;
-    }
-
-    public double getGunHeight() {
-        return gunHeight;
-    }
-
-    public void setGunHeight(double gunHeight) {
-        this.gunHeight = gunHeight;
     }
 
     public double getAngle() {
