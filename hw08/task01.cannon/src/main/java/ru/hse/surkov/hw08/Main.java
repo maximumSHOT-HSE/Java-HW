@@ -11,7 +11,6 @@ public class Main extends Application {
 
     private RenderEngine renderEngine;
     private PhysicsEngine physicsEngine;
-    private InputListener inputListener;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,7 +26,7 @@ public class Main extends Application {
                 Toolkit
                         .getDefaultToolkit()
                         .getScreenSize()
-                        .getHeight() * 0.4
+                        .getHeight() * 0.5
         );
         var gameState = new GameState(
                 primaryStage.getWidth(),
@@ -36,9 +35,7 @@ public class Main extends Application {
         renderEngine = new RenderEngine(primaryStage, gameState);
         primaryStage.show();
         physicsEngine = new PhysicsEngine(gameState);
-        inputListener = new InputListener(gameState);
         var gameLoop = new GameLoop();
-        gameLoop.addEngine(inputListener);
         gameLoop.addEngine(physicsEngine);
         gameLoop.addEngine(renderEngine);
         gameLoop.start();

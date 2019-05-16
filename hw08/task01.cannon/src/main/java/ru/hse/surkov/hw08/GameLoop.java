@@ -1,21 +1,37 @@
 package ru.hse.surkov.hw08;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GameLoop extends AnimationTimer {
+public class GameLoop {
+
+    private static final double FPS = 60;
 
     private long previousNanoTime;
     private List<Engine> engines = new ArrayList<>();
+    private Timeline timeline = new Timeline();
+    private KeyFrame keyFrame;
+
+    public GameLoop() {
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        keyFrame = new KeyFrame(
+                Duration.millis(16),
+                event -> handle(System.currentTimeMillis()));
+        timeline.getKeyFrames().add(keyFrame);
+    }
 
     void addEngine(Engine engine) {
         engines.add(engine);
     }
 
-    @Override
     public void handle(long currentNanoTime) {
         double deltaTime = TimeUnit.NANOSECONDS.toSeconds(currentNanoTime - previousNanoTime);
         previousNanoTime = currentNanoTime;
@@ -24,9 +40,8 @@ public class GameLoop extends AnimationTimer {
         }
     }
 
-    @Override
     public void start() {
         previousNanoTime = System.currentTimeMillis();
-        super.start();
+        timeline.play();
     }
 }
