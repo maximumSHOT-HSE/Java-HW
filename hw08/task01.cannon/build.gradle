@@ -9,7 +9,7 @@ javafx {
     modules = [ 'javafx.controls' ]
 }
 
-mainClassName = 'com.example.pw13.Main'
+mainClassName = 'ru.hse.surkov.hw08.Main'
 
 group 'com.example'
 version '1.0-SNAPSHOT'
