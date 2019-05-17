@@ -37,6 +37,7 @@ public class Main extends Application {
         physicsEngine = new PhysicsEngine(gameState);
         var gameLoop = new GameLoop();
         gameLoop.addEngine(physicsEngine);
+        physicsEngine.setGameLoop(gameLoop);
         gameLoop.addEngine(renderEngine);
         gameLoop.start();
     }

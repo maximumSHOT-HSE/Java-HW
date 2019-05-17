@@ -8,20 +8,26 @@ import java.util.List;
 
 public class Cannon implements Drawable {
 
-    private double fieldWidth;
-    private double fieldHeight;
+    private static final double VELOCITY_COEFFICIENT = 10;
+    private static final double[] bulletMasses = new double[] {
+        1, 2, 3
+    };
 
+    private GameState gameState;
     private double gunWidth;
     private double gunHeight;
     private double angle;
     private Vector2D base;
+    private int currentMassId = 2;
+
+    public void setCurrentMassId(int id) {
+        if (0 <= id && id < bulletMasses.length) {
+            currentMassId = id;
+        }
+    }
 
     public double getGunWidth() {
         return gunWidth;
-    }
-
-    public void setGunWidth(double gunWidth) {
-        this.gunWidth = gunWidth;
     }
 
     public Vector2D getGunpointPosition() {
@@ -31,14 +37,8 @@ public class Cannon implements Drawable {
         );
     }
 
-    public Cannon(double fieldWidth,
-                  double fieldHeight,
-                  double gunWidth,
-                  double gunHeight,
-                  double angle,
-                  Vector2D base) {
-        this.fieldWidth = fieldWidth;
-        this.fieldHeight = fieldHeight;
+    public Cannon(GameState gameState, double gunWidth, double gunHeight, double angle, Vector2D base) {
+        this.gameState = gameState;
         this.gunWidth = gunWidth;
         this.gunHeight = gunHeight;
         this.angle = angle;
@@ -61,6 +61,32 @@ public class Cannon implements Drawable {
         this.base = base;
     }
 
+    public Bullet generateBullet() {
+        return new Bullet(
+                gameState,
+                getGunpointPosition(),
+                getGunWidth() / 2,
+                getGunpointPosition()
+                        .difference(getBase())
+                        .multiply(VELOCITY_COEFFICIENT),
+                bulletMasses[currentMassId]
+        );
+    }
+
+    public void drawBulletType(GraphicsContext graphicsContext) {
+        for (int i = 0; i < bulletMasses.length; i++) {
+            RenderEngine.drawCircleText(
+                    Integer.toString(i + 1),
+                    (0.85 + 0.15 * i / bulletMasses.length) * gameState.getFieldWidth(),
+                    0.01 * gameState.getFieldHeight(),
+                    0.05,
+                    gameState,
+                    graphicsContext,
+                    currentMassId == i ? Color.DARKRED : Color.GRAY
+            );
+        }
+    }
+
     @Override
     public void draw(GraphicsContext graphicsContext) {
         Vector2D gunpoint = getGunpointPosition();
@@ -79,9 +105,10 @@ public class Cannon implements Drawable {
         double[] ys = new double[vertices.size()];
         for (int i = 0; i < vertices.size(); i++) {
             xs[i] = vertices.get(i).getX();
-            ys[i] = fieldHeight - vertices.get(i).getY();
+            ys[i] = gameState.getFieldHeight() - vertices.get(i).getY();
         }
-        graphicsContext.setFill(Color.rgb(200, 200, 0));
+        graphicsContext.setFill(Color.rgb(102, 0, 51));
         graphicsContext.fillPolygon(xs, ys, 4);
+        drawBulletType(graphicsContext);
     }
 }

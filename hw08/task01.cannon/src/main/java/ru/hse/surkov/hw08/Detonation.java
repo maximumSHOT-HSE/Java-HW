@@ -8,9 +8,7 @@ public class Detonation implements Drawable {
     private static final double DECREASE_DETONATION_COEFFICIENT = 0.1;
     private static final double DETONATION_LIFE_TIME = 20;
 
-    private double fieldWidth;
-    private double fieldHeight;
-
+    private GameState gameState;
     private Vector2D center;
     private double radius;
     private double remainingLifeTime = DETONATION_LIFE_TIME;
@@ -23,25 +21,28 @@ public class Detonation implements Drawable {
         remainingLifeTime -= DECREASE_DETONATION_COEFFICIENT;
     }
 
-    public double getRadius() {
-        return radius;
-    }
-
-    public Detonation(double fieldWidth, double fieldHeight, Vector2D center, double radius) {
-        this.fieldWidth = fieldWidth;
-        this.fieldHeight = fieldHeight;
+    public Detonation(GameState gameState, Vector2D center, double radius) {
+        this.gameState = gameState;
         this.center = center;
         this.radius = radius;
     }
 
     @Override
     public void draw(GraphicsContext graphicsContext) {
-        graphicsContext.setFill(Color.DARKRED);
+        graphicsContext.setFill(Color.ORANGE);
         graphicsContext.fillOval(
                 center.getX() - radius,
-                fieldHeight - center.getY() - radius,
+                gameState.getFieldHeight() - center.getY() - radius,
                 2 * radius,
                 2 * radius
         );
+    }
+
+    public Vector2D getCenter() {
+        return center;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 }

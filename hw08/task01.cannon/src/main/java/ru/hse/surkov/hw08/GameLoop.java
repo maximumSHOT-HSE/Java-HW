@@ -1,15 +1,11 @@
 package ru.hse.surkov.hw08;
 
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class GameLoop {
 
@@ -23,7 +19,7 @@ public class GameLoop {
     public GameLoop() {
         timeline.setCycleCount(Timeline.INDEFINITE);
         keyFrame = new KeyFrame(
-                Duration.millis(16),
+                Duration.seconds(1 / FPS),
                 event -> handle(System.currentTimeMillis()));
         timeline.getKeyFrames().add(keyFrame);
     }
@@ -43,5 +39,9 @@ public class GameLoop {
     public void start() {
         previousNanoTime = System.currentTimeMillis();
         timeline.play();
+    }
+
+    public void stop() {
+        timeline.stop();
     }
 }

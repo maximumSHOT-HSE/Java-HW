@@ -5,22 +5,19 @@ import javafx.scene.paint.Color;
 
 public class Bullet implements Drawable {
 
-    private double fieldWidth;
-    private double fieldHeight;
-
+    private GameState gameState;
     private Vector2D center;
     private double radius;
     private Vector2D velocity;
     private double mass;
 
-    public Bullet(double fieldWidth,
-                  double fieldHeight,
-                  Vector2D center,
-                  double radius,
-                  Vector2D velocity,
-                  double mass) {
-        this.fieldWidth = fieldWidth;
-        this.fieldHeight = fieldHeight;
+    public Bullet(
+            GameState gameState,
+            Vector2D center,
+            double radius,
+            Vector2D velocity,
+            double mass) {
+        this.gameState = gameState;
         this.center = center;
         this.radius = radius;
         this.velocity = velocity;
@@ -32,10 +29,14 @@ public class Bullet implements Drawable {
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillOval(
             center.getX() - radius,
-                fieldHeight - center.getY() - radius,
+                gameState.getFieldHeight() - center.getY() - radius,
                 2 * radius,
                 2 * radius
         );
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     public Vector2D getCenter() {
