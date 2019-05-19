@@ -36,6 +36,10 @@ public class Cannon implements Drawable {
         }
     }
 
+    public int getCurrentMassId() {
+        return currentMassId;
+    }
+
     public double getGunWidth() {
         return gunWidth;
     }

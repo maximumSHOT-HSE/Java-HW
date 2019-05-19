@@ -15,7 +15,7 @@ import java.util.*;
 public class GameState implements Drawable {
 
     private static final int MAX_TARGETS_NUMBER = 10;
-    @NotNull private static final Random random = new Random(System.currentTimeMillis());
+    @NotNull private static Random random = new Random(System.currentTimeMillis());
 
     /**
      * The state of the game.
@@ -33,6 +33,13 @@ public class GameState implements Drawable {
 
     @NotNull public GameStatus getGameStatus() {
         return gameStatus;
+    }
+
+    /**
+     * Changes the seed of the random generator.
+     * */
+    public void setRandomSeed(long seed) {
+        random.setSeed(seed);
     }
 
     /*
@@ -86,6 +93,10 @@ public class GameState implements Drawable {
 
     @NotNull public Set<String> getActiveKeys() {
         return activeKeys;
+    }
+
+    @NotNull public Cannon getCannon() {
+        return cannon;
     }
 
     public double getFieldHeight() {
