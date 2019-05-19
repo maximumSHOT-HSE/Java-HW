@@ -88,4 +88,20 @@ public class Vector2D {
                 y * coefficient
         );
     }
+
+    /**
+     * Calculates the scalar multiplication of this vector
+     * and the given vector.
+     * */
+    public double scalarMultiply(@NotNull Vector2D other) {
+        return getX() * other.getX() + getY() * other.getY();
+    }
+
+    /**
+     * Calculates the vector multiplication of this vector
+     * and the given vector.
+     * */
+    public double vectorMultiply(@NotNull Vector2D other) {
+        return getX() * other.getY() - other.getX() * getY();
+    }
 }

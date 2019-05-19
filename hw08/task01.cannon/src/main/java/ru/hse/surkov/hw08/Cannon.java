@@ -40,6 +40,9 @@ public class Cannon implements Drawable {
         return gunWidth;
     }
 
+    /**
+     * Calculates the position of the cannon tip.
+     * */
     @NotNull public Vector2D getGunpointPosition() {
         return new Vector2D(
                 base.getX() + gunHeight * Math.sin(angle),
