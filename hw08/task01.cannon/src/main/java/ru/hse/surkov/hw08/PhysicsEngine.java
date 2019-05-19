@@ -1,10 +1,15 @@
 package ru.hse.surkov.hw08;
 
+/**
+ * Engines for the processing physical laws
+ * and changing the states of all game entities
+ * according to them.
+ * */
 public class PhysicsEngine implements Engine {
 
     private static final double RATIO_DELTA_X_PER_TOUCH = 0.0025;
     private static final double RATIO_DELTA_ANGLE_PER_TOUCH = 0.010;
-    private static final double GRAVITATION = 500;
+    private static final double GRAVITATION = 600;
     private static final double DETONATION_RADIUS_RATIO = 10;
 
     private GameState gameState;
@@ -18,7 +23,7 @@ public class PhysicsEngine implements Engine {
         this.gameLoop = gameLoop;
     }
 
-    void processKeys() {
+    private void processKeys() {
         var activeKeys = gameState.getActiveKeys();
         for (var keyCode : activeKeys) {
             switch (keyCode) {
@@ -42,7 +47,7 @@ public class PhysicsEngine implements Engine {
         }
     }
 
-    void processBullets(double deltaTime) {
+    private void processBullets(double deltaTime) {
         var bullets = gameState.getBullets();
         var iterator = bullets.iterator();
         while (iterator.hasNext()) {
@@ -70,21 +75,17 @@ public class PhysicsEngine implements Engine {
                     < target.getRadius() + detonation.getRadius();
     }
 
-    void processCollisions() {
+    private void processCollisions() {
         var targets = gameState.getTargets();
         var detonations = gameState.getDetonations();
         var iterator = targets.iterator();
         while (iterator.hasNext()) {
             var target = iterator.next();
-            boolean anyDetonation = false;
             for (var detonation : detonations) {
                 if (checkDetonation(target, detonation)) {
-                    anyDetonation = true;
+                    iterator.remove();
                     break;
                 }
-            }
-            if (anyDetonation) {
-                iterator.remove();
             }
         }
         if (gameState.getTargets().isEmpty()) {
@@ -93,6 +94,19 @@ public class PhysicsEngine implements Engine {
         }
     }
 
+    /**
+     * {@link Engine#update(double)}
+     *
+     * Processes events related with
+     * physical laws and player's actions.
+     * Changes the cannon position and angle
+     * if appropriate keys are pressed.
+     * Checks whether some bullet reach the landscape.
+     * Changes the states of the bullets according
+     * to the physical laws called the movement of the
+     * parabola.
+     * Processes collisions between detonations and targets.
+     * */
     @Override
     public void update(double deltaTime) {
         processKeys();

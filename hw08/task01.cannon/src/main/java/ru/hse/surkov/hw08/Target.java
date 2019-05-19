@@ -3,13 +3,21 @@ package ru.hse.surkov.hw08;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Abstraction for the target. The
+ * target is the circle lying on the landscape.
+ * The main player goal to collect all targets.
+ * */
 public class Target implements Drawable {
 
     private GameState gameState;
     private Vector2D center;
     private double radius;
 
-    public Target(GameState gameState, Vector2D center, double radius) {
+    public Target(
+            GameState gameState,
+            Vector2D center,
+            double radius) {
         this.gameState = gameState;
         this.center = center;
         this.radius = radius;
@@ -23,6 +31,12 @@ public class Target implements Drawable {
         return radius;
     }
 
+    /**
+     * {@link Drawable#draw(GraphicsContext)}
+     *
+     * Draws the target as the circle lying on
+     * the landscape.
+     */
     @Override
     public void draw(GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.DARKRED);

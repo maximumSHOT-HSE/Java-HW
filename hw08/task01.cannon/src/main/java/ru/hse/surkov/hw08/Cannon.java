@@ -6,6 +6,15 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cannon is the gun, which is represented
+ * as the rectangle, which can move and rotate
+ * about the base of the cannon. Cannon can shoot
+ * bullets, which will start their movement at the
+ * gunpoint with a certain velocity, start angle of
+ * the bullet movement depends on the angle of the
+ * cannon.
+ * */
 public class Cannon implements Drawable {
 
     private static final double VELOCITY_COEFFICIENT = 10;
@@ -18,7 +27,7 @@ public class Cannon implements Drawable {
     private double gunHeight;
     private double angle;
     private Vector2D base;
-    private int currentMassId = 2;
+    private int currentMassId = 0;
 
     public void setCurrentMassId(int id) {
         if (0 <= id && id < bulletMasses.length) {
@@ -37,7 +46,12 @@ public class Cannon implements Drawable {
         );
     }
 
-    public Cannon(GameState gameState, double gunWidth, double gunHeight, double angle, Vector2D base) {
+    public Cannon(
+            GameState gameState,
+            double gunWidth,
+            double gunHeight,
+            double angle,
+            Vector2D base) {
         this.gameState = gameState;
         this.gunWidth = gunWidth;
         this.gunHeight = gunHeight;
@@ -73,7 +87,7 @@ public class Cannon implements Drawable {
         );
     }
 
-    public void drawBulletType(GraphicsContext graphicsContext) {
+    private void drawBulletTypes(GraphicsContext graphicsContext) {
         for (int i = 0; i < bulletMasses.length; i++) {
             RenderEngine.drawCircleText(
                     Integer.toString(i + 1),
@@ -87,6 +101,13 @@ public class Cannon implements Drawable {
         }
     }
 
+    /**
+     * {@link Drawable#draw(GraphicsContext)}
+     *
+     * Draws the cannon as the rectangle rotated by the
+     * angle and located at the landscape. Precise position
+     * is defined by the position of the cannon base.
+     * */
     @Override
     public void draw(GraphicsContext graphicsContext) {
         Vector2D gunpoint = getGunpointPosition();
@@ -109,6 +130,6 @@ public class Cannon implements Drawable {
         }
         graphicsContext.setFill(Color.rgb(102, 0, 51));
         graphicsContext.fillPolygon(xs, ys, 4);
-        drawBulletType(graphicsContext);
+        drawBulletTypes(graphicsContext);
     }
 }

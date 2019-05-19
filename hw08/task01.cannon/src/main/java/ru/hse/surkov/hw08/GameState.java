@@ -4,11 +4,21 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.util.*;
 
+/**
+ * Abstraction for the game stae, which stores
+ * all parameters of the game namely information
+ * about
+ * bullets, targets, detonations, landscape, cannon,
+ * landscape and which keys on the keyboard are pressed.
+ */
 public class GameState implements Drawable {
 
     private static final int MAX_TARGETS_NUMBER = 10;
     private static final Random random = new Random(System.currentTimeMillis());
 
+    /**
+     * The state of the game.
+     * */
     public enum GameStatus {
         IN_PROGRESS,
         FINISHED
@@ -37,9 +47,12 @@ public class GameState implements Drawable {
     private Cannon cannon;
     private Set<Target> targets = new HashSet<>();
     private Set<Bullet> bullets = new HashSet<>();
-    private Set<String> activeKeys = new TreeSet<>();
+    private Set<String> activeKeys = new HashSet<>();
     private Set<Detonation> detonations = new HashSet<>();
 
+    /**
+     * Adds the detonation to the list of processed detonations.
+     * */
     public void addDetonation(double x, double radius) {
         detonations.add(
             new Detonation(
@@ -78,7 +91,11 @@ public class GameState implements Drawable {
         return fieldHeight;
     }
 
-    void addKey(String keyCode) {
+    /**
+     * Adds the key to the processed keys in terms of
+     * its key code, which is represented as the String.
+     * */
+    public void addKey(String keyCode) {
         if (keyCode.equals("ENTER")) {
             fire();
         } else if (keyCode.startsWith("DIGIT")) {
@@ -88,11 +105,14 @@ public class GameState implements Drawable {
         }
     }
 
-    void removeKey(String keyCode) {
+    /**
+     * Removes the key from the processed keys.
+     * */
+    public void removeKey(String keyCode) {
         activeKeys.remove(keyCode);
     }
 
-    void generateTargets() {
+    private void generateTargets() {
         int targetsNumber = random.nextInt(MAX_TARGETS_NUMBER) + 1;
         for (int i = 0; i < targetsNumber; i++) {
             double x = random.nextDouble() * fieldWidth;
@@ -116,6 +136,12 @@ public class GameState implements Drawable {
         generateTargets();
     }
 
+    /**
+     * {@link Drawable#draw(GraphicsContext)}
+     *
+     * Draws the game by drawing each component of the game
+     * in appropriate order.
+     * */
     @Override
     public void draw(GraphicsContext graphicsContext) {
         landscape.draw(graphicsContext);
@@ -138,6 +164,9 @@ public class GameState implements Drawable {
         }
     }
 
+    /**
+     * Changes the cannon position at the landscape.
+     * */
     public void moveCannon(double deltaX) {
         Vector2D cannonBase = cannon.getBase();
         double targetX = Math.max(0.0, Math.min(fieldWidth, cannonBase.getX() + deltaX));
@@ -147,11 +176,18 @@ public class GameState implements Drawable {
         ));
     }
 
+    /**
+     * Changes the cannon angle.
+     */
     public void rotateCannon(double deltaAngle) {
         double cannonAngle = cannon.getAngle();
         cannon.setAngle(cannonAngle + deltaAngle);
     }
 
+    /**
+     * Makes the gun fire. As the consequence new bullet
+     * will be generated.
+     * */
     public void fire() {
         bullets.add(cannon.generateBullet());
     }

@@ -5,6 +5,10 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 
+/**
+ * The Main class for the initialization, configuration
+ * and launching of the game.
+ * */
 public class Main extends Application {
 
     private final String GAME_NAME = "Cannon";
@@ -12,6 +16,9 @@ public class Main extends Application {
     private RenderEngine renderEngine;
     private PhysicsEngine physicsEngine;
 
+    /**
+     * Initializes and starts the application.
+     * */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle(GAME_NAME);
@@ -42,6 +49,9 @@ public class Main extends Application {
         gameLoop.start();
     }
 
+    /**
+     * Launches the application.
+     * */
     public static void main(String[] args) {
         Application.launch(args);
     }

@@ -3,6 +3,13 @@ package ru.hse.surkov.hw08;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Bullet of cannon, which is circle
+ * with defined radius, mass and
+ * start velocity. Bullet moves
+ * by physical law namely the movement
+ * of the parabola.
+ * */
 public class Bullet implements Drawable {
 
     private GameState gameState;
@@ -24,6 +31,12 @@ public class Bullet implements Drawable {
         this.mass = mass;
     }
 
+    /**
+     * {@link Drawable#draw(GraphicsContext)}
+     *
+     * Draws the bullet as the circle with a certain center
+     * and radius.
+     * * */
     @Override
     public void draw(GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.BLACK);
@@ -33,10 +46,6 @@ public class Bullet implements Drawable {
                 2 * radius,
                 2 * radius
         );
-    }
-
-    public double getRadius() {
-        return radius;
     }
 
     public Vector2D getCenter() {

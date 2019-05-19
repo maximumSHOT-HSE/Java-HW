@@ -1,5 +1,8 @@
 package ru.hse.surkov.hw08;
 
+/**
+ * Two-dimensional vector.
+ */
 public class Vector2D {
 
     private double x;
@@ -14,26 +17,20 @@ public class Vector2D {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
     public double getY() {
         return y;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public Vector2D convert(double width, double height) {
-        return new Vector2D(x, height - y);
-    }
-
+    /**
+     * Finds the length of the vector.
+     * */
     public double getLength() {
         return Math.sqrt(x * x + y * y);
     }
 
+    /**
+     * Rotates the vector by given angle.
+     * */
     public Vector2D rotate(double alpha) {
         return new Vector2D(
                 x * Math.cos(alpha) - y * Math.sin(alpha),
@@ -41,6 +38,10 @@ public class Vector2D {
         );
     }
 
+    /**
+     * Calculates the sum of this vector
+     * and given vector.
+     * */
     public Vector2D add(Vector2D other) {
         return new Vector2D(
                 x + other.getX(),
@@ -48,6 +49,11 @@ public class Vector2D {
         );
     }
 
+    /**
+     * Makes the length of the vector
+     * equal to one by dividing the vector
+     * by its length.
+     * */
     public Vector2D normalize() {
         double length = getLength();
         return new Vector2D(
@@ -56,6 +62,10 @@ public class Vector2D {
         );
     }
 
+    /**
+     * Finds the difference between this
+     * and given vectors.
+     * */
     public Vector2D difference(Vector2D other) {
         return new Vector2D(
                 x - other.getX(),
@@ -63,6 +73,10 @@ public class Vector2D {
         );
     }
 
+    /**
+     * Multiplies vector by given coefficient
+     * and returns it as the result.
+     * */
     public Vector2D multiply(double coefficient) {
         return new Vector2D(
                 x * coefficient,

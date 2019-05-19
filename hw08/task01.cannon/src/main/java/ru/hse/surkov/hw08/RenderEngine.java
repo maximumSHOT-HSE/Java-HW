@@ -12,25 +12,24 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * Engine for the drawing entities of the game.
+ * */
 public class RenderEngine implements Engine {
 
     private Stage primaryStage;
-    private Group root;
-    private Scene scene;
-    private Canvas canvas;
     private GraphicsContext graphicsContext;
-
     private GameState gameState;
 
     public RenderEngine(Stage givenPrimaryStage, GameState gameState) {
         this.gameState = gameState;
         this.primaryStage = givenPrimaryStage;
-        root = new Group();
-        scene = new Scene(
-            root,
-            primaryStage.getWidth(),
-            primaryStage.getHeight(),
-            Color.GRAY
+        var root = new Group();
+        var scene = new Scene(
+                root,
+                primaryStage.getWidth(),
+                primaryStage.getHeight(),
+                Color.GRAY
         );
         scene.setOnKeyPressed(
             event -> gameState.addKey(event.getCode().toString())
@@ -39,11 +38,16 @@ public class RenderEngine implements Engine {
             event -> gameState.removeKey(event.getCode().toString())
         );
         primaryStage.setScene(scene);
-        canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
+        var canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
         root.getChildren().add(canvas);
         graphicsContext = canvas.getGraphicsContext2D();
     }
 
+    /**
+     * Draws the circle and the given text inside
+     * at the given position and paints it
+     * in the given color.
+     */
     public static void drawCircleText(
             String textString,
             double x,
@@ -68,6 +72,9 @@ public class RenderEngine implements Engine {
         graphicsContext.drawImage(image, x, y);
     }
 
+    /**
+     * Clears whole field and redraws all entities.
+     * */
     @Override
     public void update(double deltaTime) {
         graphicsContext.clearRect(
@@ -89,7 +96,7 @@ public class RenderEngine implements Engine {
         }
     }
 
-    public void drawFinish() {
+    private void drawFinish() {
         drawCircleText(
                 "YOU WIN!",
                 gameState.getFieldWidth() / 3.0,
