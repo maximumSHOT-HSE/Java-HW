@@ -58,6 +58,9 @@ public class Vector2D {
      * */
     @NotNull public Vector2D normalize() {
         double length = getLength();
+        if (length == 0) {
+            length = 1;
+        }
         return new Vector2D(
                 x / length,
                 y / length
