@@ -265,4 +265,78 @@ class Vector2DTest {
             }
         }
     }
+
+    @Test
+    void testScalarMultiplication() {
+        for (double x1 = -2; x1 <= 2; x1 += 0.1) {
+            for (double y1 = -2; y1 <= 2; y1 += 0.1) {
+                for (double x2 = -2; x2 <= 2; x2 += 0.1) {
+                    for (double y2 = -2; y2 <= 2; y2 += 0.1) {
+                        double m1 = new Vector2D(x1, y1).scalarMultiply(new Vector2D(x2, y2));
+                        double m2 = x1 * x2 + y1 * y2;
+                        assertTrue(Math.abs(m1 - m2) < EPS);
+                    }
+                }
+            }
+        }
+        for (double x1 = -1e9; x1 <= 1e9; x1 += 1e8) {
+            for (double y1 = -1e9; y1 <= 1e9; y1 += 1e8) {
+                for (double x2 = -1e9; x2 <= 1e9; x2 += 1e8) {
+                    for (double y2 = -1e9; y2 <= 1e9; y2 += 1e8) {
+                        double m1 = new Vector2D(x1, y1).scalarMultiply(new Vector2D(x2, y2));
+                        double m2 = x1 * x2 + y1 * y2;
+                        assertTrue(Math.abs(m1 - m2) < EPS);
+                    }
+                }
+            }
+        }
+        for (double x1 = -1e3; x1 <= 1e3; x1 += 1e2) {
+            for (double y1 = -1e3; y1 <= 1e3; y1 += 1e2) {
+                for (double x2 = -1e3; x2 <= 1e3; x2 += 1e2) {
+                    for (double y2 = -1e3; y2 <= 1e3; y2 += 1e2) {
+                        double m1 = new Vector2D(x1, y1).scalarMultiply(new Vector2D(x2, y2));
+                        double m2 = x1 * x2 + y1 * y2;
+                        assertTrue(Math.abs(m1 - m2) < EPS);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    void testVectorMultiplication() {
+        for (double x1 = -2; x1 <= 2; x1 += 0.1) {
+            for (double y1 = -2; y1 <= 2; y1 += 0.1) {
+                for (double x2 = -2; x2 <= 2; x2 += 0.1) {
+                    for (double y2 = -2; y2 <= 2; y2 += 0.1) {
+                        double m1 = new Vector2D(x1, y1).vectorMultiply(new Vector2D(x2, y2));
+                        double m2 = x1 * y2 - x2 * y1;
+                        assertTrue(Math.abs(m1 - m2) < EPS);
+                    }
+                }
+            }
+        }
+        for (double x1 = -1e9; x1 <= 1e9; x1 += 1e8) {
+            for (double y1 = -1e9; y1 <= 1e9; y1 += 1e8) {
+                for (double x2 = -1e9; x2 <= 1e9; x2 += 1e8) {
+                    for (double y2 = -1e9; y2 <= 1e9; y2 += 1e8) {
+                        double m1 = new Vector2D(x1, y1).vectorMultiply(new Vector2D(x2, y2));
+                        double m2 = x1 * y2 - x2 * y1;
+                        assertTrue(Math.abs(m1 - m2) < EPS);
+                    }
+                }
+            }
+        }
+        for (double x1 = -1e3; x1 <= 1e3; x1 += 1e2) {
+            for (double y1 = -1e3; y1 <= 1e3; y1 += 1e2) {
+                for (double x2 = -1e3; x2 <= 1e3; x2 += 1e2) {
+                    for (double y2 = -1e3; y2 <= 1e3; y2 += 1e2) {
+                        double m1 = new Vector2D(x1, y1).vectorMultiply(new Vector2D(x2, y2));
+                        double m2 = x1 * y2 - x2 * y1;
+                        assertTrue(Math.abs(m1 - m2) < EPS);
+                    }
+                }
+            }
+        }
+    }
 }
