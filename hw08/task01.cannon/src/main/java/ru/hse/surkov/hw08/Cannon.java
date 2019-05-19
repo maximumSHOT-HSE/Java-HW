@@ -110,9 +110,9 @@ public class Cannon implements Drawable {
      * */
     @Override
     public void draw(GraphicsContext graphicsContext) {
-        Vector2D gunpoint = getGunpointPosition();
-        Vector2D direction = gunpoint.difference(base);
-        Vector2D rotated = direction
+        var gunpoint = getGunpointPosition();
+        var direction = gunpoint.difference(base);
+        var rotated = direction
                 .rotate(Math.PI / 2)
                 .normalize()
                 .multiply(gunWidth / 2);

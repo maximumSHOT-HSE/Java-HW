@@ -88,6 +88,6 @@ public class Landscape implements Drawable {
                 return rightY * ratio + (1 - ratio) * leftY;
             }
         }
-        return 1e18;
+        return fieldHeight * 2;
     }
 }

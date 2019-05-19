@@ -168,7 +168,7 @@ public class GameState implements Drawable {
      * Changes the cannon position at the landscape.
      * */
     public void moveCannon(double deltaX) {
-        Vector2D cannonBase = cannon.getBase();
+        var cannonBase = cannon.getBase();
         double targetX = Math.max(0.0, Math.min(fieldWidth, cannonBase.getX() + deltaX));
         cannon.setBase(new Vector2D(
                 targetX,
