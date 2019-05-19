@@ -2,6 +2,7 @@ package ru.hse.surkov.hw08;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Bullet of cannon, which is circle
@@ -12,17 +13,17 @@ import javafx.scene.paint.Color;
  * */
 public class Bullet implements Drawable {
 
-    private GameState gameState;
-    private Vector2D center;
+    @NotNull private GameState gameState;
+    @NotNull private Vector2D center;
     private double radius;
-    private Vector2D velocity;
+    @NotNull private Vector2D velocity;
     private double mass;
 
     public Bullet(
-            GameState gameState,
-            Vector2D center,
+            @NotNull GameState gameState,
+            @NotNull Vector2D center,
             double radius,
-            Vector2D velocity,
+            @NotNull Vector2D velocity,
             double mass) {
         this.gameState = gameState;
         this.center = center;
@@ -38,7 +39,7 @@ public class Bullet implements Drawable {
      * and radius.
      * * */
     @Override
-    public void draw(GraphicsContext graphicsContext) {
+    public void draw(@NotNull GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillOval(
             center.getX() - radius,
@@ -48,19 +49,19 @@ public class Bullet implements Drawable {
         );
     }
 
-    public Vector2D getCenter() {
+    @NotNull public Vector2D getCenter() {
         return center;
     }
 
-    public void setCenter(Vector2D center) {
+    public void setCenter(@NotNull Vector2D center) {
         this.center = center;
     }
 
-    public Vector2D getVelocity() {
+    @NotNull public Vector2D getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Vector2D velocity) {
+    public void setVelocity(@NotNull Vector2D velocity) {
         this.velocity = velocity;
     }
 

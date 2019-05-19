@@ -2,6 +2,7 @@ package ru.hse.surkov.hw08;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -11,17 +12,12 @@ import java.awt.*;
  * */
 public class Main extends Application {
 
-    private final String GAME_NAME = "Cannon";
-
-    private RenderEngine renderEngine;
-    private PhysicsEngine physicsEngine;
-
     /**
      * Initializes and starts the application.
      * */
     @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle(GAME_NAME);
+    public void start(@NotNull Stage primaryStage) {
+        primaryStage.setTitle("Cannon");
         primaryStage.setResizable(false);
         primaryStage.setWidth(
                 Toolkit
@@ -39,9 +35,9 @@ public class Main extends Application {
                 primaryStage.getWidth(),
                 primaryStage.getHeight()
         );
-        renderEngine = new RenderEngine(primaryStage, gameState);
+        var renderEngine = new RenderEngine(primaryStage, gameState);
         primaryStage.show();
-        physicsEngine = new PhysicsEngine(gameState);
+        var physicsEngine = new PhysicsEngine(gameState);
         var gameLoop = new GameLoop();
         gameLoop.addEngine(physicsEngine);
         physicsEngine.setGameLoop(gameLoop);
@@ -52,7 +48,7 @@ public class Main extends Application {
     /**
      * Launches the application.
      * */
-    public static void main(String[] args) {
+    public static void main(@NotNull String[] args) {
         Application.launch(args);
     }
 }

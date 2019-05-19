@@ -2,6 +2,7 @@ package ru.hse.surkov.hw08;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstraction for the target. The
@@ -10,20 +11,20 @@ import javafx.scene.paint.Color;
  * */
 public class Target implements Drawable {
 
-    private GameState gameState;
-    private Vector2D center;
+    @NotNull private GameState gameState;
+    @NotNull private Vector2D center;
     private double radius;
 
     public Target(
-            GameState gameState,
-            Vector2D center,
+            @NotNull GameState gameState,
+            @NotNull Vector2D center,
             double radius) {
         this.gameState = gameState;
         this.center = center;
         this.radius = radius;
     }
 
-    public Vector2D getCenter() {
+    @NotNull public Vector2D getCenter() {
         return center;
     }
 
@@ -38,7 +39,7 @@ public class Target implements Drawable {
      * the landscape.
      */
     @Override
-    public void draw(GraphicsContext graphicsContext) {
+    public void draw(@NotNull GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.DARKRED);
         graphicsContext.fillOval(
                 center.getX() - radius,

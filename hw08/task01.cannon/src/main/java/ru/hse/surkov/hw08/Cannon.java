@@ -2,6 +2,7 @@ package ru.hse.surkov.hw08;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +19,15 @@ import java.util.List;
 public class Cannon implements Drawable {
 
     private static final double VELOCITY_COEFFICIENT = 10;
-    private static final double[] bulletMasses = new double[] {
+    @NotNull private static final double[] bulletMasses = new double[] {
         1, 2, 3
     };
 
-    private GameState gameState;
+    @NotNull private GameState gameState;
     private double gunWidth;
     private double gunHeight;
     private double angle;
-    private Vector2D base;
+    @NotNull private Vector2D base;
     private int currentMassId = 0;
 
     public void setCurrentMassId(int id) {
@@ -39,7 +40,7 @@ public class Cannon implements Drawable {
         return gunWidth;
     }
 
-    public Vector2D getGunpointPosition() {
+    @NotNull public Vector2D getGunpointPosition() {
         return new Vector2D(
                 base.getX() + gunHeight * Math.sin(angle),
                 base.getY() + gunHeight * Math.cos(angle)
@@ -47,11 +48,11 @@ public class Cannon implements Drawable {
     }
 
     public Cannon(
-            GameState gameState,
+            @NotNull GameState gameState,
             double gunWidth,
             double gunHeight,
             double angle,
-            Vector2D base) {
+            @NotNull Vector2D base) {
         this.gameState = gameState;
         this.gunWidth = gunWidth;
         this.gunHeight = gunHeight;
@@ -67,15 +68,15 @@ public class Cannon implements Drawable {
         this.angle = angle;
     }
 
-    public Vector2D getBase() {
+    @NotNull public Vector2D getBase() {
         return base;
     }
 
-    public void setBase(Vector2D base) {
+    public void setBase(@NotNull Vector2D base) {
         this.base = base;
     }
 
-    public Bullet generateBullet() {
+    @NotNull public Bullet generateBullet() {
         return new Bullet(
                 gameState,
                 getGunpointPosition(),
@@ -87,7 +88,7 @@ public class Cannon implements Drawable {
         );
     }
 
-    private void drawBulletTypes(GraphicsContext graphicsContext) {
+    private void drawBulletTypes(@NotNull GraphicsContext graphicsContext) {
         for (int i = 0; i < bulletMasses.length; i++) {
             RenderEngine.drawCircleText(
                     Integer.toString(i + 1),
@@ -109,7 +110,7 @@ public class Cannon implements Drawable {
      * is defined by the position of the cannon base.
      * */
     @Override
-    public void draw(GraphicsContext graphicsContext) {
+    public void draw(@NotNull GraphicsContext graphicsContext) {
         var gunpoint = getGunpointPosition();
         var direction = gunpoint.difference(base);
         var rotated = direction

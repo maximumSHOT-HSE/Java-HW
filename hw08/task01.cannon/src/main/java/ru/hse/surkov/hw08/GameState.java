@@ -1,6 +1,7 @@
 package ru.hse.surkov.hw08;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -14,7 +15,7 @@ import java.util.*;
 public class GameState implements Drawable {
 
     private static final int MAX_TARGETS_NUMBER = 10;
-    private static final Random random = new Random(System.currentTimeMillis());
+    @NotNull private static final Random random = new Random(System.currentTimeMillis());
 
     /**
      * The state of the game.
@@ -24,13 +25,13 @@ public class GameState implements Drawable {
         FINISHED
     }
 
-    private GameStatus gameStatus = GameStatus.IN_PROGRESS;
+    @NotNull private GameStatus gameStatus = GameStatus.IN_PROGRESS;
 
-    public void setGameStatus(GameStatus gameStatus) {
+    public void setGameStatus(@NotNull GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
 
-    public GameStatus getGameStatus() {
+    @NotNull public GameStatus getGameStatus() {
         return gameStatus;
     }
 
@@ -43,12 +44,12 @@ public class GameState implements Drawable {
     private double fieldWidth;
     private double fieldHeight;
 
-    private Landscape landscape;
-    private Cannon cannon;
-    private Set<Target> targets = new HashSet<>();
-    private Set<Bullet> bullets = new HashSet<>();
-    private Set<String> activeKeys = new HashSet<>();
-    private Set<Detonation> detonations = new HashSet<>();
+    @NotNull private Landscape landscape;
+    @NotNull private Cannon cannon;
+    @NotNull private Set<Target> targets = new HashSet<>();
+    @NotNull private Set<Bullet> bullets = new HashSet<>();
+    @NotNull private Set<String> activeKeys = new HashSet<>();
+    @NotNull private Set<Detonation> detonations = new HashSet<>();
 
     /**
      * Adds the detonation to the list of processed detonations.
@@ -63,7 +64,7 @@ public class GameState implements Drawable {
         );
     }
 
-    public Set<Bullet> getBullets() {
+    @NotNull public Set<Bullet> getBullets() {
         return bullets;
     }
 
@@ -71,19 +72,19 @@ public class GameState implements Drawable {
         return fieldWidth;
     }
 
-    public Set<Target> getTargets() {
+    @NotNull public Set<Target> getTargets() {
         return targets;
     }
 
-    public Set<Detonation> getDetonations() {
+    @NotNull public Set<Detonation> getDetonations() {
         return detonations;
     }
 
-    public Landscape getLandscape() {
+    @NotNull public Landscape getLandscape() {
         return landscape;
     }
 
-    public Set<String> getActiveKeys() {
+    @NotNull public Set<String> getActiveKeys() {
         return activeKeys;
     }
 
@@ -95,7 +96,7 @@ public class GameState implements Drawable {
      * Adds the key to the processed keys in terms of
      * its key code, which is represented as the String.
      * */
-    public void addKey(String keyCode) {
+    public void addKey(@NotNull String keyCode) {
         if (keyCode.equals("ENTER")) {
             fire();
         } else if (keyCode.startsWith("DIGIT")) {
@@ -108,7 +109,7 @@ public class GameState implements Drawable {
     /**
      * Removes the key from the processed keys.
      * */
-    public void removeKey(String keyCode) {
+    public void removeKey(@NotNull String keyCode) {
         activeKeys.remove(keyCode);
     }
 
@@ -143,7 +144,7 @@ public class GameState implements Drawable {
      * in appropriate order.
      * */
     @Override
-    public void draw(GraphicsContext graphicsContext) {
+    public void draw(@NotNull GraphicsContext graphicsContext) {
         landscape.draw(graphicsContext);
         cannon.draw(graphicsContext);
         for (Bullet bullet : bullets) {

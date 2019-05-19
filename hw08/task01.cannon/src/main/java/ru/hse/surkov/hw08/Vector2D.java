@@ -1,5 +1,7 @@
 package ru.hse.surkov.hw08;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Two-dimensional vector.
  */
@@ -31,7 +33,7 @@ public class Vector2D {
     /**
      * Rotates the vector by given angle.
      * */
-    public Vector2D rotate(double alpha) {
+    @NotNull public Vector2D rotate(double alpha) {
         return new Vector2D(
                 x * Math.cos(alpha) - y * Math.sin(alpha),
                 y * Math.cos(alpha) + x * Math.sin(alpha)
@@ -42,7 +44,7 @@ public class Vector2D {
      * Calculates the sum of this vector
      * and given vector.
      * */
-    public Vector2D add(Vector2D other) {
+    @NotNull public Vector2D add(Vector2D other) {
         return new Vector2D(
                 x + other.getX(),
                 y + other.getY()
@@ -54,7 +56,7 @@ public class Vector2D {
      * equal to one by dividing the vector
      * by its length.
      * */
-    public Vector2D normalize() {
+    @NotNull public Vector2D normalize() {
         double length = getLength();
         return new Vector2D(
                 x / length,
@@ -66,7 +68,7 @@ public class Vector2D {
      * Finds the difference between this
      * and given vectors.
      * */
-    public Vector2D difference(Vector2D other) {
+    @NotNull public Vector2D difference(Vector2D other) {
         return new Vector2D(
                 x - other.getX(),
                 y - other.getY()
@@ -77,7 +79,7 @@ public class Vector2D {
      * Multiplies vector by given coefficient
      * and returns it as the result.
      * */
-    public Vector2D multiply(double coefficient) {
+    @NotNull public Vector2D multiply(double coefficient) {
         return new Vector2D(
                 x * coefficient,
                 y * coefficient

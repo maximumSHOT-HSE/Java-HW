@@ -3,6 +3,7 @@ package ru.hse.surkov.hw08;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,12 @@ public class GameLoop {
     private static final double FPS = 60;
 
     private long previousNanoTime;
-    private List<Engine> engines = new ArrayList<>();
-    private Timeline timeline = new Timeline();
+    @NotNull private List<Engine> engines = new ArrayList<>();
+    @NotNull private Timeline timeline = new Timeline();
 
     public GameLoop() {
         timeline.setCycleCount(Timeline.INDEFINITE);
-        KeyFrame keyFrame = new KeyFrame(
+        var keyFrame = new KeyFrame(
                 Duration.seconds(1 / FPS),
                 event -> handle(System.currentTimeMillis()));
         timeline.getKeyFrames().add(keyFrame);
@@ -30,7 +31,7 @@ public class GameLoop {
     /**
      * Adds the engines to the list of controllable engines.
      * */
-    public void addEngine(Engine engine) {
+    public void addEngine(@NotNull Engine engine) {
         engines.add(engine);
     }
 

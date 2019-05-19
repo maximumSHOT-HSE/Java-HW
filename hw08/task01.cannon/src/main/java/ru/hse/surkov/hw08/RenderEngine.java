@@ -11,17 +11,20 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Engine for the drawing entities of the game.
  * */
 public class RenderEngine implements Engine {
 
-    private Stage primaryStage;
-    private GraphicsContext graphicsContext;
-    private GameState gameState;
+    @NotNull private Stage primaryStage;
+    @NotNull private GraphicsContext graphicsContext;
+    @NotNull private GameState gameState;
 
-    public RenderEngine(Stage givenPrimaryStage, GameState gameState) {
+    public RenderEngine(
+            @NotNull Stage givenPrimaryStage,
+            @NotNull GameState gameState) {
         this.gameState = gameState;
         this.primaryStage = givenPrimaryStage;
         var root = new Group();
@@ -49,13 +52,13 @@ public class RenderEngine implements Engine {
      * in the given color.
      */
     public static void drawCircleText(
-            String textString,
+            @NotNull String textString,
             double x,
             double y,
             double radiusRatio,
-            GameState gameState,
-            GraphicsContext graphicsContext,
-            Color color) {
+            @NotNull GameState gameState,
+            @NotNull GraphicsContext graphicsContext,
+            @NotNull Color color) {
         var stackPane = new StackPane();
         stackPane.setPrefSize(26, 26);
         var circle = new Circle(radiusRatio * gameState.getFieldHeight());

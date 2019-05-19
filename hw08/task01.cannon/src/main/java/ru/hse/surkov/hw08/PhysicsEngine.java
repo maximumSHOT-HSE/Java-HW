@@ -1,5 +1,7 @@
 package ru.hse.surkov.hw08;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Engines for the processing physical laws
  * and changing the states of all game entities
@@ -12,14 +14,14 @@ public class PhysicsEngine implements Engine {
     private static final double GRAVITATION = 600;
     private static final double DETONATION_RADIUS_RATIO = 10;
 
-    private GameState gameState;
-    private GameLoop gameLoop;
+    @NotNull private GameState gameState;
+    @NotNull private GameLoop gameLoop;
 
-    public PhysicsEngine(GameState gameState) {
+    public PhysicsEngine(@NotNull GameState gameState) {
         this.gameState = gameState;
     }
 
-    public void setGameLoop(GameLoop gameLoop) {
+    public void setGameLoop(@NotNull GameLoop gameLoop) {
         this.gameLoop = gameLoop;
     }
 
@@ -69,7 +71,9 @@ public class PhysicsEngine implements Engine {
         }
     }
 
-    private boolean checkDetonation(Target target, Detonation detonation) {
+    private boolean checkDetonation(
+            @NotNull Target target,
+            @NotNull Detonation detonation) {
         return
             target.getCenter().difference(detonation.getCenter()).getLength()
                     < target.getRadius() + detonation.getRadius();

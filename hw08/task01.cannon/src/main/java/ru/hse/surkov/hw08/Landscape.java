@@ -2,6 +2,7 @@ package ru.hse.surkov.hw08;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The abstraction for the game landscape.
@@ -13,12 +14,12 @@ import javafx.scene.paint.Color;
 public class Landscape implements Drawable {
 
     private static final double eps = 1e-9;
-    private final double[] relativeVertexHeights = new double[] {
+    @NotNull private final double[] relativeVertexHeights = new double[] {
         0.3125, 0.20833333333333334, 0.34375, 0.31545833333333334, 0.17708333333333334,
         0.10416666666666667, 0.15625, 0.23125000000000004, 0.6416666666666667, 0.6854166666666667,
         0.2104166666666667, 0.22083333333333335, 0.401875, 0.37916666666666665, 0.3041666666666667
     };
-    private final double[] relativeVertexPositions = new double[] {
+    @NotNull private final double[] relativeVertexPositions = new double[] {
         0.0, 0.0875, 0.1375, 0.23125,
         0.2875, 0.4375, 0.575, 0.5875, 0.6125,
         0.6875, 0.7125, 0.8, 0.8000200002, 0.9, 1.0
@@ -27,12 +28,10 @@ public class Landscape implements Drawable {
 
     private double fieldWidth;
     private double fieldHeight;
-    private double[] vertexReversedXCoordinates;
-    private double[] vertexReversedYCoordinates;
+    @NotNull private double[] vertexReversedXCoordinates = new double[POINTS_NUMBER + 2];;
+    @NotNull private double[] vertexReversedYCoordinates = new double[POINTS_NUMBER + 2];;
 
     private void generateVertexCoordinates() {
-        vertexReversedXCoordinates = new double[POINTS_NUMBER + 2];
-        vertexReversedYCoordinates = new double[POINTS_NUMBER + 2];
         for (int i = 0; i < POINTS_NUMBER; i++) {
             vertexReversedXCoordinates[i] = relativeVertexPositions[i] * fieldWidth;
             vertexReversedYCoordinates[i] = fieldHeight - relativeVertexHeights[i] * fieldHeight;
@@ -56,7 +55,7 @@ public class Landscape implements Drawable {
      * of the landscape represented as the filled polygon.
      * */
     @Override
-    public void draw(GraphicsContext graphicsContext) {
+    public void draw(@NotNull GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.rgb(25, 51, 0));
         graphicsContext.fillPolygon(
                 vertexReversedXCoordinates,
