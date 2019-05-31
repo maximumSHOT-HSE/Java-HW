@@ -20,7 +20,7 @@ class LandscapeTest {
     }
 
     @Test
-    void testOutOfBandsX() {
+    void testOutOfBoundsX() {
         assertEquals(2 * FIELD_HEIGHT, landscape.getY(-0.0001));
         assertEquals(2 * FIELD_HEIGHT, landscape.getY(FIELD_WIDTH + 0.0001));
     }

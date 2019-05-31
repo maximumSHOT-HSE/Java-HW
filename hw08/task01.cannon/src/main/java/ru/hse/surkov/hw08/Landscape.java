@@ -78,6 +78,7 @@ public class Landscape implements Drawable {
     /**
      * Gives the y coordinate of the intersection landscape
      * and the vertical line, which describes by given x.
+     * Returns double field height if x will be out of field bounds.
      */
     public double getY(double x) {
         for (int i = 0; i + 1 < relativeVertexHeights.length; i++) {

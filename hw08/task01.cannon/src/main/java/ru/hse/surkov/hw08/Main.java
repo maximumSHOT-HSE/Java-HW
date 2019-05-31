@@ -20,14 +20,12 @@ public class Main extends Application {
         primaryStage.setTitle("Cannon");
         primaryStage.setResizable(false);
         primaryStage.setWidth(
-                Toolkit
-                        .getDefaultToolkit()
+                Toolkit.getDefaultToolkit()
                         .getScreenSize()
                         .getWidth() * 0.8
         );
         primaryStage.setHeight(
-                Toolkit
-                        .getDefaultToolkit()
+                Toolkit.getDefaultToolkit()
                         .getScreenSize()
                         .getHeight() * 0.6
         );
