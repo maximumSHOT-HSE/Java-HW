@@ -15,6 +15,7 @@ import java.util.List;
 public class GameLoop {
 
     private static final double FPS = 60;
+    private static final double MILLISECONDS_IN_SECOND = 1e3;
 
     private long previousNanoTime;
     @NotNull private List<Engine> engines = new ArrayList<>();
@@ -35,8 +36,13 @@ public class GameLoop {
         engines.add(engine);
     }
 
+    // translates time from milliseconds to seconds
+    private double millisecondsToSeconds(long milliseconds) {
+        return milliseconds / MILLISECONDS_IN_SECOND;
+    }
+
     private void handle(long currentNanoTime) {
-        double deltaTime = (currentNanoTime - previousNanoTime) * 1e-3;
+        double deltaTime = millisecondsToSeconds(currentNanoTime - previousNanoTime);
         previousNanoTime = currentNanoTime;
         for (var engine : engines) {
             engine.update(deltaTime);
