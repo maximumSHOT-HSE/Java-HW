@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * Abstraction for the target. The
  * target is the circle lying on the landscape.
  * The main player goal to collect all targets.
- * */
+ */
 public class Target implements Drawable {
 
     @NotNull private GameState gameState;

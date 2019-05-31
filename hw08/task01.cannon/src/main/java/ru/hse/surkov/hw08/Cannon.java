@@ -15,7 +15,7 @@ import java.util.List;
  * gunpoint with a certain velocity, start angle of
  * the bullet movement depends on the angle of the
  * cannon.
- * */
+ */
 public class Cannon implements Drawable {
 
     private static final double VELOCITY_COEFFICIENT = 10;
@@ -46,7 +46,7 @@ public class Cannon implements Drawable {
 
     /**
      * Calculates the position of the cannon tip.
-     * */
+     */
     @NotNull public Vector2D getGunpointPosition() {
         return new Vector2D(
                 base.getX() + gunHeight * Math.sin(angle),
@@ -115,7 +115,7 @@ public class Cannon implements Drawable {
      * Draws the cannon as the rectangle rotated by the
      * angle and located at the landscape. Precise position
      * is defined by the position of the cannon base.
-     * */
+     */
     @Override
     public void draw(@NotNull GraphicsContext graphicsContext) {
         var gunpoint = getGunpointPosition();

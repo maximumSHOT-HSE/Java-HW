@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * detonation has its own limited life time. If
  * detonation area intersect target, then last one
  * will be destroyed.
- * */
+ */
 public class Detonation implements Drawable {
 
     private static final double DECREASE_DETONATION_LIFE_TIME_COEFFICIENT = 0.1;
@@ -27,7 +27,7 @@ public class Detonation implements Drawable {
 
     /**
      * Decrease life time of the detonation by defined constant.
-     * */
+     */
     public void decreaseLifeTime() {
         remainingLifeTime -= DECREASE_DETONATION_LIFE_TIME_COEFFICIENT;
     }
@@ -45,7 +45,7 @@ public class Detonation implements Drawable {
      * on the mass of bullet that caused the detonation.
      * The position of the detonation is defined by place,
      * where bullet hit the landscape.
-     * */
+     */
     @Override
     public void draw(@NotNull GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.ORANGE);

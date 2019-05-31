@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * Engines for the processing physical laws
  * and changing the states of all game entities
  * according to them.
- * */
+ */
 public class PhysicsEngine implements Engine {
 
     private static final double RATIO_DELTA_X_PER_TOUCH = 0.0025;
@@ -110,7 +110,7 @@ public class PhysicsEngine implements Engine {
      * to the physical laws called the movement of the
      * parabola.
      * Processes collisions between detonations and targets.
-     * */
+     */
     @Override
     public void update(double deltaTime) {
         processKeys();

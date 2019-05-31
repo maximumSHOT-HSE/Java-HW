@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Abstraction for game iteration, on each
  * of which all engines should update their states.
- * */
+ */
 public class GameLoop {
 
     private static final double FPS = 60;
@@ -31,7 +31,7 @@ public class GameLoop {
 
     /**
      * Adds the engines to the list of controllable engines.
-     * */
+     */
     public void addEngine(@NotNull Engine engine) {
         engines.add(engine);
     }
@@ -51,7 +51,7 @@ public class GameLoop {
 
     /**
      * Starts the game loop.
-     * */
+     */
     public void start() {
         previousNanoTime = System.currentTimeMillis();
         timeline.play();
@@ -59,7 +59,7 @@ public class GameLoop {
 
     /**
      * Finishes the game loop.
-     * */
+     */
     public void stop() {
         timeline.stop();
     }

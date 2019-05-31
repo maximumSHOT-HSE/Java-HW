@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * start velocity. Bullet moves
  * by physical law namely the movement
  * of the parabola.
- * */
+ */
 public class Bullet implements Drawable {
 
     @NotNull private GameState gameState;
@@ -37,7 +37,7 @@ public class Bullet implements Drawable {
      *
      * Draws the bullet as the circle with a certain center
      * and radius.
-     * * */
+     */
     @Override
     public void draw(@NotNull GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.BLACK);

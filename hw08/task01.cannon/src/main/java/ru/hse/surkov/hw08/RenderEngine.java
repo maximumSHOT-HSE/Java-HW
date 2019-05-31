@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Engine for the drawing entities of the game.
- * */
+ */
 public class RenderEngine implements Engine {
 
     @NotNull private Stage primaryStage;
@@ -77,7 +77,7 @@ public class RenderEngine implements Engine {
 
     /**
      * Clears whole field and redraws all entities.
-     * */
+     */
     @Override
     public void update(double deltaTime) {
         graphicsContext.clearRect(

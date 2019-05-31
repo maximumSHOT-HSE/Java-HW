@@ -9,12 +9,12 @@ import java.awt.*;
 /**
  * The Main class for the initialization, configuration
  * and launching of the game.
- * */
+ */
 public class Main extends Application {
 
     /**
      * Initializes and starts the application.
-     * */
+     */
     @Override
     public void start(@NotNull Stage primaryStage) {
         primaryStage.setTitle("Cannon");
@@ -47,7 +47,7 @@ public class Main extends Application {
 
     /**
      * Launches the application.
-     * */
+     */
     public static void main(@NotNull String[] args) {
         Application.launch(args);
     }

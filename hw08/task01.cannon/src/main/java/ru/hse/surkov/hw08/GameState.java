@@ -19,7 +19,7 @@ public class GameState implements Drawable {
 
     /**
      * The state of the game.
-     * */
+     */
     public enum GameStatus {
         IN_PROGRESS,
         FINISHED
@@ -37,7 +37,7 @@ public class GameState implements Drawable {
 
     /**
      * Changes the seed of the random generator.
-     * */
+     */
     public void setRandomSeed(long seed) {
         random.setSeed(seed);
     }
@@ -60,7 +60,7 @@ public class GameState implements Drawable {
 
     /**
      * Adds the detonation to the list of processed detonations.
-     * */
+     */
     public void addDetonation(double x, double radius) {
         detonations.add(
             new Detonation(
@@ -106,7 +106,7 @@ public class GameState implements Drawable {
     /**
      * Adds the key to the processed keys in terms of
      * its key code, which is represented as the String.
-     * */
+     */
     public void addKey(@NotNull String keyCode) {
         if (keyCode.equals("ENTER")) {
             fire();
@@ -119,7 +119,7 @@ public class GameState implements Drawable {
 
     /**
      * Removes the key from the processed keys.
-     * */
+     */
     public void removeKey(@NotNull String keyCode) {
         activeKeys.remove(keyCode);
     }
@@ -153,7 +153,7 @@ public class GameState implements Drawable {
      *
      * Draws the game by drawing each component of the game
      * in appropriate order.
-     * */
+     */
     @Override
     public void draw(@NotNull GraphicsContext graphicsContext) {
         landscape.draw(graphicsContext);
@@ -178,7 +178,7 @@ public class GameState implements Drawable {
 
     /**
      * Changes the cannon position at the landscape.
-     * */
+     */
     public void moveCannon(double deltaX) {
         var cannonBase = cannon.getBase();
         double targetX = Math.max(0.0, Math.min(fieldWidth, cannonBase.getX() + deltaX));
@@ -199,7 +199,7 @@ public class GameState implements Drawable {
     /**
      * Makes the gun fire. As the consequence new bullet
      * will be generated.
-     * */
+     */
     public void fire() {
         bullets.add(cannon.generateBullet());
     }

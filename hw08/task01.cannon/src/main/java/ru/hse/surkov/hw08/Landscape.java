@@ -56,7 +56,7 @@ public class Landscape implements Drawable {
      *
      * Draws the landscape as the broken line. Underground
      * of the landscape represented as the filled polygon.
-     * */
+     */
     @Override
     public void draw(@NotNull GraphicsContext graphicsContext) {
         graphicsContext.setFill(Color.rgb(25, 51, 0));
@@ -78,7 +78,7 @@ public class Landscape implements Drawable {
     /**
      * Gives the y coordinate of the intersection landscape
      * and the vertical line, which describes by given x.
-     * */
+     */
     public double getY(double x) {
         for (int i = 0; i + 1 < relativeVertexHeights.length; i++) {
             double leftX = relativeVertexPositions[i] * fieldWidth - EPS;
