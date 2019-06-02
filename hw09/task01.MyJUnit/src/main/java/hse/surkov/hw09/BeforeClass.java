@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Annotation for methods, which
  * should be executed before all tests
- * */
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeforeClass {
