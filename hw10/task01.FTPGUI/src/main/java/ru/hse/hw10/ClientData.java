@@ -37,6 +37,7 @@ public class ClientData {
     @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BLOCK_SIZE);
 
     @NotNull private DataInputStream answerInputStream;
+    private int remainingBytesNumber;
 
     public void append(byte b) {
         request.add(b);
@@ -90,12 +91,12 @@ public class ClientData {
         var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         try {
             dataOutputStream.writeInt(-1);
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             // TODO handle me
         }
     }
 
-    private void processRequest() {
+    public void processRequest() {
         switch (requestType) {
             case GET:
                 processGet();
@@ -112,12 +113,61 @@ public class ClientData {
             processError();
             return;
         }
-        var listAnswer = new ArrayList<>(Arrays.asList(Objects.requireNonNull(file.listFiles())));
         var byteArrayOutputStream = new ByteArrayOutputStream();
         var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-
+        var childFiles = file.listFiles();
+        try {
+            dataOutputStream.writeInt(Objects.requireNonNull(childFiles).length);
+            for (var childFile : childFiles) {
+                dataOutputStream.writeUTF(childFile.getName());
+                dataOutputStream.writeBoolean(childFile.isDirectory());
+            }
+        } catch (IOException ignored) {
+            // TODO handle me
+        }
+        remainingBytesNumber = byteArrayOutputStream.toByteArray().length;
+        answerInputStream = new DataInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+        buffer.putInt(remainingBytesNumber);
     }
 
     public void processGet() {
+    }
+
+    public ByteBuffer getBuffer() {
+        return buffer;
+    }
+
+    public DataInputStream getAnswerInputStream() {
+        return answerInputStream;
+    }
+
+    public int getRemainingBytesNumber() {
+        return remainingBytesNumber;
+    }
+
+    /**
+     * Checks whether there exists information to work with.
+     * If there is no such information then true will be returned.
+     * Otherwise, true will be returned. Moreover, in last case
+     * if buffer has not any byte write to a channel then
+     * extra bytes will be moved to the buffer. After that
+     * buffer will be in correct state.
+     * */
+    public boolean isFinished() {
+        if (!buffer.hasRemaining()) {
+            if (remainingBytesNumber == 0) {
+                return true;
+            }
+            buffer.clear();
+            while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
+                try {
+                    buffer.put(answerInputStream.readByte());
+                    remainingBytesNumber--;
+                } catch (IOException ignore) {
+                    // TODO handle me
+                }
+            }
+        }
+        return false;
     }
 }

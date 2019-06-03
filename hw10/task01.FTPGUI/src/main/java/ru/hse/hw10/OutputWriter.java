@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 
 public class OutputWriter implements Runnable {
 
@@ -14,8 +15,18 @@ public class OutputWriter implements Runnable {
         this.outputWriterSelector = outputWriterSelector;
     }
 
-    private void processList(ClientData data) {
-
+    private void processList(ClientData data, SelectionKey key) {
+        if (data.isFinished()) {
+            key.cancel();
+            return;
+        }
+        var buffer = data.getBuffer();
+        var socketChannel = (SocketChannel) key.channel();
+        try {
+            socketChannel.write(buffer);
+        } catch (IOException ignore) {
+            // TODO handle me
+        }
     }
 
     private void processGet(ClientData data) {
@@ -26,7 +37,7 @@ public class OutputWriter implements Runnable {
         var data = (ClientData) key.attachment();
         switch (data.getRequestType()) {
             case LIST:
-                processList(data);
+                processList(data, key);
                 break;
             case GET:
                 processGet(data);
