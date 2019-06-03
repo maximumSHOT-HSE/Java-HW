@@ -2,8 +2,12 @@ package ru.hse.hw10;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Storage for client's request and
@@ -19,18 +23,101 @@ import java.util.List;
  * */
 public class ClientData {
 
+    private static final int BLOCK_SIZE = 4096;
+
+    public enum RequestType {
+        UNDEFINED,
+        LIST,
+        GET
+    }
+
     @NotNull private List<Byte> request = new ArrayList<>();
+    @NotNull private RequestType requestType = RequestType.UNDEFINED;
+    @NotNull private String path;
+    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BLOCK_SIZE);
+
+    @NotNull private DataInputStream answerInputStream;
 
     public void append(byte b) {
         request.add(b);
     }
 
-    public boolean isFull() {
-        // TODO
-        return true;
+    private int getBytesNumber() { // TODO develop adequate converting from bytes to int
+        byte[] helper = new byte[4];
+        var inputStream = new DataInputStream(new ByteArrayInputStream(helper));
+        try {
+            return inputStream.readInt();
+        } catch (IOException e) {
+            return 0;
+        }
     }
 
-    public List<Byte> getRequest() {
-        return request;
+    public boolean isFull() {
+        if (request.size() < 4) {
+            return false;
+        }
+        int bytesNumber = getBytesNumber();
+        return request.size() == bytesNumber + 4;
+    }
+
+    public byte[] getRequest() {
+        // TODO modify code
+        byte[] bytes = new byte[request.size()];
+        for (int i = 0; i < request.size(); i++) {
+            bytes[i] = request.get(i);
+        }
+        return bytes;
+    }
+
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    private void processError() {
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        try {
+            dataOutputStream.writeInt(-1);
+        } catch (IOException e) {
+            // TODO handle me
+        }
+    }
+
+    private void processRequest() {
+        switch (requestType) {
+            case GET:
+                processGet();
+                break;
+            case LIST:
+                processList();
+                break;
+        }
+    }
+
+    private void processList() {
+        File file = new File(path);
+        if (!file.exists() || !file.isDirectory()) {
+            processError();
+            return;
+        }
+        var listAnswer = new ArrayList<>(Arrays.asList(Objects.requireNonNull(file.listFiles())));
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+
+    }
+
+    public void processGet() {
     }
 }

@@ -39,7 +39,7 @@ public class InputListener implements Runnable {
             data.append(buffer.get());
         }
         if (data.isFull()) {
-            threadPool.submit(new ThreadPoolTask(data, outputWriterSelector));
+            threadPool.submit(new ThreadPoolTask(data, (SocketChannel) key.channel(), outputWriterSelector));
             key.cancel();
         }
     }
@@ -52,8 +52,6 @@ public class InputListener implements Runnable {
                 lastSelect = inputListenerSelector.select();
             } catch (IOException ignored) {
                 continue;
-            } catch (ClosedSelectorException e) {
-                break;
             }
             if (lastSelect == 0) {
                 continue;

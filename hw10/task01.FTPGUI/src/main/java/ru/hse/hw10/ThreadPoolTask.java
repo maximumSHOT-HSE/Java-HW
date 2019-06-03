@@ -2,8 +2,15 @@ package ru.hse.hw10;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.util.Arrays;
 
 /**
  * Task for thread pool is parse client's
@@ -13,33 +20,42 @@ import java.nio.channels.Selector;
  * */
 public class ThreadPoolTask implements Runnable {
 
-    private static final int BYTES_NUMBER_BLOCK_SIZE = 4;
-    private static final int REQUEST_TYPE_BLOCK_SIZE = 1;
-    private static final int BYTE_SEQUENCE_BLOCK_SIZE = 4096;
-
-    @NotNull private ByteBuffer bytesNumberBuffer = ByteBuffer.allocate(BYTES_NUMBER_BLOCK_SIZE);
-    @NotNull private ByteBuffer requestTypeBuffer = ByteBuffer.allocate(REQUEST_TYPE_BLOCK_SIZE);
-    @NotNull private ByteBuffer byteSequenceBuffer = ByteBuffer.allocate(BYTE_SEQUENCE_BLOCK_SIZE);
-
     @NotNull private ClientData data;
+    @NotNull private SocketChannel socketChannel;
     @NotNull private Selector outputWriterSelector;
 
-    public ThreadPoolTask(@NotNull ClientData data, @NotNull Selector outputWriterSelector) {
+    public ThreadPoolTask(@NotNull ClientData data,
+                          @NotNull SocketChannel socketChannel,
+                          @NotNull Selector outputWriterSelector) {
         this.data = data;
+        this.socketChannel = socketChannel;
         this.outputWriterSelector = outputWriterSelector;
     }
 
     /*
     * Parsed request will be stored in the client data
     * */
-    private void parseRequest() {
-        var request = data.getRequest();
-        // TODO
+    private void parseRequest() throws IOException {
+        var inputStream = new DataInputStream(new ByteArrayInputStream(data.getRequest()));
+        int byteNumber = inputStream.readInt();
+        byte requestType = inputStream.readByte();
+        String path = inputStream.readUTF();
+        data.setRequestType(requestType == 1 ? ClientData.RequestType.LIST : ClientData.RequestType.GET);
+        data.setPath(path);
+        data.processRequest();
     }
 
     @Override
     public void run() {
-        parseRequest();
-
+        try {
+            parseRequest();
+        } catch (IOException ignored) {
+            // TODO handle me
+        }
+        try {
+            socketChannel.register(outputWriterSelector, SelectionKey.OP_WRITE, data);
+        } catch (ClosedChannelException ignore) {
+            // TODO handle me
+        }
     }
 }
