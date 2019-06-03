@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -21,6 +22,11 @@ public class RenderEngine implements Engine {
     @NotNull private Stage primaryStage;
     @NotNull private GraphicsContext graphicsContext;
     @NotNull private GameState gameState;
+
+    @NotNull private WritableImage enterHintImage;
+    @NotNull private WritableImage digitsHintImage;
+    @NotNull private WritableImage leftRightHintImage;
+    @NotNull private WritableImage upDownHintImage;
 
     public RenderEngine(
             @NotNull Stage givenPrimaryStage,
@@ -44,6 +50,7 @@ public class RenderEngine implements Engine {
         var canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
         root.getChildren().add(canvas);
         graphicsContext = canvas.getGraphicsContext2D();
+        createHintImages();
     }
 
     /**
@@ -94,6 +101,7 @@ public class RenderEngine implements Engine {
                 graphicsContext,
                 Color.DARKRED
         );
+        drawHints();
         if (gameState.getGameStatus().equals(GameState.GameStatus.FINISHED)) {
             drawFinish();
         }
@@ -109,5 +117,41 @@ public class RenderEngine implements Engine {
                 graphicsContext,
                 Color.DARKRED
         );
+    }
+
+    private void drawImage(@NotNull WritableImage image, double x, double y) {
+        graphicsContext.drawImage(image, x, y);
+    }
+
+    private void drawHints() {
+        drawImage(enterHintImage,
+                0.82 * gameState.getFieldWidth(),
+                0.7 * gameState.getFieldHeight());
+        drawImage(digitsHintImage,
+                0.82 * gameState.getFieldWidth(),
+                0.75 * gameState.getFieldHeight());
+        drawImage(leftRightHintImage,
+                0.82 * gameState.getFieldWidth(),
+                0.8 * gameState.getFieldHeight());
+        drawImage(upDownHintImage,
+                0.82 * gameState.getFieldWidth(),
+                0.85 * gameState.getFieldHeight());
+    }
+
+    @NotNull private WritableImage createTextImage(@NotNull String message) {
+        var text = new Text(message);
+        text.setFont(Font.font(20));
+        var stackPane = new StackPane();
+        stackPane.getChildren().add(text);
+        var parameters = new SnapshotParameters();
+        parameters.setFill(Color.TRANSPARENT);
+        return stackPane.snapshot(parameters, null);
+    }
+
+    private void createHintImages() {
+        enterHintImage = createTextImage("ENTER to shoot");
+        digitsHintImage = createTextImage("DIGITS to change bullet");
+        leftRightHintImage = createTextImage("LEFT/RIGHT to move");
+        upDownHintImage = createTextImage("UP/DOWN to rotate");
     }
 }
