@@ -44,7 +44,6 @@ public class InputListener implements Runnable {
         while (buffer.hasRemaining()) {
             byte b = buffer.get();
 //            data.append(buffer.get());
-            System.out.println("b = " + b);
             data.append(b);
         }
         if (data.isFull()) {

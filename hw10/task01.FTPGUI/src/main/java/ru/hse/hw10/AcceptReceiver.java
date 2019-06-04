@@ -34,14 +34,14 @@ public class AcceptReceiver implements Runnable {
             serverIP = "UNKNOWN";
         }
 
-        System.out.println("SERVER LISTENING...");
-        System.out.println("IP = " + serverIP);
-        System.out.println("PORT = " + PORT);
+        Server.LOGGER.info("SERVER LISTENING...");
+        Server.LOGGER.info("IP = " + serverIP);
+        Server.LOGGER.info("PORT = " + PORT);
     }
 
     @Override
     public void run() {
-        System.out.println("RECEIVER BEGIN");
+        Server.LOGGER.info("RECEIVER BEGIN");
         while (true) {
             SocketChannel socketChannel = null;
             try {
@@ -52,7 +52,7 @@ public class AcceptReceiver implements Runnable {
             if (socketChannel == null) {
                 continue;
             }
-            System.out.println("ACCEPT!!! + " + socketChannel);
+            Server.LOGGER.info("ACCEPT + " + socketChannel);
             try {
                 socketChannel.configureBlocking(false);
                 socketChannel.socket().setTcpNoDelay(true);

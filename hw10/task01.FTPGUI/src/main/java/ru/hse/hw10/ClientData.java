@@ -91,13 +91,13 @@ public class ClientData {
      * @return true if package has been receive fully and false otherwise
      */
     public boolean isFull() {
-        System.out.println("is full.");
-        System.out.println("sz = " + request.size());
+        Server.LOGGER.info("is full.");
+        Server.LOGGER.info("sz = " + request.size());
         if (request.size() < 4) {
             return false;
         }
         int bytesNumber = getBytesNumber();
-        System.out.println("bytesNumber = " + bytesNumber);
+        Server.LOGGER.info("bytesNumber = " + bytesNumber);
         return request.size() == bytesNumber + 4;
     }
 
@@ -109,13 +109,12 @@ public class ClientData {
      */
     public byte[] getRequest() {
         // TODO modify code
-        System.out.println("GET REQUEST : ");
+        Server.LOGGER.info("get request : ");
         byte[] bytes = new byte[request.size()];
         for (int i = 0; i < request.size(); i++) {
             bytes[i] = request.get(i);
-            System.out.print(bytes[i] + " ");
+            Server.LOGGER.info(bytes[i] + " ");
         }
-        System.out.println();
         return bytes;
     }
 
@@ -139,7 +138,7 @@ public class ClientData {
     * Forms answer for the invalid request.
     */
     private void processError() {
-        System.out.println("Client. process error !!!");
+        Server.LOGGER.info("Client process error");
         buffer.clear();
         buffer.putInt(Integer.BYTES);
         buffer.putInt(ERROR_CODE);
@@ -176,7 +175,7 @@ public class ClientData {
     }
 
     private void processList() {
-        System.out.println("Client.processList()");
+        Server.LOGGER.info("Client.processList()");
         File file = getFileByPath();
         if (file == null || !file.isDirectory()) {
             processError();
@@ -186,7 +185,7 @@ public class ClientData {
         var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         var childFiles = file.listFiles();
         for (var child : childFiles) {
-            System.out.println(child.getName() + " is dir = " + child.isDirectory());
+            Server.LOGGER.info(child.getName() + " is dir = " + child.isDirectory());
         }
         try {
             dataOutputStream.writeInt(Objects.requireNonNull(childFiles).length);
@@ -198,14 +197,14 @@ public class ClientData {
             // TODO handle me
         }
         remainingBytesNumber = byteArrayOutputStream.toByteArray().length;
-        System.out.println("total number of useful bytes = " + remainingBytesNumber);
+        Server.LOGGER.info("total number of useful bytes = " + remainingBytesNumber);
         answerInputStream = new DataInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
         buffer.putInt(remainingBytesNumber);
         buffer.flip();
     }
 
     public void processGet() {
-        System.out.println("Client.processGet()");
+        Server.LOGGER.info("Client.processGet()");
         File file = getFileByPath();
         if (file == null || file.isDirectory()) {
             processError();
@@ -222,7 +221,7 @@ public class ClientData {
          * hence int variable can be used to store file size.
          */
         remainingBytesNumber = (int) file.length();
-        System.out.println("File size!!! = " + file.length());
+        Server.LOGGER.info("File size = " + file.length());
         buffer.putInt(remainingBytesNumber);
         buffer.putInt(remainingBytesNumber);
         buffer.flip();
@@ -253,7 +252,7 @@ public class ClientData {
             while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
                 try {
                     byte b = answerInputStream.readByte();
-                    System.out.println("b = " + b + ", rem = " + remainingBytesNumber);
+                    Server.LOGGER.info("byte = " + b + ", remain = " + remainingBytesNumber);
                     buffer.put(b);
 //                    buffer.put(answerInputStream.readByte());
                     remainingBytesNumber--;

@@ -12,22 +12,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+/** Implementation of ftp client */
 public class Client {
-
     private static final int BLOCK_SIZE = 4096;
-
+    private final Logger logger = Logger.getLogger("ClientLogger");
     private final InetSocketAddress address;
 
+    /**
+     * Creates a client for ftp
+     *
+     * @param hostname hostname or ip to connect
+     * @param port     server port to connect
+     * @throws UnknownHostException if hostname is not valid
+     */
     public Client(String hostname, int port) throws UnknownHostException {
         this.address = new InetSocketAddress(InetAddress.getByName(hostname), port);
+        setupLogger();
     }
 
-    public Client() throws UnknownHostException {
-        this.address = new InetSocketAddress(InetAddress.getLocalHost(), 9999);
-    }
-
+    /** Starts console client */
     public static void main(String[] args) throws UnknownHostException {
         Scanner scanner = new Scanner(System.in);
 
@@ -37,13 +43,9 @@ public class Client {
         int port = scanner.nextInt();
         var client = new Client(hostname, port);
 
-        System.out.println(Arrays.toString(InetAddress.getLocalHost().getAddress()));
-
         while (true) {
             int type = scanner.nextInt();
             String path = scanner.nextLine().strip();
-
-            System.out.println("type = " + type + ", path = " + path);
 
             if (type == RequestType.LIST_REQUEST.toCode()) {
                 var list = client.executeList(path);
@@ -58,37 +60,68 @@ public class Client {
                 System.out.println("Get: size = " + file.length);
                 System.out.println(Arrays.toString(file));
                 System.out.println(new String(file));
+                continue;
+            }
+            if (type == 0) {
+                break;
             }
         }
     }
 
+    private void setupLogger() {
+        if (logger.getHandlers().length == 0) {
+            try {
+                logger.setUseParentHandlers(false);
+                logger.addHandler(new FileHandler("clientLogs"));
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    /**
+     * Executes get file by specified path request
+     *
+     * @param path path to get file from
+     * @return file content represented by bytes
+     */
     public byte[] executeGet(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
             sendRequest(RequestType.GET_REQUEST, socketChannel, path);
             return receiveGetRequest(socketChannel);
         } catch (IOException exception) {
-            throw new RuntimeException("AAA");
-        }
-    }
-
-    private byte[] receiveGetRequest(SocketChannel socketChannel) throws IOException {
-        var dataInputStream = getResponseStream(socketChannel);
-        int bytesNumber = dataInputStream.readInt(); // TODO
-        int size = dataInputStream.readInt();
-        if (size < 0) {
+            logger.severe("Unable to execute get request: " + exception.getMessage());
             return new byte[0];
         }
-        return dataInputStream.readAllBytes();
     }
 
+    /**
+     * Executes list directory request
+     *
+     * @param path path of the directory to list files from
+     * @return list of the files
+     */
     public List<ServerFile> executeList(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
             sendRequest(RequestType.LIST_REQUEST, socketChannel, path);
             return receiveListRequest(socketChannel);
         } catch (IOException exception) {
-            exception.printStackTrace();
-            throw new RuntimeException("AAA");
+            logger.severe("Unable to execute get request: " + exception.getMessage());
+            return new ArrayList<>();
         }
+    }
+
+    private byte[] receiveGetRequest(SocketChannel socketChannel) throws IOException {
+        var dataInputStream = getResponseStream(socketChannel);
+        int bytesNumber = dataInputStream.readInt();
+        int size = dataInputStream.readInt();
+        if (size < 0) {
+            return new byte[0];
+        }
+        byte[] fileContent = dataInputStream.readAllBytes();
+        if (Integer.BYTES + fileContent.length != bytesNumber) {
+            throw new IOException("Corrupted package");
+        }
+        return fileContent;
     }
 
     private DataInputStream getResponseStream(SocketChannel socketChannel) throws IOException {
@@ -105,7 +138,7 @@ public class Client {
         headBuffer.flip();
         int remainingBytesNumber = headBuffer.getInt();
 
-        System.out.println("DONE! rem bytes number = " + remainingBytesNumber + ", head = " + Arrays.toString(headBuffer.array()));
+        logger.info("DONE! rem bytes number = " + remainingBytesNumber + ", head = " + Arrays.toString(headBuffer.array()));
 
         dataOutputStream.writeInt(remainingBytesNumber);
         while (remainingBytesNumber > 0) {
@@ -122,15 +155,15 @@ public class Client {
     }
 
     private List<ServerFile> receiveListRequest(SocketChannel socketChannel) throws IOException {
-
-        System.out.println("Receive list request!!!");
+        logger.info("Receive list request");
 
         var dataInputStream = getResponseStream(socketChannel);
         int bytesNumber = dataInputStream.readInt();
         int size = dataInputStream.readInt();
+        int bytesCount = Integer.BYTES;
 
-        System.out.println("bytesNumber = " + bytesNumber);
-        System.out.println("size = " + size);
+        logger.info("bytesNumber = " + bytesNumber);
+        logger.info("size = " + size);
 
         if (size < 0) {
             return new ArrayList<>();
@@ -139,13 +172,17 @@ public class Client {
         for (int i = 0; i < size; i++) {
             var name = dataInputStream.readUTF();
             boolean isDirectory = dataInputStream.readBoolean();
+            bytesCount += name.length() * Character.BYTES + 4;
             serverFiles.add(new ServerFile(name, isDirectory));
+        }
+        if (bytesCount != bytesNumber) {
+            throw new IOException("Corrupted package");
         }
         return serverFiles;
     }
 
     private void sendRequest(RequestType requestType, SocketChannel socketChannel, String path) throws IOException {
-        System.out.println("Send requestType = " + requestType.toCode() + ", path = " + path);
+        logger.info("Send requestType = " + requestType.toCode() + ", path = " + path);
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         var dataOutputStream = new DataOutputStream(byteOutputStream);
 
@@ -161,9 +198,9 @@ public class Client {
             buffer.put(b);
         }
 
-        System.out.println("path length = " + path.length());
-        System.out.println("bytes number = " + byteOutputStream.toByteArray().length
-                + ", but found = " + bytesNumber);
+        logger.info("path length = " + path.length());
+        logger.info("bytes number = " + byteOutputStream.toByteArray().length
+                            + ", but found = " + bytesNumber);
 
         buffer.flip();
 

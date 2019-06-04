@@ -17,7 +17,7 @@ public class OutputWriter implements Runnable {
 
     private void writeToChannel(@NotNull SelectionKey key) {
         var data = (ClientData) key.attachment();
-        System.out.println("TRY TO WRITE to channel: is Finished = " + data.isFinished());
+        Server.LOGGER.info("try to write to channel: is Finished = " + data.isFinished());
         if (data.isFinished()) {
             key.cancel();
             return;
@@ -33,7 +33,7 @@ public class OutputWriter implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("RUN OUT writer???");
+        Server.LOGGER.info("run out writer");
         while (!Thread.interrupted()) {
             if (Server.select(outputWriterSelector) == 0) {
                 continue; // TODO remove duplicate code

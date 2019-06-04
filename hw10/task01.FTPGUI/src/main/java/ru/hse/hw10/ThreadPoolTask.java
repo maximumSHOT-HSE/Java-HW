@@ -39,7 +39,7 @@ public class ThreadPoolTask implements Runnable {
     * Parsed request will be stored in the client data
     * */
     private void parseRequest() throws IOException {
-        System.out.println("PARSE");
+        Server.LOGGER.info("parse");
         var inputStream = new DataInputStream(new ByteArrayInputStream(data.getRequest()));
         int bytesNumber = inputStream.readInt();
         byte requestType = inputStream.readByte();
@@ -47,7 +47,7 @@ public class ThreadPoolTask implements Runnable {
         data.setRequestType(ClientData.RequestType.get(requestType));
         data.setPath(path);
         data.processRequest();
-        System.out.println("bytesNumber = " + bytesNumber
+        Server.LOGGER.info("bytesNumber = " + bytesNumber
                 + ", requestType = " + requestType
                 + ", path = " + path);
     }
@@ -61,7 +61,7 @@ public class ThreadPoolTask implements Runnable {
         }
         try {
             outputWriterSelectorLock.lock();
-            System.out.println("TRY TO REGISTER");
+            Server.LOGGER.info("try to register");
             socketChannel.register(outputWriterSelector,
                     SelectionKey.OP_WRITE, data);
         } catch (ClosedChannelException ignore) {
