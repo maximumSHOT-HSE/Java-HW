@@ -1,6 +1,5 @@
 package ru.hse.hw10.client;
 
-import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,13 +14,14 @@ import javafx.stage.Stage;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClientGUI extends Application {
+public class ClientGUI {
     private FakeClient client = new FakeClient();
     private ObservableList<ServerFile> files;
     private Button downloadButton = new Button("Download");
@@ -31,13 +31,19 @@ public class ClientGUI extends Application {
     private Label filesLabel;
     private LinkedList<ServerFile> directoryPath = new LinkedList<>();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public ClientGUI(Stage stage, String ip, String port) {
+        int intPort;
+        try {
+            intPort = Integer.valueOf(port);
+            if (intPort >= 65536 || intPort < 0) {
+                throw new RuntimeException("wrong port");
+            }
+        } catch (NumberFormatException exception) {
+            throw new RuntimeException("number format exc");
+        }
 
-    @Override
-    public void start(Stage stage) {
-        files = FXCollections.observableArrayList(client.executeList(""));
+
+        files = FXCollections.observableArrayList(client.executeList("."));
         directoryPath.add(new ServerFile("", true));
         filesLabel = new Label("Current dir: \"\"");
 
