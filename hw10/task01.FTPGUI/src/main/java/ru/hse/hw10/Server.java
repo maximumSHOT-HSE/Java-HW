@@ -51,7 +51,7 @@ public class Server {
         System.out.println("STOP!!!");
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) {
         Server server = new Server();
         try {
             server.start();
