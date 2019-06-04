@@ -74,8 +74,7 @@ public class Client {
         if (size < 0) {
             return new byte[0];
         }
-        byte[] fileContent = dataInputStream.readAllBytes();
-        return fileContent;
+        return dataInputStream.readAllBytes();
     }
 
     private List<ServerFile> executeList(@NotNull String path) {

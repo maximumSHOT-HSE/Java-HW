@@ -58,14 +58,8 @@ public class InputListener implements Runnable {
     @Override
     public void run() {
         int lastSelect;
-        while (true) {
-            try {
-                lastSelect = inputListenerSelector.select(TIMEOUT);
-            } catch (IOException e) {
-                e.printStackTrace();
-                continue;
-            }
-            if (lastSelect == 0) {
+        while (!Thread.interrupted()) {
+            if (Server.select(inputListenerSelector) == 0) {
                 continue;
             }
             Set<SelectionKey> selectedKeys;
@@ -87,6 +81,11 @@ public class InputListener implements Runnable {
                 }
                 iterator.remove();
             }
+        }
+        try {
+            inputListenerSelector.close();
+        } catch (IOException ignore) {
+            // TODO handle me
         }
     }
 }

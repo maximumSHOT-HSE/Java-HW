@@ -17,10 +17,17 @@ public class OutputWriter implements Runnable {
         this.outputWriterSelector = outputWriterSelector;
     }
 
-    private void processList(@NotNull ClientData data, @NotNull SelectionKey key) {
-//        System.out.println("TRY OT WRITE to channel: is Finished = " + data.isFinished());
+    private void writeToChannel(@NotNull SelectionKey key) {
+        var data = (ClientData) key.attachment();
+        System.out.println("TRY OT WRITE to channel: is Finished = " + data.isFinished());
         if (data.isFinished()) {
-            key.cancel();
+            try {
+                key.cancel();
+                key.channel().close();
+                data.close();
+            } catch (IOException ignore) {
+                // TODO handle me
+            }
             return;
         }
         var buffer = data.getBuffer();
@@ -32,38 +39,11 @@ public class OutputWriter implements Runnable {
         }
     }
 
-    private void processGet(@NotNull ClientData data) {
-        // TODO finish it
-    }
-
-    private void writeToChannel(@NotNull SelectionKey key) {
-        var data = (ClientData) key.attachment();
-        switch (data.getRequestType()) {
-            case LIST:
-                processList(data, key);
-                break;
-            case GET:
-                processGet(data);
-                break;
-        }
-    }
-
-    private int select() {
-        int lastSelect;
-        try {
-            lastSelect = outputWriterSelector.select(TIMEOUT);
-        } catch (IOException ignored) {
-            // TODO handle me
-            lastSelect = 0;
-        }
-        return lastSelect;
-    }
-
     @Override
     public void run() {
         System.out.println("RUN OUT writer???");
-        while (true) {
-            if (select() == 0) {
+        while (!Thread.interrupted()) {
+            if (Server.select(outputWriterSelector) == 0) {
                 continue; // TODO remove duplicate code
             }
             var selectedKeys = outputWriterSelector.selectedKeys();
@@ -75,6 +55,11 @@ public class OutputWriter implements Runnable {
                 }
                 iterator.remove();
             }
+        }
+        try {
+            outputWriterSelector.close();
+        } catch (IOException ignore) {
+            // TODO handle me
         }
     }
 }

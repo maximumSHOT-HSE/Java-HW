@@ -11,6 +11,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Server {
 
+    private static final int TIMEOUT = 1000;
+
     @NotNull private ExecutorService acceptReceiverService = Executors.newSingleThreadExecutor();
     @NotNull private ExecutorService inputListenerService = Executors.newSingleThreadExecutor();
     @NotNull private ExecutorService outputWriterService = Executors.newSingleThreadExecutor();
@@ -39,5 +41,15 @@ public class Server {
         } catch (IOException e) {
             // ignore
         }
+    }
+
+    public static int select(@NotNull Selector selector) {
+        int lastSelect;
+        try {
+            lastSelect = selector.select(TIMEOUT);
+        } catch (IOException ignored) {
+            lastSelect = 0;
+        }
+        return lastSelect;
     }
 }

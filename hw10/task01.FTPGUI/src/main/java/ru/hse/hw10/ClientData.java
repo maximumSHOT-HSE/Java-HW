@@ -1,6 +1,7 @@
 package ru.hse.hw10;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.print.DocFlavor;
 import java.io.*;
@@ -20,8 +21,8 @@ import java.util.Objects;
  * Secondly, one byte for request type
  * Finally, the sequence of bytes associated with
  * string provided by client.
- * */
-public class ClientData {
+ */
+public class ClientData implements Closeable {
 
     private static final int BLOCK_SIZE = 4096;
     private static final int ERROR_CODE = -1;
@@ -131,10 +132,20 @@ public class ClientData {
         }
     }
 
+    /*
+     * Checks whether path is correct or not.
+     * If path is correct then appropriate file
+     * will be returned, otherwise null will be returned.
+     */
+    @Nullable private File getFileByPath() {
+        File file = new File(path);
+        return file.exists() ? file : null;
+    }
+
     private void processList() {
         System.out.println("Client.processList()");
-        File file = new File(path);
-        if (!file.exists() || !file.isDirectory()) {
+        File file = getFileByPath();
+        if (file == null || !file.isDirectory()) {
             processError();
             return;
         }
@@ -161,10 +172,28 @@ public class ClientData {
     }
 
     public void processGet() {
-        // TODO finish it
+        System.out.println("Client.processGet()");
+        File file = getFileByPath();
+        if (file == null || file.isDirectory()) {
+            processError();
+            return;
+        }
+        try {
+            answerInputStream = new DataInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            processError();
+            return;
+        }
+        /* to simplify task we will assume that file is not too long,
+         * hence int variable can be used to store file size.
+         */
+        remainingBytesNumber = (int) file.length();
+        buffer.putInt(remainingBytesNumber);
+        buffer.flip();
     }
 
-    public ByteBuffer getBuffer() {
+    @NotNull public ByteBuffer getBuffer() {
         return buffer;
     }
 
@@ -183,7 +212,7 @@ public class ClientData {
      * if buffer has not any byte write to a channel then
      * extra bytes will be moved to the buffer. After that
      * buffer will be in correct state.
-     * */
+     */
     public boolean isFinished() {
 //        System.out.println("rem = " + remainingBytesNumber + " had rem = " + buffer.hasRemaining());
         if (!buffer.hasRemaining()) {
@@ -205,5 +234,10 @@ public class ClientData {
             buffer.flip();
         }
         return false;
+    }
+
+    @Override
+    public void close() throws IOException {
+        answerInputStream.close();
     }
 }
