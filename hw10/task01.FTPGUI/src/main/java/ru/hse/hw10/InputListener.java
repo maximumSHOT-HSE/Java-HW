@@ -14,7 +14,6 @@ import java.util.concurrent.locks.Lock;
 public class InputListener implements Runnable {
 
     private static final int BLOCK_SIZE = 4096;
-    private static final int TIMEOUT = 1000;
 
     @NotNull private Selector inputListenerSelector;
     @NotNull private Lock inputListenerSelectorLock;
@@ -57,7 +56,6 @@ public class InputListener implements Runnable {
 
     @Override
     public void run() {
-        int lastSelect;
         while (!Thread.interrupted()) {
             if (Server.select(inputListenerSelector) == 0) {
                 continue;

@@ -9,8 +9,6 @@ import java.nio.channels.SocketChannel;
 
 public class OutputWriter implements Runnable {
 
-    private static final int TIMEOUT = 1000;
-
     @NotNull private Selector outputWriterSelector;
 
     public OutputWriter(@NotNull Selector outputWriterSelector) {

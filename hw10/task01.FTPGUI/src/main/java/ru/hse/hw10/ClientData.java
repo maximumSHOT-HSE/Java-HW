@@ -3,7 +3,6 @@ package ru.hse.hw10;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.print.DocFlavor;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -24,9 +23,12 @@ import java.util.Objects;
  */
 public class ClientData {
 
-    private static final int BLOCK_SIZE = 4096;
+    private static final int BUFFER_BLOCK_SIZE = 4096;
     private static final int ERROR_CODE = -1;
 
+    /**
+     * Type of request to the server.
+     */
     public enum RequestType {
         UNDEFINED(0),
         LIST(1),
@@ -38,6 +40,10 @@ public class ClientData {
             this.type = type;
         }
 
+        /**
+         * Determines request type to the server
+         * by it's integer value.
+         */
         public static RequestType get(int type) {
             for (var value : RequestType.values()) {
                 if (value.type == type) {
@@ -50,16 +56,22 @@ public class ClientData {
 
     @NotNull private List<Byte> request = new ArrayList<>();
     @NotNull private RequestType requestType = RequestType.UNDEFINED;
-    @NotNull private String path;
-    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BLOCK_SIZE);
+    @Nullable private String path;
+    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_BLOCK_SIZE);
 
-    @NotNull private DataInputStream answerInputStream;
+    @Nullable private DataInputStream answerInputStream;
     private int remainingBytesNumber;
 
+    /**
+     * Adds one byte to the request byte sequence
+     */
     public void append(byte b) {
         request.add(b);
     }
 
+    /*
+    * Determines the number of bytes in request package
+    */
     private int getBytesNumber() { // TODO develop adequate converting from bytes to int
         byte[] helper = new byte[Integer.BYTES];
         for (int i = 0; i < Integer.BYTES; i++) {
@@ -73,6 +85,11 @@ public class ClientData {
         }
     }
 
+    /**
+     * Determines whether request package has been received fully or not
+     *
+     * @return true if package has been receive fully and false otherwise
+     */
     public boolean isFull() {
         System.out.println("is full.");
         System.out.println("sz = " + request.size());
@@ -84,6 +101,12 @@ public class ClientData {
         return request.size() == bytesNumber + 4;
     }
 
+    /**
+     * Converts the request package to the byte array
+     * and returns it.
+     *
+     * @return the request package in form of byte array.
+     */
     public byte[] getRequest() {
         // TODO modify code
         System.out.println("GET REQUEST : ");
@@ -112,6 +135,9 @@ public class ClientData {
         return path;
     }
 
+    /*
+    * Forms answer for the invalid request.
+    */
     private void processError() {
         System.out.println("Client. process error !!!");
         buffer.clear();
@@ -121,6 +147,13 @@ public class ClientData {
         remainingBytesNumber = 0;
     }
 
+
+    /**
+     * Forms the answer for the request.
+     * answerInputStream has the remaining part of answer
+     * for the request while buffer has the part of the answer
+     * which can be provided for the socket directly.
+     */
     public void processRequest() {
         switch (requestType) {
             case LIST:
@@ -201,10 +234,6 @@ public class ClientData {
         return answerInputStream;
     }
 
-    public int getRemainingBytesNumber() {
-        return remainingBytesNumber;
-    }
-
     /**
      * Checks whether there exists information to work with.
      * If there is no such information then true will be returned.
@@ -212,6 +241,9 @@ public class ClientData {
      * if buffer has not any byte write to a channel then
      * extra bytes will be moved to the buffer. After that
      * buffer will be in correct state.
+     *
+     * @return true if answer for the request has been provided fully
+     * and false otherwise.
      */
     public boolean isFinished() {
 //        System.out.println("rem = " + remainingBytesNumber + " had rem = " + buffer.hasRemaining());
