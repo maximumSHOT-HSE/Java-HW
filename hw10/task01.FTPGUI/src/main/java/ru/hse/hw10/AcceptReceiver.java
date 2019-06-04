@@ -3,12 +3,15 @@ package ru.hse.hw10;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.concurrent.locks.Lock;
 
 public class AcceptReceiver implements Runnable {
+
+    private static final int PORT = 9999;
 
     @NotNull private ServerSocketChannel serverSocketChannel;
 
@@ -19,10 +22,21 @@ public class AcceptReceiver implements Runnable {
                           @NotNull Lock inputListenerSelectorLock) throws IOException {
         this.inputListenerSelector = inputListenerSelector;
         this.inputListenerSelectorLock = inputListenerSelectorLock;
-        serverSocketChannel = ServerSocketChannel
-                .open()
-                .bind(new InetSocketAddress(InetAddress.getLocalHost(), 9999));
+        serverSocketChannel = ServerSocketChannel.open()
+                .bind(new InetSocketAddress(PORT));
         serverSocketChannel.configureBlocking(false);
+
+        String serverIP;
+        try (final var socket = new DatagramSocket()) {
+            socket.connect(InetAddress.getByName("8.8.8.8"), PORT);
+            serverIP = socket.getLocalAddress().getHostAddress();
+        } catch (Exception ignored) {
+            serverIP = "UNKNOWN";
+        }
+
+        System.out.println("SERVER LISTENING...");
+        System.out.println("IP = " + serverIP);
+        System.out.println("PORT = " + PORT);
     }
 
     @Override

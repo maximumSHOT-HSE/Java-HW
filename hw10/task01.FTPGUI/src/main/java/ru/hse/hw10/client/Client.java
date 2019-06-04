@@ -85,6 +85,7 @@ public class Client {
             sendRequest(RequestType.LIST_REQUEST, socketChannel, path);
             return receiveListRequest(socketChannel);
         } catch (IOException exception) {
+            exception.printStackTrace();
             throw new RuntimeException("AAA");
         }
     }
