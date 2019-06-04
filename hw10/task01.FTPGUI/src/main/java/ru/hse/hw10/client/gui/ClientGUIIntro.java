@@ -47,7 +47,7 @@ public class ClientGUIIntro extends Application {
         });
 
         Scene scene = new Scene(pane);
-        primaryStage.setTitle("FTPGUI");
+        primaryStage.setTitle("FTP GUI");
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(125);
         primaryStage.setMinWidth(300);

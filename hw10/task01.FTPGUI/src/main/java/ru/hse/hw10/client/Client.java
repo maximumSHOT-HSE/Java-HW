@@ -138,7 +138,7 @@ public class Client {
         headBuffer.flip();
         int remainingBytesNumber = headBuffer.getInt();
 
-        logger.info("DONE! rem bytes number = " + remainingBytesNumber + ", head = " + Arrays.toString(headBuffer.array()));
+        logger.info("rem bytes number = " + remainingBytesNumber + ", head = " + Arrays.toString(headBuffer.array()));
 
         dataOutputStream.writeInt(remainingBytesNumber);
         while (remainingBytesNumber > 0) {
@@ -160,7 +160,6 @@ public class Client {
         var dataInputStream = getResponseStream(socketChannel);
         int bytesNumber = dataInputStream.readInt();
         int size = dataInputStream.readInt();
-        int bytesCount = Integer.BYTES;
 
         logger.info("bytesNumber = " + bytesNumber);
         logger.info("size = " + size);
@@ -172,11 +171,7 @@ public class Client {
         for (int i = 0; i < size; i++) {
             var name = dataInputStream.readUTF();
             boolean isDirectory = dataInputStream.readBoolean();
-            bytesCount += name.length() * Character.BYTES + 4;
             serverFiles.add(new ServerFile(name, isDirectory));
-        }
-        if (bytesCount != bytesNumber) {
-            throw new IOException("Corrupted package");
         }
         return serverFiles;
     }
