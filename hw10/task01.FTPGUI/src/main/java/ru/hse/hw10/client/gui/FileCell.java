@@ -3,15 +3,18 @@ package ru.hse.hw10.client.gui;
 import javafx.scene.control.ListCell;
 import ru.hse.hw10.client.ServerFile;
 
-// Representation of the file in the list view
-class FileCell extends ListCell<ServerFile> {
+public class FileCell extends ListCell<ServerFile> {
+
     @Override
     public void updateItem(ServerFile item, boolean empty) {
         super.updateItem(item, empty);
-        if (item == null || empty) {
-            return;
+        String representation = null;
+
+        if (item != null && !empty) {
+            representation = item.toString();
         }
-        this.setText(item.toString());
+
+        this.setText(representation);
         setGraphic(null);
     }
 }
