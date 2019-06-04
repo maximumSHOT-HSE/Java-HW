@@ -1,28 +1,35 @@
-package ru.hse.hw10.client;
+package ru.hse.hw10.client.gui;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.hse.hw10.client.Client;
+import ru.hse.hw10.client.ServerFile;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+/** Activity for walking the file tree and downloading files */
 public class ClientGUI {
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private Client client;
     private ObservableList<ServerFile> files;
     private Button downloadButton = new Button("Download");
@@ -30,31 +37,23 @@ public class ClientGUI {
     private Button backButton = new Button("Back");
     private ServerFile selectedFile;
     private Label filesLabel;
-    private LinkedList<ServerFile> directoryPath = new LinkedList<>();
     private Path currentPath;
 
-    public ClientGUI(Stage stage, String ip, String port) throws UnknownHostException {
-        int intPort;
+    public ClientGUI(@NotNull Stage stage, @NotNull String ip, @NotNull String port) {
         try {
-            intPort = Integer.valueOf(port);
-            if (intPort >= 65536 || intPort < 0) {
-                throw new RuntimeException("wrong port");
-            }
-        } catch (NumberFormatException exception) {
-            throw new RuntimeException("number format exc");
+            client = getClient(ip, port);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
-        client = new Client();
 
         files = FXCollections.observableArrayList(client.executeList("."));
         currentPath = Paths.get("");
-        directoryPath.add(new ServerFile("", true));
         filesLabel = new Label("Current dir: \"\"");
 
-        ListView<ServerFile> filesListView = new ListView<>(files);
+        var filesListView = new ListView<>(files);
         filesListView.setOrientation(Orientation.VERTICAL);
         filesListView.setPrefSize(200, 200);
         filesListView.setCellFactory(new FileCellFactory());
-
         filesListView.getSelectionModel().selectedItemProperty().addListener(this::fileChanged);
 
         VBox fileSelection = new VBox();
@@ -63,6 +62,7 @@ public class ClientGUI {
 
         downloadButton.setDisable(true);
         enterButton.setDisable(true);
+        backButton.setDisable(true);
 
         enterButton.setOnAction(event -> onEnterButtonClicked());
         downloadButton.setOnAction(event -> onDownloadButtonClicked());
@@ -76,12 +76,12 @@ public class ClientGUI {
         pane.addColumn(2, enterButton);
         pane.addColumn(3, backButton);
 
-        pane.setStyle("-fx-padding: 10;" +
-                              "-fx-border-style: solid inside;" +
-                              "-fx-border-width: 2;" +
-                              "-fx-border-insets: 5;" +
-                              "-fx-border-radius: 5;" +
-                              "-fx-border-color: blue;");
+        //        pane.setStyle("-fx-padding: 10;" +
+        //                              "-fx-border-style: solid inside;" +
+        //                              "-fx-border-width: 2;" +
+        //                              "-fx-border-insets: 5;" +
+        //                              "-fx-border-radius: 5;" +
+        //                              "-fx-border-color: blue;");
 
         Scene scene = new Scene(pane);
         stage.setScene(scene);
@@ -89,7 +89,20 @@ public class ClientGUI {
         stage.show();
     }
 
-    public void fileChanged(ObservableValue<? extends ServerFile> observable, @Nullable ServerFile oldValue, @Nullable ServerFile newValue) {
+    private Client getClient(@NotNull String ip, @NotNull String port) throws UnknownHostException {
+        int intPort;
+        try {
+            intPort = Integer.valueOf(port);
+            if (intPort >= 65536 || intPort < 0) {
+                throw new RuntimeException("wrong port");
+            }
+        } catch (NumberFormatException exception) {
+            throw new RuntimeException("number format exc");
+        }
+        return new Client();
+    }
+
+    private void fileChanged(ObservableValue<? extends ServerFile> observable, @Nullable ServerFile oldValue, @Nullable ServerFile newValue) {
         if (newValue == null) {
             return;
         }
@@ -105,19 +118,21 @@ public class ClientGUI {
 
     private void onEnterButtonClicked() {
         assert selectedFile.isDirectory();
+
         currentPath = currentPath.resolve(selectedFile.getName());
         String path = currentPath.toString();
-        List<ServerFile> result = client.executeList(path); // TODO threadpool
+        List<ServerFile> result = client.executeList(path);
         filesLabel.setText("Current dir: " + path);
-        directoryPath.add(selectedFile);
+        backButton.setDisable(false);
         files.setAll(result);
     }
 
     private void onDownloadButtonClicked() {
-        Thread thread = new Thread(() -> {
+        assert !selectedFile.isDirectory();
+
+        executor.submit(() -> {
             Path path = currentPath.resolve(selectedFile.getName());
-            System.out.println("Path " + path.toString());
-            byte[] result = client.executeGet(path.toString());
+            byte[] fileBytes = client.executeGet(path.toString());
             try {
                 if (path.getParent() != null) {
                     Files.createDirectories(path.getParent());
@@ -126,20 +141,23 @@ public class ClientGUI {
                     Files.delete(path);
                 }
                 Files.createFile(path);
-
-                Files.write(path, result);
-            } catch (IOException e) {
-                e.printStackTrace();
+                Files.write(path, fileBytes);
+            } catch (IOException exception) {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Error while downloading the file");
+                    alert.setContentText(exception.getMessage());
+                    alert.showAndWait();
+                });
             }
         });
-        thread.start();
     }
 
     private void onBackButtonClicked() {
         if (currentPath.getParent() == null) {
-            return; // TODO
+            return; // TODO idti  v koren'
         }
-        directoryPath.pollLast();
         currentPath = currentPath.getParent();
        // String path = directoryPath.peekLast().getPath();
         filesLabel.setText("Current dir: " + currentPath.toString());

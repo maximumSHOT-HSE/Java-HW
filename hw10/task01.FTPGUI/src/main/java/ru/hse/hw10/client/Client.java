@@ -58,7 +58,7 @@ public class Client {
 
     }
 
-    byte[] executeGet(@NotNull String path) {
+    public byte[] executeGet(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
             sendRequest(RequestType.GET_REQUEST, socketChannel, path);
             return receiveGetRequest(socketChannel);
@@ -77,7 +77,7 @@ public class Client {
         return dataInputStream.readAllBytes();
     }
 
-    List<ServerFile> executeList(@NotNull String path) {
+    public List<ServerFile> executeList(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
             sendRequest(RequestType.LIST_REQUEST, socketChannel, path);
             return receiveListRequest(socketChannel);

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FakeClient {
-    byte[] executeGet(@NotNull String path) {
+    public byte[] executeGet(@NotNull String path) {
         return "String".getBytes();
     }
 
 
-    List<ServerFile> executeList(@NotNull String path) {
+    public List<ServerFile> executeList(@NotNull String path) {
         List<ServerFile> serverFiles = new ArrayList<>();
         if (!path.equals("")) {
             path += "/";

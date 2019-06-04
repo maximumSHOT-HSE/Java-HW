@@ -1,4 +1,4 @@
-package ru.hse.hw10.client;
+package ru.hse.hw10.client.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -8,16 +8,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.net.UnknownHostException;
-
+/** Start activity of ftp client that asks of the server ip and port */
 public class ClientGUIIntro extends Application {
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        var pane = new GridPane();
+        final var pane = new GridPane();
+
         final var ipLabel = new Label("Enter server IP: ");
         GridPane.setConstraints(ipLabel, 0, 1);
         pane.getChildren().add(ipLabel);
@@ -34,26 +35,22 @@ public class ClientGUIIntro extends Application {
         GridPane.setConstraints(portTextField, 1, 2);
         pane.getChildren().add(portTextField);
 
-        var button = new Button("Connect");
-        GridPane.setConstraints(button, 0, 3);
-        pane.getChildren().add(button);
+        final var connectButton = new Button("Connect");
+        GridPane.setConstraints(connectButton, 0, 3);
+        pane.getChildren().add(connectButton);
 
-        button.setOnAction((e) -> {
+        connectButton.setOnAction((e) -> {
             String ip = ipTextField.getText();
             String port = portTextField.getText();
 
-            try {
-                var clientGUI = new ClientGUI(primaryStage, ip, port);
-            } catch (UnknownHostException e1) {
-                e1.printStackTrace();
-            }
+            var clientGUI = new ClientGUI(primaryStage, ip, port);
         });
 
         Scene scene = new Scene(pane);
         primaryStage.setTitle("FTPGUI");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(200);
-        primaryStage.setMinWidth(200);
+        primaryStage.setMinHeight(125);
+        primaryStage.setMinWidth(300);
         primaryStage.show();
     }
 }
