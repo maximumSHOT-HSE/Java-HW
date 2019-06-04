@@ -19,8 +19,8 @@ public class Client {
 
     private final InetSocketAddress address;
 
-    public Client(String hostname, int port) {
-        this.address = new InetSocketAddress(hostname, port);
+    public Client(String hostname, int port) throws UnknownHostException {
+        this.address = new InetSocketAddress(InetAddress.getByName(hostname), port);
     }
 
     public Client() throws UnknownHostException {
@@ -30,12 +30,13 @@ public class Client {
     public static void main(String[] args) throws UnknownHostException {
         Scanner scanner = new Scanner(System.in);
 
-//        System.out.println("Enter hostname: ");
-//        String hostname = scanner.next();
-//        System.out.println("Enter port: ");
-//        int port = scanner.nextInt();
-//        var client = new Client(hostname, port);
-        var client = new Client();
+        System.out.println("Enter hostname: ");
+        String hostname = scanner.next();
+        System.out.println("Enter port: ");
+        int port = scanner.nextInt();
+        var client = new Client(hostname, port);
+
+        System.out.println(Arrays.toString(InetAddress.getLocalHost().getAddress()));
 
         while (true) {
             int type = scanner.nextInt();
@@ -58,7 +59,6 @@ public class Client {
                 System.out.println(new String(file));
             }
         }
-
     }
 
     public byte[] executeGet(@NotNull String path) {
