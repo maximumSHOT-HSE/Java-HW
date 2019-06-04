@@ -38,6 +38,7 @@ public class ClientGUI {
     private ServerFile selectedFile;
     private Label filesLabel;
     private Path currentPath;
+    private ListView<ServerFile> filesListView;
 
     public ClientGUI(@NotNull Stage stage, @NotNull String ip, @NotNull String port) {
         try {
@@ -50,7 +51,7 @@ public class ClientGUI {
         currentPath = Paths.get("");
         filesLabel = new Label("Current dir: \"\"");
 
-        var filesListView = new ListView<>(files);
+        filesListView = new ListView<>(files);
         filesListView.setOrientation(Orientation.VERTICAL);
         filesListView.setPrefSize(200, 200);
         filesListView.setCellFactory(new FileCellFactory());
@@ -118,6 +119,7 @@ public class ClientGUI {
         filesLabel.setText("Current dir: " + path);
         backButton.setDisable(false);
         files.setAll(result);
+        filesListView.refresh();
     }
 
     private void onDownloadButtonClicked() {
@@ -154,5 +156,6 @@ public class ClientGUI {
         currentPath = currentPath.getParent();
         filesLabel.setText("Current dir: " + currentPath.toString());
         files.setAll(client.executeList(currentPath.toString()));
+        filesListView.refresh();
     }
 }
