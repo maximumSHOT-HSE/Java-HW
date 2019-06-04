@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.net.UnknownHostException;
+
 public class ClientGUIIntro extends Application {
     public static void main(String[] args) {
         launch(args);
@@ -40,7 +42,11 @@ public class ClientGUIIntro extends Application {
             String ip = ipTextField.getText();
             String port = portTextField.getText();
 
-            var clientGUI = new ClientGUI(primaryStage, ip, port);
+            try {
+                var clientGUI = new ClientGUI(primaryStage, ip, port);
+            } catch (UnknownHostException e1) {
+                e1.printStackTrace();
+            }
         });
 
         Scene scene = new Scene(pane);

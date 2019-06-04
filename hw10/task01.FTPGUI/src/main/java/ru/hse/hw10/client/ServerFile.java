@@ -5,25 +5,16 @@ import org.jetbrains.annotations.NotNull;
 public class ServerFile {
 
     @NotNull private final String name;
-    @NotNull private final String path;
     private final boolean isDirectory;
 
-    public ServerFile(@NotNull String path, boolean isDirectory) {
-        int index = path.lastIndexOf("/");
-        this.name = path.substring(index + 1);
-        System.out.println(name);
-        this.path = path;
+    public ServerFile(@NotNull String name, boolean isDirectory) {
+        this.name = name;
         this.isDirectory = isDirectory;
     }
 
     @NotNull
     public String getName() {
         return name;
-    }
-
-    @NotNull
-    public String getPath() {
-        return path;
     }
 
     public boolean isDirectory() {

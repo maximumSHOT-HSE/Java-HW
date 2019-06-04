@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,8 +31,9 @@ public class ClientGUI {
     private ServerFile selectedFile;
     private Label filesLabel;
     private LinkedList<ServerFile> directoryPath = new LinkedList<>();
+    private Path currentPath;
 
-    public ClientGUI(Stage stage, String ip, String port) {
+    public ClientGUI(Stage stage, String ip, String port) throws UnknownHostException {
         int intPort;
         try {
             intPort = Integer.valueOf(port);
@@ -41,9 +43,10 @@ public class ClientGUI {
         } catch (NumberFormatException exception) {
             throw new RuntimeException("number format exc");
         }
-        client = new Client(ip, intPort);
+        client = new Client();
 
         files = FXCollections.observableArrayList(client.executeList("."));
+        currentPath = Paths.get("");
         directoryPath.add(new ServerFile("", true));
         filesLabel = new Label("Current dir: \"\"");
 
@@ -102,18 +105,19 @@ public class ClientGUI {
 
     private void onEnterButtonClicked() {
         assert selectedFile.isDirectory();
-
-        List<ServerFile> result = client.executeList(selectedFile.getPath()); // TODO threadpool
-        filesLabel.setText("Current dir: " + selectedFile.getPath());
+        currentPath = currentPath.resolve(selectedFile.getName());
+        String path = currentPath.toString();
+        List<ServerFile> result = client.executeList(path); // TODO threadpool
+        filesLabel.setText("Current dir: " + path);
         directoryPath.add(selectedFile);
         files.setAll(result);
     }
 
     private void onDownloadButtonClicked() {
         Thread thread = new Thread(() -> {
-            Path path = Paths.get("").resolve(selectedFile.getPath());
+            Path path = currentPath.resolve(selectedFile.getName());
             System.out.println("Path " + path.toString());
-            byte[] result = client.executeGet(selectedFile.getPath());
+            byte[] result = client.executeGet(path.toString());
             try {
                 if (path.getParent() != null) {
                     Files.createDirectories(path.getParent());
@@ -132,12 +136,13 @@ public class ClientGUI {
     }
 
     private void onBackButtonClicked() {
-        if (directoryPath.size() < 2) {
+        if (currentPath.getParent() == null) {
             return; // TODO
         }
         directoryPath.pollLast();
-        String path = directoryPath.peekLast().getPath();
-        filesLabel.setText("Current dir: " + path);
-        files.setAll(client.executeList(path));
+        currentPath = currentPath.getParent();
+       // String path = directoryPath.peekLast().getPath();
+        filesLabel.setText("Current dir: " + currentPath.toString());
+        files.setAll(client.executeList(currentPath.toString()));
     }
 }
