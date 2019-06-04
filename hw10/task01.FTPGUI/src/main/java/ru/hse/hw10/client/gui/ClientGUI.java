@@ -76,13 +76,6 @@ public class ClientGUI {
         pane.addColumn(2, enterButton);
         pane.addColumn(3, backButton);
 
-        //        pane.setStyle("-fx-padding: 10;" +
-        //                              "-fx-border-style: solid inside;" +
-        //                              "-fx-border-width: 2;" +
-        //                              "-fx-border-insets: 5;" +
-        //                              "-fx-border-radius: 5;" +
-        //                              "-fx-border-color: blue;");
-
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setTitle("FTPGUI");
@@ -159,7 +152,6 @@ public class ClientGUI {
             return; // TODO idti  v koren'
         }
         currentPath = currentPath.getParent();
-       // String path = directoryPath.peekLast().getPath();
         filesLabel.setText("Current dir: " + currentPath.toString());
         files.setAll(client.executeList(currentPath.toString()));
     }
