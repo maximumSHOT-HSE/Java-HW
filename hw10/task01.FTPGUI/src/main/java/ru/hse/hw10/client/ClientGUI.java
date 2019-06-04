@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ClientGUI {
-    private FakeClient client = new FakeClient();
+    private Client client;
     private ObservableList<ServerFile> files;
     private Button downloadButton = new Button("Download");
     private Button enterButton = new Button("Enter");
@@ -41,7 +41,7 @@ public class ClientGUI {
         } catch (NumberFormatException exception) {
             throw new RuntimeException("number format exc");
         }
-
+        client = new Client(ip, intPort);
 
         files = FXCollections.observableArrayList(client.executeList("."));
         directoryPath.add(new ServerFile("", true));
