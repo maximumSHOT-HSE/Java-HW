@@ -232,10 +232,6 @@ public class ClientData {
         return buffer;
     }
 
-    @NotNull public DataInputStream getAnswerInputStream() {
-        return answerInputStream;
-    }
-
     /**
      * Checks whether there exists information to work with.
      * If there is no such information then true will be returned.
