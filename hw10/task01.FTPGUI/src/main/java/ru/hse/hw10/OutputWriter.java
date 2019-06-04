@@ -9,13 +9,16 @@ import java.nio.channels.SocketChannel;
 
 public class OutputWriter implements Runnable {
 
+    private static final int TIMEOUT = 1000;
+
     @NotNull private Selector outputWriterSelector;
 
     public OutputWriter(@NotNull Selector outputWriterSelector) {
         this.outputWriterSelector = outputWriterSelector;
     }
 
-    private void processList(ClientData data, SelectionKey key) {
+    private void processList(@NotNull ClientData data, @NotNull SelectionKey key) {
+//        System.out.println("TRY OT WRITE to channel: is Finished = " + data.isFinished());
         if (data.isFinished()) {
             key.cancel();
             return;
@@ -29,11 +32,11 @@ public class OutputWriter implements Runnable {
         }
     }
 
-    private void processGet(ClientData data) {
-        String path = data.getPath();
+    private void processGet(@NotNull ClientData data) {
+        // TODO finish it
     }
 
-    private void writeToChannel(SelectionKey key) {
+    private void writeToChannel(@NotNull SelectionKey key) {
         var data = (ClientData) key.attachment();
         switch (data.getRequestType()) {
             case LIST:
@@ -48,7 +51,7 @@ public class OutputWriter implements Runnable {
     private int select() {
         int lastSelect;
         try {
-            lastSelect = outputWriterSelector.select();
+            lastSelect = outputWriterSelector.select(TIMEOUT);
         } catch (IOException ignored) {
             // TODO handle me
             lastSelect = 0;
@@ -58,11 +61,12 @@ public class OutputWriter implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("RUN OUT writer???");
         while (true) {
             if (select() == 0) {
-                continue;
+                continue; // TODO remove duplicate code
             }
-            var selectedKeys=  outputWriterSelector.selectedKeys();
+            var selectedKeys = outputWriterSelector.selectedKeys();
             var iterator = selectedKeys.iterator();
             while (iterator.hasNext()) {
                 var key = iterator.next();

@@ -2,10 +2,10 @@ package ru.hse.hw10;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.print.DocFlavor;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,11 +24,27 @@ import java.util.Objects;
 public class ClientData {
 
     private static final int BLOCK_SIZE = 4096;
+    private static final int ERROR_CODE = -1;
 
     public enum RequestType {
-        UNDEFINED,
-        LIST,
-        GET
+        UNDEFINED(0),
+        LIST(1),
+        GET(2);
+
+        private int type;
+
+        RequestType(int type) {
+            this.type = type;
+        }
+
+        public static RequestType get(int type) {
+            for (var value : RequestType.values()) {
+                if (value.type == type) {
+                    return value;
+                }
+            }
+            return UNDEFINED;
+        }
     }
 
     @NotNull private List<Byte> request = new ArrayList<>();
@@ -44,7 +60,10 @@ public class ClientData {
     }
 
     private int getBytesNumber() { // TODO develop adequate converting from bytes to int
-        byte[] helper = new byte[4];
+        byte[] helper = new byte[Integer.BYTES];
+        for (int i = 0; i < Integer.BYTES; i++) {
+            helper[i] = request.get(i);
+        }
         var inputStream = new DataInputStream(new ByteArrayInputStream(helper));
         try {
             return inputStream.readInt();
@@ -54,60 +73,66 @@ public class ClientData {
     }
 
     public boolean isFull() {
+        System.out.println("is full.");
+        System.out.println("sz = " + request.size());
         if (request.size() < 4) {
             return false;
         }
         int bytesNumber = getBytesNumber();
+        System.out.println("bytesNumber = " + bytesNumber);
         return request.size() == bytesNumber + 4;
     }
 
     public byte[] getRequest() {
         // TODO modify code
+        System.out.println("GET REQUEST : ");
         byte[] bytes = new byte[request.size()];
         for (int i = 0; i < request.size(); i++) {
             bytes[i] = request.get(i);
+            System.out.print(bytes[i] + " ");
         }
+        System.out.println();
         return bytes;
     }
 
-    public void setRequestType(RequestType requestType) {
+    public void setRequestType(@NotNull RequestType requestType) {
         this.requestType = requestType;
     }
 
-    public void setPath(String path) {
+    public void setPath(@NotNull String path) {
         this.path = path;
     }
 
-    public RequestType getRequestType() {
+    @NotNull public RequestType getRequestType() {
         return requestType;
     }
 
-    public String getPath() {
+    @NotNull public String getPath() {
         return path;
     }
 
     private void processError() {
-        var byteArrayOutputStream = new ByteArrayOutputStream();
-        var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-        try {
-            dataOutputStream.writeInt(-1);
-        } catch (IOException ignored) {
-            // TODO handle me
-        }
+        System.out.println("Client. process error !!!");
+        buffer.clear();
+        buffer.putInt(Integer.BYTES);
+        buffer.putInt(ERROR_CODE);
+        buffer.flip();
+        remainingBytesNumber = 0;
     }
 
     public void processRequest() {
         switch (requestType) {
-            case GET:
-                processGet();
-                break;
             case LIST:
                 processList();
+                break;
+            case GET:
+                processGet();
                 break;
         }
     }
 
     private void processList() {
+        System.out.println("Client.processList()");
         File file = new File(path);
         if (!file.exists() || !file.isDirectory()) {
             processError();
@@ -116,6 +141,9 @@ public class ClientData {
         var byteArrayOutputStream = new ByteArrayOutputStream();
         var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         var childFiles = file.listFiles();
+        for (var child : childFiles) {
+            System.out.println(child.getName() + " is dir = " + child.isDirectory());
+        }
         try {
             dataOutputStream.writeInt(Objects.requireNonNull(childFiles).length);
             for (var childFile : childFiles) {
@@ -126,18 +154,21 @@ public class ClientData {
             // TODO handle me
         }
         remainingBytesNumber = byteArrayOutputStream.toByteArray().length;
+        System.out.println("total number of useful bytes = " + remainingBytesNumber);
         answerInputStream = new DataInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
         buffer.putInt(remainingBytesNumber);
+        buffer.flip();
     }
 
     public void processGet() {
+        // TODO finish it
     }
 
     public ByteBuffer getBuffer() {
         return buffer;
     }
 
-    public DataInputStream getAnswerInputStream() {
+    @NotNull public DataInputStream getAnswerInputStream() {
         return answerInputStream;
     }
 
@@ -154,6 +185,7 @@ public class ClientData {
      * buffer will be in correct state.
      * */
     public boolean isFinished() {
+//        System.out.println("rem = " + remainingBytesNumber + " had rem = " + buffer.hasRemaining());
         if (!buffer.hasRemaining()) {
             if (remainingBytesNumber == 0) {
                 return true;
@@ -161,12 +193,16 @@ public class ClientData {
             buffer.clear();
             while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
                 try {
-                    buffer.put(answerInputStream.readByte());
+                    byte b = answerInputStream.readByte();
+                    System.out.println("b = " + b + ", rem = " + remainingBytesNumber);
+                    buffer.put(b);
+//                    buffer.put(answerInputStream.readByte());
                     remainingBytesNumber--;
                 } catch (IOException ignore) {
                     // TODO handle me
                 }
             }
+            buffer.flip();
         }
         return false;
     }
