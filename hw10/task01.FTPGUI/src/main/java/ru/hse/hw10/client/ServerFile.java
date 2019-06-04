@@ -20,4 +20,9 @@ public class ServerFile {
     public boolean isDirectory() {
         return isDirectory;
     }
+
+    @Override
+    public String toString() {
+        return (isDirectory ? "Dir: " : "File: ") + name;
+    }
 }

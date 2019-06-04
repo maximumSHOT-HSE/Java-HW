@@ -49,7 +49,7 @@ public class Client {
 
     }
 
-    private byte[] executeGet(@NotNull String path) {
+    byte[] executeGet(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
             sendRequest(RequestType.GET_REQUEST, socketChannel, path);
             return receiveGetRequest(socketChannel);
@@ -69,7 +69,7 @@ public class Client {
         return fileContent;
     }
 
-    private List<ServerFile> executeList(@NotNull String path) {
+    List<ServerFile> executeList(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
             sendRequest(RequestType.LIST_REQUEST, socketChannel, path);
             return receiveListRequest(socketChannel);
