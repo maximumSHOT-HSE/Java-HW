@@ -93,7 +93,7 @@ public class ClientGUI {
         } catch (NumberFormatException exception) {
             throw new RuntimeException("number format exc");
         }
-        return new Client();
+        return new Client(ip, intPort);
     }
 
     private void fileChanged(ObservableValue<? extends ServerFile> observable, @Nullable ServerFile oldValue, @Nullable ServerFile newValue) {
