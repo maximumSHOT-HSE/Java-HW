@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-06-04T23:42:43.549582Z</date>
+  <millis>1559691763549</millis>
+  <nanos>582000</nanos>
+  <sequence>6</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>sendRequest</method>
+  <thread>1</thread>
+  <message>Send requestType = 1, path = .</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.553770Z</date>
+  <millis>1559691763553</millis>
+  <nanos>770000</nanos>
+  <sequence>7</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>sendRequest</method>
+  <thread>1</thread>
+  <message>path length = 1</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.560020Z</date>
+  <millis>1559691763560</millis>
+  <nanos>20000</nanos>
+  <sequence>8</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>sendRequest</method>
+  <thread>1</thread>
+  <message>bytes number = 4, but found = 4</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.561088Z</date>
+  <millis>1559691763561</millis>
+  <nanos>88000</nanos>
+  <sequence>9</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>receiveListRequest</method>
+  <thread>1</thread>
+  <message>Receive list request</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.529770Z</date>
+  <millis>1559691765529</millis>
+  <nanos>770000</nanos>
+  <sequence>43</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>getResponseStream</method>
+  <thread>1</thread>
+  <message>rem bytes number = 168, head = [0, 0, 0, -88]</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.546612Z</date>
+  <millis>1559691765546</millis>
+  <nanos>612000</nanos>
+  <sequence>213</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>receiveListRequest</method>
+  <thread>1</thread>
+  <message>bytesNumber = 168</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.546833Z</date>
+  <millis>1559691765546</millis>
+  <nanos>833000</nanos>
+  <sequence>214</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>receiveListRequest</method>
+  <thread>1</thread>
+  <message>size = 14</message>
+</record>
+</log>

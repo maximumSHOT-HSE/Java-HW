@@ -1,0 +1,2500 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-06-04T23:42:43.509252Z</date>
+  <millis>1559691763509</millis>
+  <nanos>252000</nanos>
+  <sequence>0</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.AcceptReceiver</class>
+  <method>&lt;init&gt;</method>
+  <thread>1</thread>
+  <message>SERVER LISTENING...</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.523579Z</date>
+  <millis>1559691763523</millis>
+  <nanos>579000</nanos>
+  <sequence>1</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.AcceptReceiver</class>
+  <method>&lt;init&gt;</method>
+  <thread>1</thread>
+  <message>IP = 192.168.0.107</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.523864Z</date>
+  <millis>1559691763523</millis>
+  <nanos>864000</nanos>
+  <sequence>2</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.AcceptReceiver</class>
+  <method>&lt;init&gt;</method>
+  <thread>1</thread>
+  <message>PORT = 9999</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.524726Z</date>
+  <millis>1559691763524</millis>
+  <nanos>726000</nanos>
+  <sequence>3</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.OutputWriter</class>
+  <method>run</method>
+  <thread>15</thread>
+  <message>run out writer</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.524869Z</date>
+  <millis>1559691763524</millis>
+  <nanos>869000</nanos>
+  <sequence>4</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.AcceptReceiver</class>
+  <method>run</method>
+  <thread>16</thread>
+  <message>RECEIVER BEGIN</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:43.534851Z</date>
+  <millis>1559691763534</millis>
+  <nanos>851000</nanos>
+  <sequence>5</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.AcceptReceiver</class>
+  <method>run</method>
+  <thread>16</thread>
+  <message>ACCEPT + java.nio.channels.SocketChannel[connected local=/192.168.0.107:9999 remote=/192.168.0.107:58498]</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.525357Z</date>
+  <millis>1559691764525</millis>
+  <nanos>357000</nanos>
+  <sequence>10</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFull</method>
+  <thread>14</thread>
+  <message>is full.</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.526338Z</date>
+  <millis>1559691764526</millis>
+  <nanos>338000</nanos>
+  <sequence>11</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFull</method>
+  <thread>14</thread>
+  <message>sz = 8</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.526735Z</date>
+  <millis>1559691764526</millis>
+  <nanos>735000</nanos>
+  <sequence>12</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFull</method>
+  <thread>14</thread>
+  <message>bytesNumber = 4</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.528297Z</date>
+  <millis>1559691764528</millis>
+  <nanos>297000</nanos>
+  <sequence>13</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ThreadPoolTask</class>
+  <method>parseRequest</method>
+  <thread>18</thread>
+  <message>parse</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.528598Z</date>
+  <millis>1559691764528</millis>
+  <nanos>598000</nanos>
+  <sequence>14</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>get request : </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.531567Z</date>
+  <millis>1559691764531</millis>
+  <nanos>567000</nanos>
+  <sequence>15</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>0 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.531977Z</date>
+  <millis>1559691764531</millis>
+  <nanos>977000</nanos>
+  <sequence>16</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>0 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.532239Z</date>
+  <millis>1559691764532</millis>
+  <nanos>239000</nanos>
+  <sequence>17</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>0 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.532476Z</date>
+  <millis>1559691764532</millis>
+  <nanos>476000</nanos>
+  <sequence>18</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>4 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.532712Z</date>
+  <millis>1559691764532</millis>
+  <nanos>712000</nanos>
+  <sequence>19</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>1 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.532961Z</date>
+  <millis>1559691764532</millis>
+  <nanos>961000</nanos>
+  <sequence>20</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>0 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.533203Z</date>
+  <millis>1559691764533</millis>
+  <nanos>203000</nanos>
+  <sequence>21</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>1 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.533460Z</date>
+  <millis>1559691764533</millis>
+  <nanos>460000</nanos>
+  <sequence>22</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>getRequest</method>
+  <thread>18</thread>
+  <message>46 </message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.534293Z</date>
+  <millis>1559691764534</millis>
+  <nanos>293000</nanos>
+  <sequence>23</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>Client.processList()</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.542146Z</date>
+  <millis>1559691764542</millis>
+  <nanos>146000</nanos>
+  <sequence>24</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>clientLogs is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.542491Z</date>
+  <millis>1559691764542</millis>
+  <nanos>491000</nanos>
+  <sequence>25</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>clientLogs.lck is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.542718Z</date>
+  <millis>1559691764542</millis>
+  <nanos>718000</nanos>
+  <sequence>26</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>build is dir = true</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.542899Z</date>
+  <millis>1559691764542</millis>
+  <nanos>899000</nanos>
+  <sequence>27</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>settings.gradle is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.543101Z</date>
+  <millis>1559691764543</millis>
+  <nanos>101000</nanos>
+  <sequence>28</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>.gradle is dir = true</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.543291Z</date>
+  <millis>1559691764543</millis>
+  <nanos>291000</nanos>
+  <sequence>29</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>src is dir = true</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.543466Z</date>
+  <millis>1559691764543</millis>
+  <nanos>466000</nanos>
+  <sequence>30</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>.idea is dir = true</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.543648Z</date>
+  <millis>1559691764543</millis>
+  <nanos>648000</nanos>
+  <sequence>31</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>gradle is dir = true</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.543837Z</date>
+  <millis>1559691764543</millis>
+  <nanos>837000</nanos>
+  <sequence>32</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>out is dir = true</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.544021Z</date>
+  <millis>1559691764544</millis>
+  <nanos>21000</nanos>
+  <sequence>33</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>serverLogs is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.544196Z</date>
+  <millis>1559691764544</millis>
+  <nanos>196000</nanos>
+  <sequence>34</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>build.gradle is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.544393Z</date>
+  <millis>1559691764544</millis>
+  <nanos>393000</nanos>
+  <sequence>35</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>serverLogs.lck is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.544586Z</date>
+  <millis>1559691764544</millis>
+  <nanos>586000</nanos>
+  <sequence>36</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>gradlew is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.544766Z</date>
+  <millis>1559691764544</millis>
+  <nanos>766000</nanos>
+  <sequence>37</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>gradlew.bat is dir = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.545383Z</date>
+  <millis>1559691764545</millis>
+  <nanos>383000</nanos>
+  <sequence>38</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>processList</method>
+  <thread>18</thread>
+  <message>total number of useful bytes = 168</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.557362Z</date>
+  <millis>1559691764557</millis>
+  <nanos>362000</nanos>
+  <sequence>39</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ThreadPoolTask</class>
+  <method>parseRequest</method>
+  <thread>18</thread>
+  <message>bytesNumber = 4, requestType = 1, path = .</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:44.557575Z</date>
+  <millis>1559691764557</millis>
+  <nanos>575000</nanos>
+  <sequence>40</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ThreadPoolTask</class>
+  <method>run</method>
+  <thread>18</thread>
+  <message>try to register</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.529224Z</date>
+  <millis>1559691765529</millis>
+  <nanos>224000</nanos>
+  <sequence>41</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.OutputWriter</class>
+  <method>writeToChannel</method>
+  <thread>15</thread>
+  <message>try to write to channel: is Finished = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.529747Z</date>
+  <millis>1559691765529</millis>
+  <nanos>747000</nanos>
+  <sequence>42</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 168</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.529909Z</date>
+  <millis>1559691765529</millis>
+  <nanos>909000</nanos>
+  <sequence>44</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 167</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530017Z</date>
+  <millis>1559691765530</millis>
+  <nanos>17000</nanos>
+  <sequence>45</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 166</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530120Z</date>
+  <millis>1559691765530</millis>
+  <nanos>120000</nanos>
+  <sequence>46</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 14, remain = 165</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530243Z</date>
+  <millis>1559691765530</millis>
+  <nanos>243000</nanos>
+  <sequence>47</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 164</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530343Z</date>
+  <millis>1559691765530</millis>
+  <nanos>343000</nanos>
+  <sequence>48</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 10, remain = 163</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530439Z</date>
+  <millis>1559691765530</millis>
+  <nanos>439000</nanos>
+  <sequence>49</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 99, remain = 162</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530537Z</date>
+  <millis>1559691765530</millis>
+  <nanos>537000</nanos>
+  <sequence>50</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 161</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530633Z</date>
+  <millis>1559691765530</millis>
+  <nanos>633000</nanos>
+  <sequence>51</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 105, remain = 160</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530732Z</date>
+  <millis>1559691765530</millis>
+  <nanos>732000</nanos>
+  <sequence>52</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 159</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530832Z</date>
+  <millis>1559691765530</millis>
+  <nanos>832000</nanos>
+  <sequence>53</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 110, remain = 158</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.530945Z</date>
+  <millis>1559691765530</millis>
+  <nanos>945000</nanos>
+  <sequence>54</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 116, remain = 157</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531051Z</date>
+  <millis>1559691765531</millis>
+  <nanos>51000</nanos>
+  <sequence>55</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 76, remain = 156</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531149Z</date>
+  <millis>1559691765531</millis>
+  <nanos>149000</nanos>
+  <sequence>56</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 111, remain = 155</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531256Z</date>
+  <millis>1559691765531</millis>
+  <nanos>256000</nanos>
+  <sequence>57</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 154</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531353Z</date>
+  <millis>1559691765531</millis>
+  <nanos>353000</nanos>
+  <sequence>58</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 153</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531453Z</date>
+  <millis>1559691765531</millis>
+  <nanos>453000</nanos>
+  <sequence>59</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 152</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531550Z</date>
+  <millis>1559691765531</millis>
+  <nanos>550000</nanos>
+  <sequence>60</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 151</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531645Z</date>
+  <millis>1559691765531</millis>
+  <nanos>645000</nanos>
+  <sequence>61</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 14, remain = 150</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531741Z</date>
+  <millis>1559691765531</millis>
+  <nanos>741000</nanos>
+  <sequence>62</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 99, remain = 149</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.531845Z</date>
+  <millis>1559691765531</millis>
+  <nanos>845000</nanos>
+  <sequence>63</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 148</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532038Z</date>
+  <millis>1559691765532</millis>
+  <nanos>38000</nanos>
+  <sequence>64</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 105, remain = 147</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532141Z</date>
+  <millis>1559691765532</millis>
+  <nanos>141000</nanos>
+  <sequence>65</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 146</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532234Z</date>
+  <millis>1559691765532</millis>
+  <nanos>234000</nanos>
+  <sequence>66</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 110, remain = 145</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532337Z</date>
+  <millis>1559691765532</millis>
+  <nanos>337000</nanos>
+  <sequence>67</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 116, remain = 144</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532431Z</date>
+  <millis>1559691765532</millis>
+  <nanos>431000</nanos>
+  <sequence>68</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 76, remain = 143</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532524Z</date>
+  <millis>1559691765532</millis>
+  <nanos>524000</nanos>
+  <sequence>69</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 111, remain = 142</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532632Z</date>
+  <millis>1559691765532</millis>
+  <nanos>632000</nanos>
+  <sequence>70</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 141</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532725Z</date>
+  <millis>1559691765532</millis>
+  <nanos>725000</nanos>
+  <sequence>71</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 140</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.532825Z</date>
+  <millis>1559691765532</millis>
+  <nanos>825000</nanos>
+  <sequence>72</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 139</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.533649Z</date>
+  <millis>1559691765533</millis>
+  <nanos>649000</nanos>
+  <sequence>73</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 138</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.533749Z</date>
+  <millis>1559691765533</millis>
+  <nanos>749000</nanos>
+  <sequence>74</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 99, remain = 137</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.533843Z</date>
+  <millis>1559691765533</millis>
+  <nanos>843000</nanos>
+  <sequence>75</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 107, remain = 136</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.533933Z</date>
+  <millis>1559691765533</millis>
+  <nanos>933000</nanos>
+  <sequence>76</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 135</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534025Z</date>
+  <millis>1559691765534</millis>
+  <nanos>25000</nanos>
+  <sequence>77</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 134</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534135Z</date>
+  <millis>1559691765534</millis>
+  <nanos>135000</nanos>
+  <sequence>78</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 5, remain = 133</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534282Z</date>
+  <millis>1559691765534</millis>
+  <nanos>282000</nanos>
+  <sequence>79</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 98, remain = 132</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534385Z</date>
+  <millis>1559691765534</millis>
+  <nanos>385000</nanos>
+  <sequence>80</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 117, remain = 131</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534481Z</date>
+  <millis>1559691765534</millis>
+  <nanos>481000</nanos>
+  <sequence>81</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 105, remain = 130</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534573Z</date>
+  <millis>1559691765534</millis>
+  <nanos>573000</nanos>
+  <sequence>82</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 129</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534664Z</date>
+  <millis>1559691765534</millis>
+  <nanos>664000</nanos>
+  <sequence>83</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 128</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534760Z</date>
+  <millis>1559691765534</millis>
+  <nanos>760000</nanos>
+  <sequence>84</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 1, remain = 127</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534852Z</date>
+  <millis>1559691765534</millis>
+  <nanos>852000</nanos>
+  <sequence>85</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 126</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.534944Z</date>
+  <millis>1559691765534</millis>
+  <nanos>944000</nanos>
+  <sequence>86</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 15, remain = 125</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535036Z</date>
+  <millis>1559691765535</millis>
+  <nanos>36000</nanos>
+  <sequence>87</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 124</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535126Z</date>
+  <millis>1559691765535</millis>
+  <nanos>126000</nanos>
+  <sequence>88</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 123</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535218Z</date>
+  <millis>1559691765535</millis>
+  <nanos>218000</nanos>
+  <sequence>89</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 116, remain = 122</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535311Z</date>
+  <millis>1559691765535</millis>
+  <nanos>311000</nanos>
+  <sequence>90</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 116, remain = 121</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535409Z</date>
+  <millis>1559691765535</millis>
+  <nanos>409000</nanos>
+  <sequence>91</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 105, remain = 120</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535500Z</date>
+  <millis>1559691765535</millis>
+  <nanos>500000</nanos>
+  <sequence>92</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 110, remain = 119</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535594Z</date>
+  <millis>1559691765535</millis>
+  <nanos>594000</nanos>
+  <sequence>93</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 118</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535685Z</date>
+  <millis>1559691765535</millis>
+  <nanos>685000</nanos>
+  <sequence>94</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 117</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535775Z</date>
+  <millis>1559691765535</millis>
+  <nanos>775000</nanos>
+  <sequence>95</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 116</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535867Z</date>
+  <millis>1559691765535</millis>
+  <nanos>867000</nanos>
+  <sequence>96</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 115</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.535961Z</date>
+  <millis>1559691765535</millis>
+  <nanos>961000</nanos>
+  <sequence>97</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 114</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536052Z</date>
+  <millis>1559691765536</millis>
+  <nanos>52000</nanos>
+  <sequence>98</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 113</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536144Z</date>
+  <millis>1559691765536</millis>
+  <nanos>144000</nanos>
+  <sequence>99</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 112</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536234Z</date>
+  <millis>1559691765536</millis>
+  <nanos>234000</nanos>
+  <sequence>100</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 111</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536337Z</date>
+  <millis>1559691765536</millis>
+  <nanos>337000</nanos>
+  <sequence>101</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 110</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536430Z</date>
+  <millis>1559691765536</millis>
+  <nanos>430000</nanos>
+  <sequence>102</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 109</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536542Z</date>
+  <millis>1559691765536</millis>
+  <nanos>542000</nanos>
+  <sequence>103</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 108</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536628Z</date>
+  <millis>1559691765536</millis>
+  <nanos>628000</nanos>
+  <sequence>104</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 7, remain = 107</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536711Z</date>
+  <millis>1559691765536</millis>
+  <nanos>711000</nanos>
+  <sequence>105</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 106</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536804Z</date>
+  <millis>1559691765536</millis>
+  <nanos>804000</nanos>
+  <sequence>106</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 105</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536910Z</date>
+  <millis>1559691765536</millis>
+  <nanos>910000</nanos>
+  <sequence>107</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 104</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.536993Z</date>
+  <millis>1559691765536</millis>
+  <nanos>993000</nanos>
+  <sequence>108</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 103</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537077Z</date>
+  <millis>1559691765537</millis>
+  <nanos>77000</nanos>
+  <sequence>109</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 102</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537165Z</date>
+  <millis>1559691765537</millis>
+  <nanos>165000</nanos>
+  <sequence>110</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 101</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537246Z</date>
+  <millis>1559691765537</millis>
+  <nanos>246000</nanos>
+  <sequence>111</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 100</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537331Z</date>
+  <millis>1559691765537</millis>
+  <nanos>331000</nanos>
+  <sequence>112</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 1, remain = 99</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537418Z</date>
+  <millis>1559691765537</millis>
+  <nanos>418000</nanos>
+  <sequence>113</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 98</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537507Z</date>
+  <millis>1559691765537</millis>
+  <nanos>507000</nanos>
+  <sequence>114</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 3, remain = 97</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537595Z</date>
+  <millis>1559691765537</millis>
+  <nanos>595000</nanos>
+  <sequence>115</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 96</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537685Z</date>
+  <millis>1559691765537</millis>
+  <nanos>685000</nanos>
+  <sequence>116</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 95</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537769Z</date>
+  <millis>1559691765537</millis>
+  <nanos>769000</nanos>
+  <sequence>117</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 99, remain = 94</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537853Z</date>
+  <millis>1559691765537</millis>
+  <nanos>853000</nanos>
+  <sequence>118</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 1, remain = 93</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.537937Z</date>
+  <millis>1559691765537</millis>
+  <nanos>937000</nanos>
+  <sequence>119</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 92</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538020Z</date>
+  <millis>1559691765538</millis>
+  <nanos>20000</nanos>
+  <sequence>120</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 5, remain = 91</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538176Z</date>
+  <millis>1559691765538</millis>
+  <nanos>176000</nanos>
+  <sequence>121</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 90</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538274Z</date>
+  <millis>1559691765538</millis>
+  <nanos>274000</nanos>
+  <sequence>122</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 105, remain = 89</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538391Z</date>
+  <millis>1559691765538</millis>
+  <nanos>391000</nanos>
+  <sequence>123</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 88</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538474Z</date>
+  <millis>1559691765538</millis>
+  <nanos>474000</nanos>
+  <sequence>124</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 87</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538579Z</date>
+  <millis>1559691765538</millis>
+  <nanos>579000</nanos>
+  <sequence>125</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 86</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538665Z</date>
+  <millis>1559691765538</millis>
+  <nanos>665000</nanos>
+  <sequence>126</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 1, remain = 85</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538758Z</date>
+  <millis>1559691765538</millis>
+  <nanos>758000</nanos>
+  <sequence>127</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 84</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.538939Z</date>
+  <millis>1559691765538</millis>
+  <nanos>939000</nanos>
+  <sequence>128</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 6, remain = 83</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539066Z</date>
+  <millis>1559691765539</millis>
+  <nanos>66000</nanos>
+  <sequence>129</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 82</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539220Z</date>
+  <millis>1559691765539</millis>
+  <nanos>220000</nanos>
+  <sequence>130</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 81</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539360Z</date>
+  <millis>1559691765539</millis>
+  <nanos>360000</nanos>
+  <sequence>131</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 80</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539444Z</date>
+  <millis>1559691765539</millis>
+  <nanos>444000</nanos>
+  <sequence>132</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 79</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539524Z</date>
+  <millis>1559691765539</millis>
+  <nanos>524000</nanos>
+  <sequence>133</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 78</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539606Z</date>
+  <millis>1559691765539</millis>
+  <nanos>606000</nanos>
+  <sequence>134</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 77</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539686Z</date>
+  <millis>1559691765539</millis>
+  <nanos>686000</nanos>
+  <sequence>135</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 1, remain = 76</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539767Z</date>
+  <millis>1559691765539</millis>
+  <nanos>767000</nanos>
+  <sequence>136</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 75</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539849Z</date>
+  <millis>1559691765539</millis>
+  <nanos>849000</nanos>
+  <sequence>137</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 3, remain = 74</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.539930Z</date>
+  <millis>1559691765539</millis>
+  <nanos>930000</nanos>
+  <sequence>138</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 111, remain = 73</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540010Z</date>
+  <millis>1559691765540</millis>
+  <nanos>10000</nanos>
+  <sequence>139</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 117, remain = 72</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540097Z</date>
+  <millis>1559691765540</millis>
+  <nanos>97000</nanos>
+  <sequence>140</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 116, remain = 71</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540179Z</date>
+  <millis>1559691765540</millis>
+  <nanos>179000</nanos>
+  <sequence>141</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 1, remain = 70</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540262Z</date>
+  <millis>1559691765540</millis>
+  <nanos>262000</nanos>
+  <sequence>142</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 69</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540344Z</date>
+  <millis>1559691765540</millis>
+  <nanos>344000</nanos>
+  <sequence>143</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 10, remain = 68</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540425Z</date>
+  <millis>1559691765540</millis>
+  <nanos>425000</nanos>
+  <sequence>144</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 67</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540512Z</date>
+  <millis>1559691765540</millis>
+  <nanos>512000</nanos>
+  <sequence>145</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 66</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540630Z</date>
+  <millis>1559691765540</millis>
+  <nanos>630000</nanos>
+  <sequence>146</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 65</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540713Z</date>
+  <millis>1559691765540</millis>
+  <nanos>713000</nanos>
+  <sequence>147</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 118, remain = 64</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540795Z</date>
+  <millis>1559691765540</millis>
+  <nanos>795000</nanos>
+  <sequence>148</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 63</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540892Z</date>
+  <millis>1559691765540</millis>
+  <nanos>892000</nanos>
+  <sequence>149</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 62</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.540995Z</date>
+  <millis>1559691765540</millis>
+  <nanos>995000</nanos>
+  <sequence>150</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 76, remain = 61</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541080Z</date>
+  <millis>1559691765541</millis>
+  <nanos>80000</nanos>
+  <sequence>151</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 111, remain = 60</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541164Z</date>
+  <millis>1559691765541</millis>
+  <nanos>164000</nanos>
+  <sequence>152</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 59</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541246Z</date>
+  <millis>1559691765541</millis>
+  <nanos>246000</nanos>
+  <sequence>153</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 58</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541332Z</date>
+  <millis>1559691765541</millis>
+  <nanos>332000</nanos>
+  <sequence>154</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 57</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541412Z</date>
+  <millis>1559691765541</millis>
+  <nanos>412000</nanos>
+  <sequence>155</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 56</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541495Z</date>
+  <millis>1559691765541</millis>
+  <nanos>495000</nanos>
+  <sequence>156</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 12, remain = 55</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541574Z</date>
+  <millis>1559691765541</millis>
+  <nanos>574000</nanos>
+  <sequence>157</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 98, remain = 54</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541654Z</date>
+  <millis>1559691765541</millis>
+  <nanos>654000</nanos>
+  <sequence>158</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 117, remain = 53</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541740Z</date>
+  <millis>1559691765541</millis>
+  <nanos>740000</nanos>
+  <sequence>159</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 105, remain = 52</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541821Z</date>
+  <millis>1559691765541</millis>
+  <nanos>821000</nanos>
+  <sequence>160</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 51</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541911Z</date>
+  <millis>1559691765541</millis>
+  <nanos>911000</nanos>
+  <sequence>161</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 50</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.541996Z</date>
+  <millis>1559691765541</millis>
+  <nanos>996000</nanos>
+  <sequence>162</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 49</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542077Z</date>
+  <millis>1559691765542</millis>
+  <nanos>77000</nanos>
+  <sequence>163</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 48</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542161Z</date>
+  <millis>1559691765542</millis>
+  <nanos>161000</nanos>
+  <sequence>164</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 47</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542242Z</date>
+  <millis>1559691765542</millis>
+  <nanos>242000</nanos>
+  <sequence>165</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 46</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542320Z</date>
+  <millis>1559691765542</millis>
+  <nanos>320000</nanos>
+  <sequence>166</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 45</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542400Z</date>
+  <millis>1559691765542</millis>
+  <nanos>400000</nanos>
+  <sequence>167</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 44</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542479Z</date>
+  <millis>1559691765542</millis>
+  <nanos>479000</nanos>
+  <sequence>168</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 43</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542559Z</date>
+  <millis>1559691765542</millis>
+  <nanos>559000</nanos>
+  <sequence>169</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 42</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542657Z</date>
+  <millis>1559691765542</millis>
+  <nanos>657000</nanos>
+  <sequence>170</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 41</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542742Z</date>
+  <millis>1559691765542</millis>
+  <nanos>742000</nanos>
+  <sequence>171</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 14, remain = 40</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542823Z</date>
+  <millis>1559691765542</millis>
+  <nanos>823000</nanos>
+  <sequence>172</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 39</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542900Z</date>
+  <millis>1559691765542</millis>
+  <nanos>900000</nanos>
+  <sequence>173</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 38</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.542982Z</date>
+  <millis>1559691765542</millis>
+  <nanos>982000</nanos>
+  <sequence>174</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 37</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543065Z</date>
+  <millis>1559691765543</millis>
+  <nanos>65000</nanos>
+  <sequence>175</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 118, remain = 36</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543148Z</date>
+  <millis>1559691765543</millis>
+  <nanos>148000</nanos>
+  <sequence>176</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 35</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543227Z</date>
+  <millis>1559691765543</millis>
+  <nanos>227000</nanos>
+  <sequence>177</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 34</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543305Z</date>
+  <millis>1559691765543</millis>
+  <nanos>305000</nanos>
+  <sequence>178</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 76, remain = 33</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543404Z</date>
+  <millis>1559691765543</millis>
+  <nanos>404000</nanos>
+  <sequence>179</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 111, remain = 32</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543482Z</date>
+  <millis>1559691765543</millis>
+  <nanos>482000</nanos>
+  <sequence>180</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 31</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543563Z</date>
+  <millis>1559691765543</millis>
+  <nanos>563000</nanos>
+  <sequence>181</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 115, remain = 30</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543639Z</date>
+  <millis>1559691765543</millis>
+  <nanos>639000</nanos>
+  <sequence>182</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 29</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543720Z</date>
+  <millis>1559691765543</millis>
+  <nanos>720000</nanos>
+  <sequence>183</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 28</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543796Z</date>
+  <millis>1559691765543</millis>
+  <nanos>796000</nanos>
+  <sequence>184</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 99, remain = 27</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543872Z</date>
+  <millis>1559691765543</millis>
+  <nanos>872000</nanos>
+  <sequence>185</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 107, remain = 26</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.543949Z</date>
+  <millis>1559691765543</millis>
+  <nanos>949000</nanos>
+  <sequence>186</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 25</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544030Z</date>
+  <millis>1559691765544</millis>
+  <nanos>30000</nanos>
+  <sequence>187</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 24</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544109Z</date>
+  <millis>1559691765544</millis>
+  <nanos>109000</nanos>
+  <sequence>188</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 7, remain = 23</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544185Z</date>
+  <millis>1559691765544</millis>
+  <nanos>185000</nanos>
+  <sequence>189</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 22</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544260Z</date>
+  <millis>1559691765544</millis>
+  <nanos>260000</nanos>
+  <sequence>190</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 21</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544338Z</date>
+  <millis>1559691765544</millis>
+  <nanos>338000</nanos>
+  <sequence>191</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 20</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544438Z</date>
+  <millis>1559691765544</millis>
+  <nanos>438000</nanos>
+  <sequence>192</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 19</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544513Z</date>
+  <millis>1559691765544</millis>
+  <nanos>513000</nanos>
+  <sequence>193</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 18</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544594Z</date>
+  <millis>1559691765544</millis>
+  <nanos>594000</nanos>
+  <sequence>194</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 17</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544671Z</date>
+  <millis>1559691765544</millis>
+  <nanos>671000</nanos>
+  <sequence>195</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 119, remain = 16</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544746Z</date>
+  <millis>1559691765544</millis>
+  <nanos>746000</nanos>
+  <sequence>196</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 15</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.544838Z</date>
+  <millis>1559691765544</millis>
+  <nanos>838000</nanos>
+  <sequence>197</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 14</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545101Z</date>
+  <millis>1559691765545</millis>
+  <nanos>101000</nanos>
+  <sequence>198</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 11, remain = 13</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545180Z</date>
+  <millis>1559691765545</millis>
+  <nanos>180000</nanos>
+  <sequence>199</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 103, remain = 12</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545253Z</date>
+  <millis>1559691765545</millis>
+  <nanos>253000</nanos>
+  <sequence>200</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 114, remain = 11</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545329Z</date>
+  <millis>1559691765545</millis>
+  <nanos>329000</nanos>
+  <sequence>201</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 10</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545402Z</date>
+  <millis>1559691765545</millis>
+  <nanos>402000</nanos>
+  <sequence>202</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 100, remain = 9</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545473Z</date>
+  <millis>1559691765545</millis>
+  <nanos>473000</nanos>
+  <sequence>203</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 108, remain = 8</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545549Z</date>
+  <millis>1559691765545</millis>
+  <nanos>549000</nanos>
+  <sequence>204</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 101, remain = 7</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545634Z</date>
+  <millis>1559691765545</millis>
+  <nanos>634000</nanos>
+  <sequence>205</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 119, remain = 6</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545742Z</date>
+  <millis>1559691765545</millis>
+  <nanos>742000</nanos>
+  <sequence>206</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 46, remain = 5</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545828Z</date>
+  <millis>1559691765545</millis>
+  <nanos>828000</nanos>
+  <sequence>207</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 98, remain = 4</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545899Z</date>
+  <millis>1559691765545</millis>
+  <nanos>899000</nanos>
+  <sequence>208</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 97, remain = 3</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.545989Z</date>
+  <millis>1559691765545</millis>
+  <nanos>989000</nanos>
+  <sequence>209</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 116, remain = 2</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.546061Z</date>
+  <millis>1559691765546</millis>
+  <nanos>61000</nanos>
+  <sequence>210</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.ClientData</class>
+  <method>isFinished</method>
+  <thread>15</thread>
+  <message>byte = 0, remain = 1</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.546133Z</date>
+  <millis>1559691765546</millis>
+  <nanos>133000</nanos>
+  <sequence>211</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.OutputWriter</class>
+  <method>writeToChannel</method>
+  <thread>15</thread>
+  <message>try to write to channel: is Finished = false</message>
+</record>
+<record>
+  <date>2019-06-04T23:42:45.546343Z</date>
+  <millis>1559691765546</millis>
+  <nanos>343000</nanos>
+  <sequence>212</sequence>
+  <logger>ServerLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.OutputWriter</class>
+  <method>writeToChannel</method>
+  <thread>15</thread>
+  <message>try to write to channel: is Finished = true</message>
+</record>
+</log>
