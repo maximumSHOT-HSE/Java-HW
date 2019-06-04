@@ -105,9 +105,18 @@ public class ClientGUI extends Application {
 
     private void onDownloadButtonClicked() {
         Thread thread = new Thread(() -> {
-            Path path = Paths.get(selectedFile.getPath());
+            Path path = Paths.get("").resolve(selectedFile.getPath());
+            System.out.println("Path " + path.toString());
             byte[] result = client.executeGet(selectedFile.getPath());
             try {
+                if (path.getParent() != null) {
+                    Files.createDirectories(path.getParent());
+                }
+                if (Files.exists(path)) {
+                    Files.delete(path);
+                }
+                Files.createFile(path);
+
                 Files.write(path, result);
             } catch (IOException e) {
                 e.printStackTrace();

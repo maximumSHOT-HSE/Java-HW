@@ -14,7 +14,7 @@ public class FakeClient {
     List<ServerFile> executeList(@NotNull String path) {
         List<ServerFile> serverFiles = new ArrayList<>();
         if (!path.equals("")) {
-            path += "\\";
+            path += "/";
         }
         serverFiles.add(new ServerFile(path + "dir", true));
         serverFiles.add(new ServerFile(path + "file1", false));

@@ -2,9 +2,6 @@ package ru.hse.hw10.client;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class ServerFile {
 
     @NotNull private final String name;
@@ -12,7 +9,7 @@ public class ServerFile {
     private final boolean isDirectory;
 
     public ServerFile(@NotNull String path, boolean isDirectory) {
-        int index = path.lastIndexOf("\\");
+        int index = path.lastIndexOf("/");
         this.name = path.substring(index + 1);
         System.out.println(name);
         this.path = path;
