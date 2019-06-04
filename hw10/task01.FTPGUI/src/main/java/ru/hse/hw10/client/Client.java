@@ -33,41 +33,6 @@ public class Client {
         setupLogger();
     }
 
-    /** Starts console client */
-    public static void main(String[] args) throws UnknownHostException {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter hostname: ");
-        String hostname = scanner.next();
-        System.out.println("Enter port: ");
-        int port = scanner.nextInt();
-        var client = new Client(hostname, port);
-
-        while (true) {
-            int type = scanner.nextInt();
-            String path = scanner.nextLine().strip();
-
-            if (type == RequestType.LIST_REQUEST.toCode()) {
-                var list = client.executeList(path);
-                System.out.println("List: size = " + list.size());
-                for (var serverFile : list) {
-                    System.out.println(serverFile.getName() + " | " + (serverFile.isDirectory() ? "d" : "f"));
-                }
-                continue;
-            }
-            if (type == RequestType.GET_REQUEST.toCode()) {
-                var file = client.executeGet(path);
-                System.out.println("Get: size = " + file.length);
-                System.out.println(Arrays.toString(file));
-                System.out.println(new String(file));
-                continue;
-            }
-            if (type == 0) {
-                break;
-            }
-        }
-    }
-
     private void setupLogger() {
         if (logger.getHandlers().length == 0) {
             try {
