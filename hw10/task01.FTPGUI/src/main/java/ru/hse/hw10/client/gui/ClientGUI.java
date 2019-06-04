@@ -43,8 +43,12 @@ public class ClientGUI {
     public ClientGUI(@NotNull Stage stage, @NotNull String ip, @NotNull String port) {
         try {
             client = getClient(ip, port);
-        } catch (UnknownHostException | IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (UnknownHostException | IllegalArgumentException exception) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error occurred while connecting to client");
+            alert.setContentText(exception.getMessage());
+            alert.showAndWait();
             return;
         }
 
