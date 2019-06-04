@@ -55,6 +55,7 @@ public class Client {
                 var file = client.executeGet(path);
                 System.out.println("Get: size = " + file.length);
                 System.out.println(Arrays.toString(file));
+                System.out.println(new String(file));
             }
         }
 

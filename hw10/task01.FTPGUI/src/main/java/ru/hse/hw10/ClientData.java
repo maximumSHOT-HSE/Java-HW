@@ -59,7 +59,7 @@ public class ClientData {
     @Nullable private String path;
     @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_BLOCK_SIZE);
 
-    @Nullable private DataInputStream answerInputStream;
+    @NotNull private DataInputStream answerInputStream;
     private int remainingBytesNumber;
 
     /**
@@ -222,6 +222,8 @@ public class ClientData {
          * hence int variable can be used to store file size.
          */
         remainingBytesNumber = (int) file.length();
+        System.out.println("File size!!! = " + file.length());
+        buffer.putInt(remainingBytesNumber);
         buffer.putInt(remainingBytesNumber);
         buffer.flip();
     }
