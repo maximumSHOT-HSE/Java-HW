@@ -3,7 +3,9 @@ package ru.hse.hw10.client;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
@@ -12,25 +14,32 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Client {
+
+    private static final int BLOCK_SIZE = 4096;
+
     private final InetSocketAddress address;
 
     public Client(String hostname, int port) {
         this.address = new InetSocketAddress(hostname, port);
     }
 
-    public static void main(String[] args) {
+    public Client() throws UnknownHostException {
+        this.address = new InetSocketAddress(InetAddress.getLocalHost(), 9999);
+    }
+
+    public static void main(String[] args) throws UnknownHostException {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter hostname: ");
-        String hostname = scanner.next();
-        System.out.println("Enter port: ");
-        int port = scanner.nextInt();
-
-        var client = new Client(hostname, port);
+//        System.out.println("Enter hostname: ");
+//        String hostname = scanner.next();
+//        System.out.println("Enter port: ");
+//        int port = scanner.nextInt();
+//        var client = new Client(hostname, port);
+        var client = new Client();
 
         while (true) {
             int type = scanner.nextInt();
-            String path = scanner.nextLine();
+            String path = scanner.nextLine().strip();
 
             if (type == RequestType.LIST_REQUEST.toCode()) {
                 var list = client.executeList(path);
@@ -65,8 +74,7 @@ public class Client {
         if (size < 0) {
             return new byte[0];
         }
-        byte[] fileContent = dataInputStream.readAllBytes();
-        return fileContent;
+        return dataInputStream.readAllBytes();
     }
 
     List<ServerFile> executeList(@NotNull String path) {
@@ -79,19 +87,45 @@ public class Client {
     }
 
     private DataInputStream getResponseStream(SocketChannel socketChannel) throws IOException {
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        while (socketChannel.read(buffer) != -1) { // TODO check if this works
-            stream.writeBytes(buffer.array());
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+
+        var headBuffer = ByteBuffer.allocate(Integer.BYTES);
+        var bodyBuffer = ByteBuffer.allocate(BLOCK_SIZE);
+
+        while (headBuffer.position() < headBuffer.limit()) {
+            socketChannel.read(headBuffer);
         }
 
-        return new DataInputStream(new ByteArrayInputStream(stream.toByteArray()));
+        headBuffer.flip();
+        int remainingBytesNumber = headBuffer.getInt();
+
+        System.out.println("DONE! rem bytes number = " + remainingBytesNumber + ", head = " + Arrays.toString(headBuffer.array()));
+
+        dataOutputStream.writeInt(remainingBytesNumber);
+        while (remainingBytesNumber > 0) {
+            bodyBuffer.clear();
+            socketChannel.read(bodyBuffer);
+            bodyBuffer.flip();
+            while (bodyBuffer.hasRemaining()) {
+                int b = bodyBuffer.get();
+                dataOutputStream.writeByte(b);
+                remainingBytesNumber--;
+            }
+        }
+        return new DataInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
     }
 
     private List<ServerFile> receiveListRequest(SocketChannel socketChannel) throws IOException {
+
+        System.out.println("Receive list request!!!");
+
         var dataInputStream = getResponseStream(socketChannel);
-        int bytesNumber = dataInputStream.readInt(); // TODO check this
+        int bytesNumber = dataInputStream.readInt();
         int size = dataInputStream.readInt();
+
+        System.out.println("bytesNumber = " + bytesNumber);
+        System.out.println("size = " + size);
 
         if (size < 0) {
             return new ArrayList<>();
@@ -106,12 +140,27 @@ public class Client {
     }
 
     private void sendRequest(RequestType requestType, SocketChannel socketChannel, String path) throws IOException {
+        System.out.println("Send requestType = " + requestType.toCode() + ", path = " + path);
         ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         var dataOutputStream = new DataOutputStream(byteOutputStream);
-        dataOutputStream.writeInt(Integer.BYTES + path.length() * Character.BYTES);
+
         dataOutputStream.writeByte(requestType.toCode());
         dataOutputStream.writeUTF(path);
-        ByteBuffer buffer = ByteBuffer.wrap(byteOutputStream.toByteArray());
+
+        int bytesNumber = byteOutputStream.toByteArray().length;
+
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES + bytesNumber);
+        buffer.putInt(bytesNumber);
+
+        for (var b : byteOutputStream.toByteArray()) {
+            buffer.put(b);
+        }
+
+        System.out.println("path length = " + path.length());
+        System.out.println("bytes number = " + byteOutputStream.toByteArray().length
+                + ", but found = " + bytesNumber);
+
+        buffer.flip();
 
         while (buffer.hasRemaining()) {
             socketChannel.write(buffer);

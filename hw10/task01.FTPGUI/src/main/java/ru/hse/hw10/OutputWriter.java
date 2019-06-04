@@ -9,15 +9,25 @@ import java.nio.channels.SocketChannel;
 
 public class OutputWriter implements Runnable {
 
+    private static final int TIMEOUT = 1000;
+
     @NotNull private Selector outputWriterSelector;
 
     public OutputWriter(@NotNull Selector outputWriterSelector) {
         this.outputWriterSelector = outputWriterSelector;
     }
 
-    private void processList(ClientData data, SelectionKey key) {
+    private void writeToChannel(@NotNull SelectionKey key) {
+        var data = (ClientData) key.attachment();
+        System.out.println("TRY OT WRITE to channel: is Finished = " + data.isFinished());
         if (data.isFinished()) {
-            key.cancel();
+            try {
+                key.cancel();
+                key.channel().close();
+                data.close();
+            } catch (IOException ignore) {
+                // TODO handle me
+            }
             return;
         }
         var buffer = data.getBuffer();
@@ -29,40 +39,14 @@ public class OutputWriter implements Runnable {
         }
     }
 
-    private void processGet(ClientData data) {
-        String path = data.getPath();
-    }
-
-    private void writeToChannel(SelectionKey key) {
-        var data = (ClientData) key.attachment();
-        switch (data.getRequestType()) {
-            case LIST:
-                processList(data, key);
-                break;
-            case GET:
-                processGet(data);
-                break;
-        }
-    }
-
-    private int select() {
-        int lastSelect;
-        try {
-            lastSelect = outputWriterSelector.select();
-        } catch (IOException ignored) {
-            // TODO handle me
-            lastSelect = 0;
-        }
-        return lastSelect;
-    }
-
     @Override
     public void run() {
-        while (true) {
-            if (select() == 0) {
-                continue;
+        System.out.println("RUN OUT writer???");
+        while (!Thread.interrupted()) {
+            if (Server.select(outputWriterSelector) == 0) {
+                continue; // TODO remove duplicate code
             }
-            var selectedKeys=  outputWriterSelector.selectedKeys();
+            var selectedKeys = outputWriterSelector.selectedKeys();
             var iterator = selectedKeys.iterator();
             while (iterator.hasNext()) {
                 var key = iterator.next();
@@ -71,6 +55,11 @@ public class OutputWriter implements Runnable {
                 }
                 iterator.remove();
             }
+        }
+        try {
+            outputWriterSelector.close();
+        } catch (IOException ignore) {
+            // TODO handle me
         }
     }
 }
