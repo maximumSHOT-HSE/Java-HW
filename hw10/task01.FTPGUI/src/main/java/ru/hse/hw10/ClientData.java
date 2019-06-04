@@ -22,7 +22,7 @@ import java.util.Objects;
  * Finally, the sequence of bytes associated with
  * string provided by client.
  */
-public class ClientData implements Closeable {
+public class ClientData {
 
     private static final int BLOCK_SIZE = 4096;
     private static final int ERROR_CODE = -1;
@@ -234,10 +234,5 @@ public class ClientData implements Closeable {
             buffer.flip();
         }
         return false;
-    }
-
-    @Override
-    public void close() throws IOException {
-        answerInputStream.close();
     }
 }

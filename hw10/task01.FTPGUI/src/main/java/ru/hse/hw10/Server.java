@@ -25,13 +25,23 @@ public class Server {
     @NotNull private Selector outputWriterSelector;
     @NotNull private Lock outputWriterSelectorLock = new ReentrantLock();
 
-    void start() throws IOException {
+    public void start() throws IOException {
         inputListenerSelector = Selector.open();
         outputWriterSelector = Selector.open();
         inputListenerService.submit(new InputListener(inputListenerSelector, inputListenerSelectorLock,
                 outputWriterSelector, outputWriterSelectorLock, threadPool));
         outputWriterService.submit(new OutputWriter(outputWriterSelector));
         acceptReceiverService.submit(new AcceptReceiver(inputListenerSelector, inputListenerSelectorLock));
+    }
+
+    public void stop() throws IOException {
+        acceptReceiverService.shutdown();
+        inputListenerService.shutdown();
+        outputWriterService.shutdown();
+        threadPool.shutdown();
+        inputListenerSelector.close();
+        outputWriterSelector.close();
+        System.out.println("STOP!!!");
     }
 
     public static void main(String[] args) {
