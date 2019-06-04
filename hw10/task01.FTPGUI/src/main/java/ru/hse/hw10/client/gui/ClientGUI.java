@@ -30,25 +30,26 @@ import java.util.concurrent.Executors;
 /** Activity for walking the file tree and downloading files */
 public class ClientGUI {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private Client client;
+    private final Button downloadButton = new Button("Download");
+    private final Button enterButton = new Button("Enter");
+    private final Button backButton = new Button("Back");
     private ObservableList<ServerFile> files;
-    private Button downloadButton = new Button("Download");
-    private Button enterButton = new Button("Enter");
-    private Button backButton = new Button("Back");
-    private ServerFile selectedFile;
     private Label filesLabel;
-    private Path currentPath;
     private ListView<ServerFile> filesListView;
+    private Client client;
+    private ServerFile selectedFile;
+    private Path currentPath;
 
     public ClientGUI(@NotNull Stage stage, @NotNull String ip, @NotNull String port) {
         try {
             client = getClient(ip, port);
-        } catch (UnknownHostException e) {
+        } catch (UnknownHostException | IllegalArgumentException e) {
             e.printStackTrace();
+            return;
         }
 
         files = FXCollections.observableArrayList(client.executeList("."));
-        currentPath = Paths.get("");
+        currentPath = Paths.get(".");
         filesLabel = new Label("Current dir: \"\"");
 
         filesListView = new ListView<>(files);
@@ -84,16 +85,16 @@ public class ClientGUI {
     }
 
     private Client getClient(@NotNull String ip, @NotNull String port) throws UnknownHostException {
-        int intPort;
+        int portAsInt;
         try {
-            intPort = Integer.valueOf(port);
-            if (intPort >= 65536 || intPort < 0) {
-                throw new RuntimeException("wrong port");
+            portAsInt = Integer.valueOf(port);
+            if (portAsInt >= 65536 || portAsInt < 0) {
+                throw new IllegalArgumentException("port should be a number between 0 and 65536");
             }
         } catch (NumberFormatException exception) {
-            throw new RuntimeException("number format exc");
+            throw new IllegalAccessError("port should be a number between 0 and 65536");
         }
-        return new Client(ip, intPort);
+        return new Client(ip, portAsInt);
     }
 
     private void fileChanged(ObservableValue<? extends ServerFile> observable, @Nullable ServerFile oldValue, @Nullable ServerFile newValue) {
@@ -119,7 +120,6 @@ public class ClientGUI {
         filesLabel.setText("Current dir: " + path);
         backButton.setDisable(false);
         files.setAll(result);
-        filesListView.refresh();
     }
 
     private void onDownloadButtonClicked() {
@@ -150,12 +150,14 @@ public class ClientGUI {
     }
 
     private void onBackButtonClicked() {
-        if (currentPath.getParent() == null) {
-            return; // TODO idti  v koren'
-        }
+        assert currentPath != null && currentPath.getParent() != null;
+
         currentPath = currentPath.getParent();
+        if (currentPath.getParent() == null) {
+            backButton.setDisable(true);
+        }
+
         filesLabel.setText("Current dir: " + currentPath.toString());
         files.setAll(client.executeList(currentPath.toString()));
-        filesListView.refresh();
     }
 }
