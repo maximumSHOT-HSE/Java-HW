@@ -9,8 +9,6 @@ import java.nio.channels.SocketChannel;
 
 public class OutputWriter implements Runnable {
 
-    private static final int TIMEOUT = 1000;
-
     @NotNull private Selector outputWriterSelector;
 
     public OutputWriter(@NotNull Selector outputWriterSelector) {
@@ -19,15 +17,9 @@ public class OutputWriter implements Runnable {
 
     private void writeToChannel(@NotNull SelectionKey key) {
         var data = (ClientData) key.attachment();
-        System.out.println("TRY OT WRITE to channel: is Finished = " + data.isFinished());
+        System.out.println("TRY TO WRITE to channel: is Finished = " + data.isFinished());
         if (data.isFinished()) {
-            try {
-                key.cancel();
-                key.channel().close();
-                data.close();
-            } catch (IOException ignore) {
-                // TODO handle me
-            }
+            key.cancel();
             return;
         }
         var buffer = data.getBuffer();

@@ -46,17 +46,14 @@ public class AcceptReceiver implements Runnable {
                 // TODO handle me
             }
             var data = new ClientData();
-            SelectionKey key;
             try {
                 inputListenerSelectorLock.lock();
-                key = socketChannel.register(inputListenerSelector, SelectionKey.OP_READ, data);
+                socketChannel.register(inputListenerSelector, SelectionKey.OP_READ, data);
             } catch (ClosedChannelException e) {
                 // TODO handle me
-                continue;
             } finally {
                 inputListenerSelectorLock.unlock();
             }
-            key.interestOps(SelectionKey.OP_READ);
         }
     }
 }

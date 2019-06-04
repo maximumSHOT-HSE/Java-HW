@@ -61,8 +61,9 @@ public class ThreadPoolTask implements Runnable {
         }
         try {
             outputWriterSelectorLock.lock();
-            System.out.println("TRY TO REGISTER to out selector");
-            socketChannel.register(outputWriterSelector, SelectionKey.OP_WRITE, data);
+            System.out.println("TRY TO REGISTER");
+            socketChannel.register(outputWriterSelector,
+                    SelectionKey.OP_WRITE, data);
         } catch (ClosedChannelException ignore) {
             // TODO handle me
         } finally {

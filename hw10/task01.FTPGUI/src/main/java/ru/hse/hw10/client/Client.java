@@ -41,6 +41,8 @@ public class Client {
             int type = scanner.nextInt();
             String path = scanner.nextLine().strip();
 
+            System.out.println("type = " + type + ", path = " + path);
+
             if (type == RequestType.LIST_REQUEST.toCode()) {
                 var list = client.executeList(path);
                 System.out.println("List: size = " + list.size());
@@ -53,6 +55,7 @@ public class Client {
                 var file = client.executeGet(path);
                 System.out.println("Get: size = " + file.length);
                 System.out.println(Arrays.toString(file));
+                System.out.println(new String(file));
             }
         }
 
@@ -70,7 +73,7 @@ public class Client {
     private byte[] receiveGetRequest(SocketChannel socketChannel) throws IOException {
         var dataInputStream = getResponseStream(socketChannel);
         int bytesNumber = dataInputStream.readInt(); // TODO
-        long size = dataInputStream.readLong();
+        int size = dataInputStream.readInt();
         if (size < 0) {
             return new byte[0];
         }
