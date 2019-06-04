@@ -4,17 +4,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServerFile {
 
-    @NotNull private String name;
-    private boolean isDirectory;
+    @NotNull private final String name;
+    @NotNull private final String path;
+    private final boolean isDirectory;
 
-    public ServerFile(@NotNull String name, boolean isDirectory) {
-        this.name = name;
+    public ServerFile(@NotNull String path, boolean isDirectory) {
+        String[] splits = path.split("/");
+        this.name = splits[splits.length - 1];
+        this.path = path;
         this.isDirectory = isDirectory;
     }
 
     @NotNull
     public String getName() {
         return name;
+    }
+
+    @NotNull
+    public String getPath() {
+        return path;
     }
 
     public boolean isDirectory() {

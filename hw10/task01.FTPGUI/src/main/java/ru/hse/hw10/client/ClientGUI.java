@@ -1,22 +1,34 @@
 package ru.hse.hw10.client;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClientGUI extends Application {
-    TextArea logging;
-    FakeClient client = new FakeClient();
+    private FakeClient client = new FakeClient();
+    private ObservableList<ServerFile> files;
+    private Button downloadButton = new Button("Download");
+    private Button enterButton = new Button("Enter");
+    private Button backButton = new Button("Back");
+    private ServerFile currentFile;
 
     public static void main(String[] args) {
         launch(args);
@@ -24,53 +36,35 @@ public class ClientGUI extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Create the TextArea
-        logging = new TextArea();
-        logging.setMaxWidth(300);
-        logging.setMaxHeight(150);
-
-        // Create the Labels
         Label filesLabel = new Label("List files: ");
 
-        // Create the Lists for the ListViews
-        ObservableList<ServerFile> files = FXCollections.observableArrayList(client.executeList(""));
+        files = FXCollections.observableArrayList(client.executeList(""));
 
-        // Create the ListView for the seasons
         ListView<ServerFile> filesListView = new ListView<>(files);
-        // Set the Orientation of the ListView
         filesListView.setOrientation(Orientation.VERTICAL);
-        // Set the Size of the ListView
-        filesListView.setPrefSize(120, 100);
+        filesListView.setPrefSize(200, 200);
         filesListView.setCellFactory(new FileCellFactory());
 
-        // Update the TextArea when the selected season changes
-        filesListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ServerFile>()
-        {
-            public void changed(ObservableValue<? extends ServerFile> ov,
-                                final ServerFile oldvalue, final ServerFile newvalue)
-            {
-                fileChanged(ov, oldvalue, newvalue);
-            }});
+        filesListView.getSelectionModel().selectedItemProperty().addListener(this::fileChanged);
 
+        VBox fileSelection = new VBox();
+        fileSelection.setSpacing(10);
+        fileSelection.getChildren().addAll(filesLabel, filesListView);
 
-        // Create the Season VBox
-        VBox seasonSelection = new VBox();
-        // Set Spacing to 10 pixels
-        seasonSelection.setSpacing(10);
-        // Add the Label and the List to the VBox
-        seasonSelection.getChildren().addAll(filesLabel,filesListView);
+        downloadButton.setDisable(true);
+        enterButton.setDisable(true);
 
-        // Create the GridPane
+        enterButton.setOnAction(event -> onEnterButtonClicked());
+        downloadButton.setOnAction(event -> onDownloadButtonClicked());
+
         GridPane pane = new GridPane();
-        // Set the horizontal and vertical gaps between children
         pane.setHgap(10);
         pane.setVgap(5);
-        // Add the Season List at position 0
-        pane.addColumn(0, seasonSelection);
-        // Add the TextArea at position 2
-        pane.addColumn(1, logging);
+        pane.addColumn(0, fileSelection);
+        pane.addColumn(1, downloadButton);
+        pane.addColumn(2, enterButton);
+        pane.addColumn(3, backButton);
 
-        // Set the Style-properties of the GridPane
         pane.setStyle("-fx-padding: 10;" +
                               "-fx-border-style: solid inside;" +
                               "-fx-border-width: 2;" +
@@ -78,22 +72,43 @@ public class ClientGUI extends Application {
                               "-fx-border-radius: 5;" +
                               "-fx-border-color: blue;");
 
-        // Create the Scene
         Scene scene = new Scene(pane);
-        // Add the Scene to the Stage
         stage.setScene(scene);
-        // Set the Title
         stage.setTitle("FTPGUI");
-        // Display the Stage
         stage.show();
     }
 
-    // Method to display the Season, which has been changed
-    public void fileChanged(ObservableValue<? extends ServerFile> observable, ServerFile oldValue, ServerFile newValue)
-    {
-        String oldText = oldValue == null ? "null" : oldValue.getName();
-        String newText = newValue == null ? "null" : newValue.getName();
+    public void fileChanged(ObservableValue<? extends ServerFile> observable, ServerFile oldValue, ServerFile newValue) {
+        if (newValue == null) {
+            return;
+        }
+        if (newValue.isDirectory()) {
+            downloadButton.setDisable(true);
+            enterButton.setDisable(false);
+        } else {
+            downloadButton.setDisable(false);
+            enterButton.setDisable(true);
+        }
+        currentFile = newValue;
+    }
 
-        logging.appendText("Season changed: old = " + oldText + ", new = " + newText + "\n");
+    private void onEnterButtonClicked() {
+        assert currentFile.isDirectory();
+
+        List<ServerFile> result = client.executeList(currentFile.getPath());
+        files.setAll(result);
+    }
+
+    private void onDownloadButtonClicked() {
+        Thread thread = new Thread(() -> {
+            Path path = Paths.get(currentFile.getPath());
+            byte[] result = client.executeGet(currentFile.getPath());
+            try {
+                Files.write(path, result);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 }
