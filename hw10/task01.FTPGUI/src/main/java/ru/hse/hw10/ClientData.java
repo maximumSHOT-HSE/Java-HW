@@ -11,12 +11,14 @@ import java.util.Objects;
 
 /**
  * Storage for client's request and
- * answer for it: file path on server's side
+ * answer for it: input steam
+ * associated with the file on server's side
  * which should be downloaded or listing of
  * current server's directory.
  *
  * Request format in bytes
- * Firstly, the number of byres is int variable
+ * Firstly, the number of bytes in package
+ * is integer variable
  * Secondly, one byte for request type
  * Finally, the sequence of bytes associated with
  * string provided by client.
@@ -72,7 +74,7 @@ public class ClientData {
     /*
     * Determines the number of bytes in request package
     */
-    private int getBytesNumber() { // TODO develop adequate converting from bytes to int
+    private int getBytesNumber() {
         byte[] helper = new byte[Integer.BYTES];
         for (int i = 0; i < Integer.BYTES; i++) {
             helper[i] = request.get(i);
@@ -88,17 +90,17 @@ public class ClientData {
     /**
      * Determines whether request package has been received fully or not
      *
-     * @return true if package has been receive fully and false otherwise
+     * @return true if package has been received fully and false otherwise
      */
     public boolean isFull() {
         Server.LOGGER.info("is full.");
         Server.LOGGER.info("sz = " + request.size());
-        if (request.size() < 4) {
+        if (request.size() < Integer.BYTES) {
             return false;
         }
         int bytesNumber = getBytesNumber();
         Server.LOGGER.info("bytesNumber = " + bytesNumber);
-        return request.size() == bytesNumber + 4;
+        return request.size() == bytesNumber + Integer.BYTES;
     }
 
     /**
@@ -107,8 +109,7 @@ public class ClientData {
      *
      * @return the request package in form of byte array.
      */
-    public byte[] getRequest() {
-        // TODO modify code
+    @NotNull public byte[] getRequest() {
         Server.LOGGER.info("get request : ");
         byte[] bytes = new byte[request.size()];
         for (int i = 0; i < request.size(); i++) {
@@ -124,14 +125,6 @@ public class ClientData {
 
     public void setPath(@NotNull String path) {
         this.path = path;
-    }
-
-    @NotNull public RequestType getRequestType() {
-        return requestType;
-    }
-
-    @NotNull public String getPath() {
-        return path;
     }
 
     /*
@@ -170,6 +163,9 @@ public class ClientData {
      * will be returned, otherwise null will be returned.
      */
     @Nullable private File getFileByPath() {
+        if (path == null) {
+            return null;
+        }
         File file = new File(path);
         return file.exists() ? file : null;
     }
@@ -184,8 +180,10 @@ public class ClientData {
         var byteArrayOutputStream = new ByteArrayOutputStream();
         var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         var childFiles = file.listFiles();
-        for (var child : childFiles) {
-            Server.LOGGER.info(child.getName() + " is dir = " + child.isDirectory());
+        if (childFiles != null) {
+            for (var child : childFiles) {
+                Server.LOGGER.info(child.getName() + " is dir = " + child.isDirectory());
+            }
         }
         try {
             dataOutputStream.writeInt(Objects.requireNonNull(childFiles).length);
@@ -194,7 +192,6 @@ public class ClientData {
                 dataOutputStream.writeBoolean(childFile.isDirectory());
             }
         } catch (IOException ignored) {
-            // TODO handle me
         }
         remainingBytesNumber = byteArrayOutputStream.toByteArray().length;
         Server.LOGGER.info("total number of useful bytes = " + remainingBytesNumber);
@@ -203,7 +200,7 @@ public class ClientData {
         buffer.flip();
     }
 
-    public void processGet() {
+    private void processGet() {
         Server.LOGGER.info("Client.processGet()");
         File file = getFileByPath();
         if (file == null || file.isDirectory()) {
@@ -217,7 +214,8 @@ public class ClientData {
             processError();
             return;
         }
-        /* to simplify task we will assume that file is not too long,
+        /*
+         * to simplify task we will assume that file is not too long,
          * hence int variable can be used to store file size.
          */
         remainingBytesNumber = (int) file.length();
@@ -237,13 +235,12 @@ public class ClientData {
      * Otherwise, true will be returned. Moreover, in last case
      * if buffer has not any byte write to a channel then
      * extra bytes will be moved to the buffer. After that
-     * buffer will be in correct state.
+     * buffer will be in a correct state.
      *
      * @return true if answer for the request has been provided fully
      * and false otherwise.
      */
     public boolean isFinished() {
-//        System.out.println("rem = " + remainingBytesNumber + " had rem = " + buffer.hasRemaining());
         if (!buffer.hasRemaining()) {
             if (remainingBytesNumber == 0) {
                 return true;
@@ -252,12 +249,10 @@ public class ClientData {
             while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
                 try {
                     byte b = answerInputStream.readByte();
-                    Server.LOGGER.info("byte = " + b + ", remain = " + remainingBytesNumber);
+                    Server.LOGGER.info("byte = " + b + ", remaining bytes number = " + remainingBytesNumber);
                     buffer.put(b);
-//                    buffer.put(answerInputStream.readByte());
                     remainingBytesNumber--;
                 } catch (IOException ignore) {
-                    // TODO handle me
                 }
             }
             buffer.flip();

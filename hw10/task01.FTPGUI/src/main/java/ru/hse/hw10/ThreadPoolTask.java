@@ -13,10 +13,10 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * Task for thread pool is parse client's
- * request and provide processed data for user.
- * OutputWriter will send right answer for user
+ * request and provide processed data for output
+ * writer which will send right answer for user
  * using processed request.
- * */
+ */
 public class ThreadPoolTask implements Runnable {
 
     @NotNull private ClientData data;
@@ -37,7 +37,7 @@ public class ThreadPoolTask implements Runnable {
 
     /*
     * Parsed request will be stored in the client data
-    * */
+    */
     private void parseRequest() throws IOException {
         Server.LOGGER.info("parse");
         var inputStream = new DataInputStream(new ByteArrayInputStream(data.getRequest()));

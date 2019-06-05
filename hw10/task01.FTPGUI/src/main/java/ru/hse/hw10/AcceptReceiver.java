@@ -9,6 +9,13 @@ import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * Server worker which binds server socket
+ * to the predefined port, accepts new
+ * request from clients and after client
+ * will be accepted then appropriate socket
+ * channel will be registered in input listener
+ */
 public class AcceptReceiver implements Runnable {
 
     private static final int PORT = 9999;

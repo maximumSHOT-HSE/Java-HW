@@ -11,7 +11,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+/**
+ * Simple FTP server, which allow to walk on
+ * server files tree and download files
+ */
 public class Server {
+
     @NotNull static final Logger LOGGER = Logger.getLogger("ServerLogger");
     private static final int TIMEOUT = 1000;
 
@@ -28,6 +33,11 @@ public class Server {
     @NotNull private Thread inputListenerThread;
     @NotNull private Thread outputWriterThread;
 
+    /**
+     * Start the server worker threads, namely
+     * accept receiver, input listener, output writer
+     * and thread pool
+     */
     public void start() throws IOException {
         inputListenerSelector = Selector.open();
         outputWriterSelector = Selector.open();
@@ -42,6 +52,11 @@ public class Server {
         acceptReceiverThread.start();
     }
 
+    /**
+     * Stops the server worker threads, namely
+     * accept receiver, input listener, output writer
+     * and thread pool
+     */
     public void stop() throws IOException {
         inputListenerThread.interrupt();
         outputWriterThread.interrupt();
@@ -65,6 +80,11 @@ public class Server {
         setupLogger();
     }
 
+    /**
+     * Executes non blocking version of select method
+     * of selector with defined timeout and returns zero
+     * in case of some problems related with IO
+     */
     public static int select(@NotNull Selector selector) {
         int lastSelect;
         try {

@@ -7,6 +7,11 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
+/**
+ * Server worker which sends answers for the client's
+ * requests and if answer has been provided fully
+ * then connection with such client will be closed
+ */
 public class OutputWriter implements Runnable {
 
     @NotNull private Selector outputWriterSelector;
@@ -27,7 +32,6 @@ public class OutputWriter implements Runnable {
         try {
             socketChannel.write(buffer);
         } catch (IOException ignore) {
-            // TODO handle me
         }
     }
 
@@ -36,7 +40,7 @@ public class OutputWriter implements Runnable {
         Server.LOGGER.info("run out writer");
         while (!Thread.interrupted()) {
             if (Server.select(outputWriterSelector) == 0) {
-                continue; // TODO remove duplicate code
+                continue;
             }
             var selectedKeys = outputWriterSelector.selectedKeys();
             var iterator = selectedKeys.iterator();
@@ -51,7 +55,6 @@ public class OutputWriter implements Runnable {
         try {
             outputWriterSelector.close();
         } catch (IOException ignore) {
-            // TODO handle me
         }
     }
 }

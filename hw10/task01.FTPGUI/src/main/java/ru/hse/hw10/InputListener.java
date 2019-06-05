@@ -11,6 +11,12 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * Server worker which reads request until
+ * full request will be received. After that
+ * appropriate request task will be submitted
+ * to the thread pool.
+ */
 public class InputListener implements Runnable {
 
     private static final int BLOCK_SIZE = 4096;
@@ -36,15 +42,13 @@ public class InputListener implements Runnable {
         this.threadPool = threadPool;
     }
 
-    private void readFromChannel(SelectionKey key) throws IOException {
+    private void readFromChannel(@NotNull SelectionKey key) throws IOException {
         var data = (ClientData) key.attachment();
         buffer.clear();
         ((SocketChannel) key.channel()).read(buffer);
         buffer.flip();
         while (buffer.hasRemaining()) {
-            byte b = buffer.get();
-//            data.append(buffer.get());
-            data.append(b);
+            data.append(buffer.get());
         }
         if (data.isFull()) {
             key.cancel();
@@ -82,7 +86,6 @@ public class InputListener implements Runnable {
         try {
             inputListenerSelector.close();
         } catch (IOException ignore) {
-            // TODO handle me
         }
     }
 }
