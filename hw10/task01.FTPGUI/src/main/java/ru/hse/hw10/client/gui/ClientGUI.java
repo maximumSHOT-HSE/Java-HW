@@ -146,10 +146,12 @@ public class ClientGUI {
 
     private void onEnterButtonClicked() {
         assert selectedFile.isDirectory();
-
-        currentPath = currentPath.resolve(selectedFile.getName());
-        String path = currentPath.toString();
-        List<ServerFile> result = client.executeList(path);
+        Path path = currentPath.resolve(selectedFile.getName());
+        List<ServerFile> result = client.executeList(path.toString());
+        if (result == null) {
+            return;
+        }
+        currentPath = path;
         filesLabel.setText("Current dir: " + path);
         backButton.setDisable(false);
         files.setAll(result);
@@ -162,6 +164,9 @@ public class ClientGUI {
             Path path = currentPath.resolve(selectedFile.getName());
             byte[] fileBytes = client.executeGet(path.toString());
             try {
+                if (fileBytes == null) {
+                    throw new IllegalStateException("file does not exist");
+                }
                 if (path.getParent() != null) {
                     Files.createDirectories(path.getParent());
                 }
@@ -170,7 +175,7 @@ public class ClientGUI {
                 }
                 Files.createFile(path);
                 Files.write(path, fileBytes);
-            } catch (IOException exception) {
+            } catch (IOException | IllegalStateException exception) {
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Error");

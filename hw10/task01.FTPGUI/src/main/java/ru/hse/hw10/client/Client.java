@@ -47,7 +47,9 @@ public class Client {
      * Executes get file by specified path request
      *
      * @param path path to get file from
-     * @return file content represented by bytes
+     * @return file content represented by bytes or null if path associated
+     * with nonexistent file or path not pointing to a file which
+     * can be downloaded from the server
      */
     public byte[] executeGet(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
@@ -63,7 +65,9 @@ public class Client {
      * Executes list directory request
      *
      * @param path path of the directory to list files from
-     * @return list of the files
+     * @return list of the files or null if given path associated
+     * with nonexistent directory or path not pointing to a directory
+     * which can listed
      */
     public List<ServerFile> executeList(@NotNull String path) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
@@ -80,7 +84,7 @@ public class Client {
         int bytesNumber = dataInputStream.readInt();
         int size = dataInputStream.readInt();
         if (size < 0) {
-            return new byte[0];
+            return null;
         }
         byte[] fileContent = dataInputStream.readAllBytes();
         if (Integer.BYTES + fileContent.length != bytesNumber) {
@@ -130,7 +134,7 @@ public class Client {
         logger.info("size = " + size);
 
         if (size < 0) {
-            return new ArrayList<>();
+            return null;
         }
         List<ServerFile> serverFiles = new ArrayList<>();
         for (int i = 0; i < size; i++) {
