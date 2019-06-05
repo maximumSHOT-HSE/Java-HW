@@ -12,7 +12,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 public class Server {
-    static final Logger LOGGER = Logger.getLogger("ServerLogger");
+    @NotNull static final Logger LOGGER = Logger.getLogger("ServerLogger");
     private static final int TIMEOUT = 1000;
 
     @NotNull private ExecutorService threadPool = Executors.newFixedThreadPool(

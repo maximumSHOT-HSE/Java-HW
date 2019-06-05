@@ -1,5 +1,6 @@
 package ru.hse.hw10;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.hse.hw10.client.Client;
@@ -19,6 +20,7 @@ class ServerTest {
 
     private static final int PORT = 9999;
     private static String serverIP;
+    private static Server server;
 
     @BeforeAll
     static void setUp() throws IOException {
@@ -28,7 +30,13 @@ class ServerTest {
         } catch (Exception ignored) {
             serverIP = "UNKNOWN";
         }
-        new Server().start();
+        server = new Server();
+        server.start();
+    }
+
+    @AfterAll
+    static void free() throws IOException {
+        server.stop();
     }
 
     @Test
