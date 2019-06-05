@@ -2,9 +2,9 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2019-06-05T00:10:08.450971Z</date>
-  <millis>1559693408450</millis>
-  <nanos>971000</nanos>
+  <date>2019-06-05T00:34:52.812641Z</date>
+  <millis>1559694892812</millis>
+  <nanos>641000</nanos>
   <sequence>0</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -14,9 +14,9 @@
   <message>Send requestType = 1, path = .</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:08.459579Z</date>
-  <millis>1559693408459</millis>
-  <nanos>579000</nanos>
+  <date>2019-06-05T00:34:52.820679Z</date>
+  <millis>1559694892820</millis>
+  <nanos>679000</nanos>
   <sequence>1</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -26,9 +26,9 @@
   <message>path length = 1</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:08.463616Z</date>
-  <millis>1559693408463</millis>
-  <nanos>616000</nanos>
+  <date>2019-06-05T00:34:52.823249Z</date>
+  <millis>1559694892823</millis>
+  <nanos>249000</nanos>
   <sequence>2</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -38,9 +38,9 @@
   <message>bytes number = 4, but found = 4</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:08.464668Z</date>
-  <millis>1559693408464</millis>
-  <nanos>668000</nanos>
+  <date>2019-06-05T00:34:52.824054Z</date>
+  <millis>1559694892824</millis>
+  <nanos>54000</nanos>
   <sequence>3</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -50,45 +50,45 @@
   <message>Receive list request</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:09.212016Z</date>
-  <millis>1559693409212</millis>
-  <nanos>16000</nanos>
+  <date>2019-06-05T00:34:53.589204Z</date>
+  <millis>1559694893589</millis>
+  <nanos>204000</nanos>
   <sequence>4</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>getResponseStream</method>
   <thread>15</thread>
-  <message>rem bytes number = 183, head = [0, 0, 0, -73]</message>
+  <message>rem bytes number = 213, head = [0, 0, 0, -43]</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:09.216063Z</date>
-  <millis>1559693409216</millis>
-  <nanos>63000</nanos>
+  <date>2019-06-05T00:34:53.595567Z</date>
+  <millis>1559694893595</millis>
+  <nanos>567000</nanos>
   <sequence>5</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>receiveListRequest</method>
   <thread>15</thread>
-  <message>bytesNumber = 183</message>
+  <message>bytesNumber = 213</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:09.216513Z</date>
-  <millis>1559693409216</millis>
-  <nanos>513000</nanos>
+  <date>2019-06-05T00:34:53.595943Z</date>
+  <millis>1559694893595</millis>
+  <nanos>943000</nanos>
   <sequence>6</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>receiveListRequest</method>
   <thread>15</thread>
-  <message>size = 15</message>
+  <message>size = 17</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:12.755741Z</date>
-  <millis>1559693412755</millis>
-  <nanos>741000</nanos>
+  <date>2019-06-05T00:34:55.709284Z</date>
+  <millis>1559694895709</millis>
+  <nanos>284000</nanos>
   <sequence>7</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -98,9 +98,9 @@
   <message>Send requestType = 1, path = ./src</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:12.756063Z</date>
-  <millis>1559693412756</millis>
-  <nanos>63000</nanos>
+  <date>2019-06-05T00:34:55.709536Z</date>
+  <millis>1559694895709</millis>
+  <nanos>536000</nanos>
   <sequence>8</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -110,9 +110,9 @@
   <message>path length = 5</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:12.756196Z</date>
-  <millis>1559693412756</millis>
-  <nanos>196000</nanos>
+  <date>2019-06-05T00:34:55.709675Z</date>
+  <millis>1559694895709</millis>
+  <nanos>675000</nanos>
   <sequence>9</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -122,9 +122,9 @@
   <message>bytes number = 8, but found = 8</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:12.756405Z</date>
-  <millis>1559693412756</millis>
-  <nanos>405000</nanos>
+  <date>2019-06-05T00:34:55.709872Z</date>
+  <millis>1559694895709</millis>
+  <nanos>872000</nanos>
   <sequence>10</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -134,9 +134,9 @@
   <message>Receive list request</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:13.220393Z</date>
-  <millis>1559693413220</millis>
-  <nanos>393000</nanos>
+  <date>2019-06-05T00:34:56.598835Z</date>
+  <millis>1559694896598</millis>
+  <nanos>835000</nanos>
   <sequence>11</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -146,9 +146,9 @@
   <message>rem bytes number = 18, head = [0, 0, 0, 18]</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:13.221130Z</date>
-  <millis>1559693413221</millis>
-  <nanos>130000</nanos>
+  <date>2019-06-05T00:34:56.599678Z</date>
+  <millis>1559694896599</millis>
+  <nanos>678000</nanos>
   <sequence>12</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -158,9 +158,9 @@
   <message>bytesNumber = 18</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:13.221385Z</date>
-  <millis>1559693413221</millis>
-  <nanos>385000</nanos>
+  <date>2019-06-05T00:34:56.599889Z</date>
+  <millis>1559694896599</millis>
+  <nanos>889000</nanos>
   <sequence>13</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -170,9 +170,9 @@
   <message>size = 2</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.051559Z</date>
-  <millis>1559693415051</millis>
-  <nanos>559000</nanos>
+  <date>2019-06-05T00:34:58.125199Z</date>
+  <millis>1559694898125</millis>
+  <nanos>199000</nanos>
   <sequence>14</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -182,9 +182,9 @@
   <message>Send requestType = 1, path = ./src/test</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.051847Z</date>
-  <millis>1559693415051</millis>
-  <nanos>847000</nanos>
+  <date>2019-06-05T00:34:58.125459Z</date>
+  <millis>1559694898125</millis>
+  <nanos>459000</nanos>
   <sequence>15</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -194,9 +194,9 @@
   <message>path length = 10</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.051972Z</date>
-  <millis>1559693415051</millis>
-  <nanos>972000</nanos>
+  <date>2019-06-05T00:34:58.125600Z</date>
+  <millis>1559694898125</millis>
+  <nanos>600000</nanos>
   <sequence>16</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -206,9 +206,9 @@
   <message>bytes number = 13, but found = 13</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.052264Z</date>
-  <millis>1559693415052</millis>
-  <nanos>264000</nanos>
+  <date>2019-06-05T00:34:58.125764Z</date>
+  <millis>1559694898125</millis>
+  <nanos>764000</nanos>
   <sequence>17</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -218,9 +218,9 @@
   <message>Receive list request</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.223385Z</date>
-  <millis>1559693415223</millis>
-  <nanos>385000</nanos>
+  <date>2019-06-05T00:34:58.602202Z</date>
+  <millis>1559694898602</millis>
+  <nanos>202000</nanos>
   <sequence>18</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -230,9 +230,9 @@
   <message>rem bytes number = 23, head = [0, 0, 0, 23]</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.223909Z</date>
-  <millis>1559693415223</millis>
-  <nanos>909000</nanos>
+  <date>2019-06-05T00:34:58.602888Z</date>
+  <millis>1559694898602</millis>
+  <nanos>888000</nanos>
   <sequence>19</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -242,9 +242,9 @@
   <message>bytesNumber = 23</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:15.224049Z</date>
-  <millis>1559693415224</millis>
-  <nanos>49000</nanos>
+  <date>2019-06-05T00:34:58.603053Z</date>
+  <millis>1559694898603</millis>
+  <nanos>53000</nanos>
   <sequence>20</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -254,9 +254,9 @@
   <message>size = 2</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:16.411597Z</date>
-  <millis>1559693416411</millis>
-  <nanos>597000</nanos>
+  <date>2019-06-05T00:34:59.797122Z</date>
+  <millis>1559694899797</millis>
+  <nanos>122000</nanos>
   <sequence>21</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -266,9 +266,9 @@
   <message>Send requestType = 1, path = ./src/test/resources</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:16.412373Z</date>
-  <millis>1559693416412</millis>
-  <nanos>373000</nanos>
+  <date>2019-06-05T00:34:59.797343Z</date>
+  <millis>1559694899797</millis>
+  <nanos>343000</nanos>
   <sequence>22</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -278,9 +278,9 @@
   <message>path length = 20</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:16.412559Z</date>
-  <millis>1559693416412</millis>
-  <nanos>559000</nanos>
+  <date>2019-06-05T00:34:59.797469Z</date>
+  <millis>1559694899797</millis>
+  <nanos>469000</nanos>
   <sequence>23</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -290,9 +290,9 @@
   <message>bytes number = 23, but found = 23</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:16.412864Z</date>
-  <millis>1559693416412</millis>
-  <nanos>864000</nanos>
+  <date>2019-06-05T00:34:59.797662Z</date>
+  <millis>1559694899797</millis>
+  <nanos>662000</nanos>
   <sequence>24</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
@@ -302,166 +302,34 @@
   <message>Receive list request</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:17.226330Z</date>
-  <millis>1559693417226</millis>
-  <nanos>330000</nanos>
+  <date>2019-06-05T00:35:00.605213Z</date>
+  <millis>1559694900605</millis>
+  <nanos>213000</nanos>
   <sequence>25</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>getResponseStream</method>
   <thread>15</thread>
-  <message>rem bytes number = 27, head = [0, 0, 0, 27]</message>
+  <message>rem bytes number = 21, head = [0, 0, 0, 21]</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:17.227051Z</date>
-  <millis>1559693417227</millis>
-  <nanos>51000</nanos>
+  <date>2019-06-05T00:35:00.605732Z</date>
+  <millis>1559694900605</millis>
+  <nanos>732000</nanos>
   <sequence>26</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>receiveListRequest</method>
   <thread>15</thread>
-  <message>bytesNumber = 27</message>
+  <message>bytesNumber = 21</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:17.227376Z</date>
-  <millis>1559693417227</millis>
-  <nanos>376000</nanos>
+  <date>2019-06-05T00:35:00.605884Z</date>
+  <millis>1559694900605</millis>
+  <nanos>884000</nanos>
   <sequence>27</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>receiveListRequest</method>
-  <thread>15</thread>
-  <message>size = 3</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:23.892518Z</date>
-  <millis>1559693423892</millis>
-  <nanos>518000</nanos>
-  <sequence>28</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>sendRequest</method>
-  <thread>20</thread>
-  <message>Send requestType = 2, path = ./src/test/resources/tmp</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:23.893259Z</date>
-  <millis>1559693423893</millis>
-  <nanos>259000</nanos>
-  <sequence>29</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>sendRequest</method>
-  <thread>20</thread>
-  <message>path length = 24</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:23.893453Z</date>
-  <millis>1559693423893</millis>
-  <nanos>453000</nanos>
-  <sequence>30</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>sendRequest</method>
-  <thread>20</thread>
-  <message>bytes number = 27, but found = 27</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:24.234450Z</date>
-  <millis>1559693424234</millis>
-  <nanos>450000</nanos>
-  <sequence>31</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>getResponseStream</method>
-  <thread>20</thread>
-  <message>rem bytes number = 4, head = [0, 0, 0, 4]</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.003893Z</date>
-  <millis>1559693427003</millis>
-  <nanos>893000</nanos>
-  <sequence>32</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>sendRequest</method>
-  <thread>15</thread>
-  <message>Send requestType = 1, path = ./src/test</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.004163Z</date>
-  <millis>1559693427004</millis>
-  <nanos>163000</nanos>
-  <sequence>33</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>sendRequest</method>
-  <thread>15</thread>
-  <message>path length = 10</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.004284Z</date>
-  <millis>1559693427004</millis>
-  <nanos>284000</nanos>
-  <sequence>34</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>sendRequest</method>
-  <thread>15</thread>
-  <message>bytes number = 13, but found = 13</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.004460Z</date>
-  <millis>1559693427004</millis>
-  <nanos>460000</nanos>
-  <sequence>35</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>receiveListRequest</method>
-  <thread>15</thread>
-  <message>Receive list request</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.237224Z</date>
-  <millis>1559693427237</millis>
-  <nanos>224000</nanos>
-  <sequence>36</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>getResponseStream</method>
-  <thread>15</thread>
-  <message>rem bytes number = 23, head = [0, 0, 0, 23]</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.237844Z</date>
-  <millis>1559693427237</millis>
-  <nanos>844000</nanos>
-  <sequence>37</sequence>
-  <logger>ClientLogger</logger>
-  <level>INFO</level>
-  <class>ru.hse.hw10.client.Client</class>
-  <method>receiveListRequest</method>
-  <thread>15</thread>
-  <message>bytesNumber = 23</message>
-</record>
-<record>
-  <date>2019-06-05T00:10:27.238023Z</date>
-  <millis>1559693427238</millis>
-  <nanos>23000</nanos>
-  <sequence>38</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
@@ -470,46 +338,46 @@
   <message>size = 2</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:49.867722Z</date>
-  <millis>1559693449867</millis>
-  <nanos>722000</nanos>
-  <sequence>39</sequence>
+  <date>2019-06-05T00:35:02.413073Z</date>
+  <millis>1559694902413</millis>
+  <nanos>73000</nanos>
+  <sequence>28</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>sendRequest</method>
   <thread>15</thread>
-  <message>Send requestType = 1, path = ./src/test/resources</message>
+  <message>Send requestType = 1, path = ./src/test/resources/Dir1</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:49.868022Z</date>
-  <millis>1559693449868</millis>
-  <nanos>22000</nanos>
-  <sequence>40</sequence>
+  <date>2019-06-05T00:35:02.413413Z</date>
+  <millis>1559694902413</millis>
+  <nanos>413000</nanos>
+  <sequence>29</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>sendRequest</method>
   <thread>15</thread>
-  <message>path length = 20</message>
+  <message>path length = 25</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:49.868140Z</date>
-  <millis>1559693449868</millis>
-  <nanos>140000</nanos>
-  <sequence>41</sequence>
+  <date>2019-06-05T00:35:02.413518Z</date>
+  <millis>1559694902413</millis>
+  <nanos>518000</nanos>
+  <sequence>30</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>sendRequest</method>
   <thread>15</thread>
-  <message>bytes number = 23, but found = 23</message>
+  <message>bytes number = 28, but found = 28</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:49.868324Z</date>
-  <millis>1559693449868</millis>
-  <nanos>324000</nanos>
-  <sequence>42</sequence>
+  <date>2019-06-05T00:35:02.413644Z</date>
+  <millis>1559694902413</millis>
+  <nanos>644000</nanos>
+  <sequence>31</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
@@ -518,34 +386,34 @@
   <message>Receive list request</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:50.259145Z</date>
-  <millis>1559693450259</millis>
-  <nanos>145000</nanos>
-  <sequence>43</sequence>
+  <date>2019-06-05T00:35:02.607266Z</date>
+  <millis>1559694902607</millis>
+  <nanos>266000</nanos>
+  <sequence>32</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>getResponseStream</method>
   <thread>15</thread>
-  <message>rem bytes number = 36, head = [0, 0, 0, 36]</message>
+  <message>rem bytes number = 48, head = [0, 0, 0, 48]</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:50.259971Z</date>
-  <millis>1559693450259</millis>
-  <nanos>971000</nanos>
-  <sequence>44</sequence>
+  <date>2019-06-05T00:35:02.608218Z</date>
+  <millis>1559694902608</millis>
+  <nanos>218000</nanos>
+  <sequence>33</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>receiveListRequest</method>
   <thread>15</thread>
-  <message>bytesNumber = 36</message>
+  <message>bytesNumber = 48</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:50.260183Z</date>
-  <millis>1559693450260</millis>
-  <nanos>183000</nanos>
-  <sequence>45</sequence>
+  <date>2019-06-05T00:35:02.608393Z</date>
+  <millis>1559694902608</millis>
+  <nanos>393000</nanos>
+  <sequence>34</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
@@ -554,51 +422,146 @@
   <message>size = 4</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:56.243897Z</date>
-  <millis>1559693456243</millis>
-  <nanos>897000</nanos>
-  <sequence>46</sequence>
+  <date>2019-06-05T00:35:04.454022Z</date>
+  <millis>1559694904454</millis>
+  <nanos>22000</nanos>
+  <sequence>35</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>sendRequest</method>
   <thread>20</thread>
-  <message>Send requestType = 2, path = ./src/test/resources/tmp</message>
+  <message>Send requestType = 2, path = ./src/test/resources/Dir1/file1.txt</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:56.244189Z</date>
-  <millis>1559693456244</millis>
-  <nanos>189000</nanos>
-  <sequence>47</sequence>
+  <date>2019-06-05T00:35:04.454547Z</date>
+  <millis>1559694904454</millis>
+  <nanos>547000</nanos>
+  <sequence>36</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>sendRequest</method>
   <thread>20</thread>
-  <message>path length = 24</message>
+  <message>path length = 35</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:56.244343Z</date>
-  <millis>1559693456244</millis>
-  <nanos>343000</nanos>
-  <sequence>48</sequence>
+  <date>2019-06-05T00:35:04.454668Z</date>
+  <millis>1559694904454</millis>
+  <nanos>668000</nanos>
+  <sequence>37</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>sendRequest</method>
   <thread>20</thread>
-  <message>bytes number = 27, but found = 27</message>
+  <message>bytes number = 38, but found = 38</message>
 </record>
 <record>
-  <date>2019-06-05T00:10:57.266970Z</date>
-  <millis>1559693457266</millis>
-  <nanos>970000</nanos>
-  <sequence>49</sequence>
+  <date>2019-06-05T00:35:04.610688Z</date>
+  <millis>1559694904610</millis>
+  <nanos>688000</nanos>
+  <sequence>38</sequence>
   <logger>ClientLogger</logger>
   <level>INFO</level>
   <class>ru.hse.hw10.client.Client</class>
   <method>getResponseStream</method>
   <thread>20</thread>
-  <message>rem bytes number = 4, head = [0, 0, 0, 4]</message>
+  <message>rem bytes number = 28, head = [0, 0, 0, 28]</message>
 </record>
-</log>
+<record>
+  <date>2019-06-05T00:35:04.611701Z</date>
+  <millis>1559694904611</millis>
+  <nanos>701000</nanos>
+  <sequence>39</sequence>
+  <logger>ClientLogger</logger>
+  <level>SEVERE</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>executeGet</method>
+  <thread>20</thread>
+  <message>Unable to execute get request: Corrupted package</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:17.901471Z</date>
+  <millis>1559694917901</millis>
+  <nanos>471000</nanos>
+  <sequence>40</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>sendRequest</method>
+  <thread>15</thread>
+  <message>Send requestType = 1, path = ./src/test/resources</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:17.901761Z</date>
+  <millis>1559694917901</millis>
+  <nanos>761000</nanos>
+  <sequence>41</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>sendRequest</method>
+  <thread>15</thread>
+  <message>path length = 20</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:17.901890Z</date>
+  <millis>1559694917901</millis>
+  <nanos>890000</nanos>
+  <sequence>42</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>sendRequest</method>
+  <thread>15</thread>
+  <message>bytes number = 23, but found = 23</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:17.902048Z</date>
+  <millis>1559694917902</millis>
+  <nanos>48000</nanos>
+  <sequence>43</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>receiveListRequest</method>
+  <thread>15</thread>
+  <message>Receive list request</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:18.625687Z</date>
+  <millis>1559694918625</millis>
+  <nanos>687000</nanos>
+  <sequence>44</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>getResponseStream</method>
+  <thread>15</thread>
+  <message>rem bytes number = 21, head = [0, 0, 0, 21]</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:18.626282Z</date>
+  <millis>1559694918626</millis>
+  <nanos>282000</nanos>
+  <sequence>45</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>receiveListRequest</method>
+  <thread>15</thread>
+  <message>bytesNumber = 21</message>
+</record>
+<record>
+  <date>2019-06-05T00:35:18.626461Z</date>
+  <millis>1559694918626</millis>
+  <nanos>461000</nanos>
+  <sequence>46</sequence>
+  <logger>ClientLogger</logger>
+  <level>INFO</level>
+  <class>ru.hse.hw10.client.Client</class>
+  <method>receiveListRequest</method>
+  <thread>15</thread>
+  <message>size = 2</message>
+</record>

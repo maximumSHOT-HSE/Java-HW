@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,7 +52,7 @@ class ServerTest {
     }
 
     @Test
-    void testSimpleRequestSequence() throws UnknownHostException {
+    void testSimpleListRequestSequence() throws UnknownHostException {
         var client = new Client(serverIP, PORT);
         Map<String, Boolean> foundContent = new TreeMap<>();
         for (var file : client.executeList("src/test/resources")) {
@@ -70,7 +72,16 @@ class ServerTest {
         expectedContent.put("Subdir2", true);
         expectedContent.put("file1.txt", false);
         expectedContent.put("file2.txt", false);
+        assertEquals(expectedContent, foundContent);
     }
 
-
+    @Test
+    void testSimpleGetRequest() throws UnknownHostException {
+        var client = new Client(serverIP, PORT);
+        var answer = client.executeGet("src/test/resources/Dir1/file2.txt");
+        System.out.println(Arrays.toString(answer));
+        var foundContent = new String(answer, StandardCharsets.UTF_8);
+        var expectedContent = "HHello, I am the first file!";
+        assertEquals(expectedContent, foundContent);
+    }
 }

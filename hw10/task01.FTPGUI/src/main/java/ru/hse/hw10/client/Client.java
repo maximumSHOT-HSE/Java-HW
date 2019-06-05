@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -87,7 +88,10 @@ public class Client {
             return null;
         }
         byte[] fileContent = dataInputStream.readAllBytes();
-        if (Integer.BYTES + fileContent.length != bytesNumber) {
+        System.out.println("bytesNumber = " + bytesNumber);
+        System.out.println("bytes = " + new String(fileContent, StandardCharsets.UTF_8));
+        System.out.println("fileContent size = " + fileContent.length);
+        if (fileContent.length != bytesNumber) {
             throw new IOException("Corrupted package");
         }
         return fileContent;
