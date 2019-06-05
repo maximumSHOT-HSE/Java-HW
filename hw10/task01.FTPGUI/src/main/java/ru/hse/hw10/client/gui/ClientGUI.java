@@ -164,7 +164,6 @@ public class ClientGUI {
         executor.submit(() -> {
             Path path = currentPath.resolve(selectedFile.getName());
             byte[] fileBytes = client.executeGet(path.toString());
-            System.out.println("FOUND FILES = " + new String(fileBytes, StandardCharsets.UTF_8));
             try {
                 if (fileBytes == null) {
                     throw new IllegalStateException("file does not exist");
