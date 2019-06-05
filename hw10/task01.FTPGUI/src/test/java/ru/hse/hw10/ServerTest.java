@@ -9,11 +9,11 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ServerTest {
 
@@ -78,10 +78,86 @@ class ServerTest {
     @Test
     void testSimpleGetRequest() throws UnknownHostException {
         var client = new Client(serverIP, PORT);
-        var answer = client.executeGet("src/test/resources/Dir1/file2.txt");
-        System.out.println(Arrays.toString(answer));
+        var answer = client.executeGet("src/test/resources/Dir1/file1.txt");
         var foundContent = new String(answer, StandardCharsets.UTF_8);
-        var expectedContent = "HHello, I am the first file!";
+        var expectedContent = "Hello, I am the first file!";
         assertEquals(expectedContent, foundContent);
+    }
+
+    @Test
+    void testUnexistentFileGetRequest() throws UnknownHostException {
+        var client = new Client(serverIP, PORT);
+        assertNull(client.executeGet("src/test/resources/Dir1/filee2.txt"));
+    }
+
+    @Test
+    void testGetAfterNonexistentFileOrDirectoryAksed() throws UnknownHostException {
+        var client = new Client(serverIP, PORT);
+        Map<String, Boolean> foundContent = new TreeMap<>();
+        for (var file : client.executeList("src/test/resources")) {
+            foundContent.put(file.getName(), file.isDirectory());
+        }
+        Map<String, Boolean> expectedContent = new TreeMap<>();
+        expectedContent.put("Dir1", true);
+        expectedContent.put("TestDir", true);
+        assertEquals(expectedContent, foundContent);
+        assertNull(client.executeList("blablabla"));
+        assertNull(client.executeGet("src/test/resources/Dir1/filee2.txt"));
+        foundContent.clear();
+        for (var file : client.executeList("src/test/resources/Dir1")) {
+            foundContent.put(file.getName(), file.isDirectory());
+        }
+        expectedContent.clear();
+        expectedContent.put("Subdir1", true);
+        expectedContent.put("Subdir2", true);
+        expectedContent.put("file1.txt", false);
+        expectedContent.put("file2.txt", false);
+        assertEquals(expectedContent, foundContent);
+    }
+
+    @Test
+    void testMultiClientMode() throws InterruptedException {
+        var threads = new Thread[10];
+        for (int i = 0; i < 10; i++) {
+            threads[i] = new Thread(() -> {
+                Client client = null;
+                try {
+                    client = new Client(serverIP, PORT);
+                } catch (UnknownHostException ignore) {
+                    // simplify for testing
+                }
+                Map<String, Boolean> foundContent = new TreeMap<>();
+                assert client != null;
+                for (var file : client.executeList("src/test/resources")) {
+                    foundContent.put(file.getName(), file.isDirectory());
+                }
+                Map<String, Boolean> expectedContent = new TreeMap<>();
+                expectedContent.put("Dir1", true);
+                expectedContent.put("TestDir", true);
+                assertEquals(expectedContent, foundContent);
+                assertNull(client.executeList("blablabla"));
+                assertNull(client.executeGet("src/test/resources/Dir1/filee2.txt"));
+                foundContent.clear();
+                for (var file : client.executeList("src/test/resources/Dir1")) {
+                    foundContent.put(file.getName(), file.isDirectory());
+                }
+                expectedContent.clear();
+                expectedContent.put("Subdir1", true);
+                expectedContent.put("Subdir2", true);
+                expectedContent.put("file1.txt", false);
+                expectedContent.put("file2.txt", false);
+                assertEquals(expectedContent, foundContent);
+                var answer = client.executeGet("src/test/resources/Dir1/file1.txt");
+                var foundContentString = new String(answer, StandardCharsets.UTF_8);
+                var expectedContentString = "Hello, I am the first file!";
+                assertEquals(expectedContentString, foundContentString);
+            });
+        }
+        for (int i = 0; i < 10; i++) {
+            threads[i].start();
+        }
+        for (int i = 0; i < 10; i++) {
+            threads[i].join();
+        }
     }
 }

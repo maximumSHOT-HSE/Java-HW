@@ -88,9 +88,6 @@ public class Client {
             return null;
         }
         byte[] fileContent = dataInputStream.readAllBytes();
-        System.out.println("bytesNumber = " + bytesNumber);
-        System.out.println("bytes = " + new String(fileContent, StandardCharsets.UTF_8));
-        System.out.println("fileContent size = " + fileContent.length);
         if (fileContent.length != bytesNumber) {
             throw new IOException("Corrupted package");
         }
