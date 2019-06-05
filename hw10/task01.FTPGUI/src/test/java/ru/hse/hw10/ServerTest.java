@@ -48,7 +48,6 @@ class ServerTest {
         }
         Map<String, Boolean> expectedContent = new TreeMap<>();
         expectedContent.put("Dir1", true);
-        expectedContent.put("TestDir", true);
         assertEquals(expectedContent, foundContent);
     }
 
@@ -68,7 +67,6 @@ class ServerTest {
         }
         Map<String, Boolean> expectedContent = new TreeMap<>();
         expectedContent.put("Dir1", true);
-        expectedContent.put("TestDir", true);
         assertEquals(expectedContent, foundContent);
         assertNull(client.executeList("blablabla"));
         foundContent.clear();
@@ -107,7 +105,6 @@ class ServerTest {
         }
         Map<String, Boolean> expectedContent = new TreeMap<>();
         expectedContent.put("Dir1", true);
-        expectedContent.put("TestDir", true);
         assertEquals(expectedContent, foundContent);
         assertNull(client.executeList("blablabla"));
         assertNull(client.executeGet("src/test/resources/Dir1/filee2.txt"));
@@ -141,7 +138,6 @@ class ServerTest {
                 }
                 Map<String, Boolean> expectedContent = new TreeMap<>();
                 expectedContent.put("Dir1", true);
-                expectedContent.put("TestDir", true);
                 assertEquals(expectedContent, foundContent);
                 assertNull(client.executeList("blablabla"));
                 assertNull(client.executeGet("src/test/resources/Dir1/filee2.txt"));
