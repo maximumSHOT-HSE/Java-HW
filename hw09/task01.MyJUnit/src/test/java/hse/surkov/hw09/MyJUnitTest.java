@@ -1,5 +1,9 @@
 package hse.surkov.hw09;
 
+import hse.surkov.hw09.TestClasses.BasicsTestClass;
+import hse.surkov.hw09.TestClasses.ComplicatedExceptionClassTest;
+import hse.surkov.hw09.TestClasses.ExceptionClassTest;
+import hse.surkov.hw09.TestClasses.IgnoreClassTest;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 

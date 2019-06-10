@@ -1,24 +1,26 @@
-package hse.surkov.hw09;
+package hse.surkov.hw09.TestClasses;
+
+import hse.surkov.hw09.Test;
 
 public class ComplicatedExceptionClassTest {
 
     @Test(isExceptionExpected = true, expectedException = IllegalArgumentException.class)
-    void expcetedException() {
+    public void expcetedException() {
         throw new IllegalArgumentException();
     }
 
     @Test(isExceptionExpected = true, expectedException = IllegalArgumentException.class)
-    void unexpectedException() {
+    public void unexpectedException() {
         throw new IllegalStateException();
     }
 
     @Test(ignore = true, isExceptionExpected = true, expectedException = IllegalArgumentException.class)
-    void ignoreExpectedException() {
+    public void ignoreExpectedException() {
         throw new IllegalArgumentException();
     }
 
     @Test(ignore = true, isExceptionExpected = true, expectedException = IllegalArgumentException.class)
-    void ignoreUnexpectedException() {
+    public void ignoreUnexpectedException() {
         throw new IllegalStateException();
     }
 }

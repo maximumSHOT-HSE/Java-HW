@@ -1,4 +1,6 @@
-package hse.surkov.hw09;
+package hse.surkov.hw09.TestClasses;
+
+import hse.surkov.hw09.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,32 +13,32 @@ public class BasicsTestClass {
     private static Set<Integer> afterSet = new HashSet<>();
 
     @BeforeClass
-    void beforeClass() {
+    public void beforeClass() {
         beforeCounter++;
     }
 
     @Before
-    void before() {
+    public void before() {
         beforeSet.add(testSet.size());
     }
 
     @Test
-    void test1() {
+    public void test1() {
         testSet.add(1);
     }
 
     @Test
-    void test2() {
+    public void test2() {
         testSet.add(2);
     }
 
     @After
-    void after() {
+    public void after() {
         afterSet.add(testSet.size());
     }
 
     @AfterClass
-    void afterClass() {
+    public void afterClass() {
         afterCounter++;
     }
 

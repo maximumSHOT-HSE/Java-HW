@@ -1,24 +1,26 @@
-package hse.surkov.hw09;
+package hse.surkov.hw09.TestClasses;
+
+import hse.surkov.hw09.Test;
 
 public class ExceptionClassTest {
 
     @Test
-    void success() {
+    public void success() {
 
     }
 
     @Test(isExceptionExpected = true, expectedException = IllegalArgumentException.class)
-    void nothingWasThrown() {
+    public void nothingWasThrown() {
 
     }
 
     @Test(isExceptionExpected = true, expectedException = IllegalArgumentException.class)
-    void otherExceptionWasThrown() {
+    public void otherExceptionWasThrown() {
         throw new IllegalStateException();
     }
 
     @Test(isExceptionExpected = true, expectedException = RuntimeException.class)
-    void successThrow() {
+    public void successThrow() {
         throw new RuntimeException();
     }
 }
