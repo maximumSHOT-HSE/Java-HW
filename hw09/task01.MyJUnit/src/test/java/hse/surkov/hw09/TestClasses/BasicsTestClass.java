@@ -13,7 +13,7 @@ public class BasicsTestClass {
     private static Set<Integer> afterSet = new HashSet<>();
 
     @BeforeClass
-    public void beforeClass() {
+    public static void beforeClass() {
         beforeCounter++;
     }
 
@@ -38,7 +38,7 @@ public class BasicsTestClass {
     }
 
     @AfterClass
-    public void afterClass() {
+    public static void afterClass() {
         afterCounter++;
     }
 

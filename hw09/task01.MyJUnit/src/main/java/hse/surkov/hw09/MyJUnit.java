@@ -6,10 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.lang.reflect.Modifier;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MyJUnit {
@@ -56,7 +54,11 @@ public class MyJUnit {
             throw new IllegalArgumentException("Default construct not found");
         }
         for (var method : beforeClassMethods) {
-            method.invoke(instance);
+            if (!Modifier.isStatic(method.getModifiers())) {
+                throw new IllegalStateException("Method with annotation BeforeClass must be static," +
+                        " but found method: " + method.toGenericString());
+            }
+            method.invoke(null);
         }
         var statistics = new ArrayList<TestData>();
         for (var testMethod : testMethods) {
@@ -103,7 +105,11 @@ public class MyJUnit {
             }
         }
         for (var method : afterClassMethods) {
-            method.invoke(instance);
+            if (!Modifier.isStatic(method.getModifiers())) {
+                throw new IllegalStateException("Method with annotation AfterClass must be static," +
+                        " but found method: " + method.toGenericString());
+            }
+            method.invoke(null);
         }
         return statistics;
     }
