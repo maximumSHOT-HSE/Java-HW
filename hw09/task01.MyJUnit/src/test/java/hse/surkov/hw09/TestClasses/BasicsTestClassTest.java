@@ -5,7 +5,7 @@ import hse.surkov.hw09.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BasicsTestClass {
+public class BasicsTestClassTest {
     private static int beforeCounter = 0;
     private static int afterCounter = 0;
     private static Set<Integer> testSet = new HashSet<>();

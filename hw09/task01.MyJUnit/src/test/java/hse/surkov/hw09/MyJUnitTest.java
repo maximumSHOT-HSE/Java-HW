@@ -12,13 +12,13 @@ class MyJUnitTest {
 
     @RepeatedTest(10)
     void testBasics() throws InvocationTargetException, IllegalAccessException {
-        BasicsTestClass.clear();
-        MyJUnit.executeTests(BasicsTestClass.class);
-        assertEquals(1, BasicsTestClass.getBeforeCounter());
-        assertEquals(1, BasicsTestClass.getAfterCounter());
-        assertEquals(2, BasicsTestClass.getTestSet().size());
-        assertEquals(2, BasicsTestClass.getAfterSet().size());
-        assertEquals(2, BasicsTestClass.getBeforeSet().size());
+        BasicsTestClassTest.clear();
+        MyJUnit.executeTests(BasicsTestClassTest.class);
+        assertEquals(1, BasicsTestClassTest.getBeforeCounter());
+        assertEquals(1, BasicsTestClassTest.getAfterCounter());
+        assertEquals(2, BasicsTestClassTest.getTestSet().size());
+        assertEquals(2, BasicsTestClassTest.getAfterSet().size());
+        assertEquals(2, BasicsTestClassTest.getBeforeSet().size());
     }
 
     @Test
@@ -101,5 +101,15 @@ class MyJUnitTest {
                 fail();
             }
         }
+    }
+
+    @Test
+    void testStaticBeforeClass() {
+        assertThrows(IllegalStateException.class, () -> MyJUnit.executeTests(BeforeClassTest.class));
+    }
+
+    @Test
+    void testStaticAfterClass() {
+        assertThrows(IllegalStateException.class, () -> MyJUnit.executeTests(AfterClassTest.class));
     }
 }
