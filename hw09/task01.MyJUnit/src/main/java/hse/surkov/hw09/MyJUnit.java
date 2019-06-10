@@ -69,20 +69,26 @@ public class MyJUnit {
                 testData.setResultType(TestData.ResultType.IGNORED);
                 testData.setMessage(annotation.ignoreReason());
             } else {
+                long executionTime = 0;
                 try {
+                    long beforeTime = System.currentTimeMillis();
                     testMethod.invoke(instance);
+                    long afterTime = System.currentTimeMillis();
+                    executionTime = afterTime - beforeTime;
                     if (annotation.isExceptionExpected()) {
                         testData.setResultType(TestData.ResultType.FAILED);
                         testData.setMessage(annotation.expectedException().getName()
                                 + " expected to be thrown, but nothing was thrown");
                     } else {
                         testData.setResultType(TestData.ResultType.PASSED);
+                        testData.setExecutionTimeMilliseconds(afterTime - beforeTime);
                     }
                 } catch (InvocationTargetException catched) {
                     var e = catched.getCause();
                     if (annotation.isExceptionExpected() &&
                             annotation.expectedException().isInstance(e)) {
                         testData.setResultType(TestData.ResultType.PASSED);
+                        testData.setExecutionTimeMilliseconds(executionTime);
                     } else {
                         testData.setResultType(TestData.ResultType.FAILED);
                         testData.setMessage("Unexpected exception "
@@ -150,6 +156,7 @@ public class MyJUnit {
         @NotNull private ResultType resultType;
         @NotNull private String message = "";
         @NotNull private String name;
+        private long executionTimeMilliseconds;
 
         public TestData(@NotNull ResultType resultType, @NotNull String name) {
             this.resultType = resultType;
@@ -164,10 +171,16 @@ public class MyJUnit {
             this.message = message;
         }
 
+        public void setExecutionTimeMilliseconds(long executionTimeMilliseconds) {
+            this.executionTimeMilliseconds = executionTimeMilliseconds;
+        }
+
         public void printStatistics() {
             System.out.println(name + ": " + resultType.toString());
             if (!resultType.equals(ResultType.PASSED)) {
                 System.out.println("Message: " + message);
+            } else {
+                System.out.println("Time: " + executionTimeMilliseconds + " ms");
             }
         }
 
@@ -188,6 +201,10 @@ public class MyJUnit {
 
         @NotNull public String getName() {
             return name;
+        }
+
+        public long getExecutionTimeMilliseconds() {
+            return executionTimeMilliseconds;
         }
     }
 }

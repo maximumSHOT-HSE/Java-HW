@@ -1,16 +1,12 @@
 package hse.surkov.hw09;
 
-import hse.surkov.hw09.TestClasses.BasicsTestClass;
-import hse.surkov.hw09.TestClasses.ComplicatedExceptionClassTest;
-import hse.surkov.hw09.TestClasses.ExceptionClassTest;
-import hse.surkov.hw09.TestClasses.IgnoreClassTest;
+import hse.surkov.hw09.TestClasses.*;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MyJUnitTest {
 
@@ -91,6 +87,18 @@ class MyJUnitTest {
                     break;
                 default:
                     fail();
+            }
+        }
+    }
+
+    @Test
+    void testExecutionTime() throws InvocationTargetException, IllegalAccessException {
+        var statistics = MyJUnit.executeTests(MeasureTimeClass.class);
+        for (var testData : statistics) {
+            if ("test".equals(testData.getName())) {
+                assertTrue(testData.getExecutionTimeMilliseconds() >= 500);
+            } else {
+                fail();
             }
         }
     }
