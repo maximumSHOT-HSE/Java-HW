@@ -163,7 +163,9 @@ public class ClientGUI {
         return new Client(ip, portAsInt);
     }
 
-    private void fileChanged(ObservableValue<? extends ServerFile> observable, @Nullable ServerFile oldValue, @Nullable ServerFile newValue) {
+    private void fileChanged(ObservableValue<? extends ServerFile> observable,
+                             @Nullable ServerFile oldValue,
+                             @Nullable ServerFile newValue) {
         if (newValue == null) {
             return;
         }
