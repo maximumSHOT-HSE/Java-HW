@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  * server files tree and download files
  */
 public class Server {
-
     private static final int MIN_PORT_VALUE = 0;
     private static final int MAX_PORT_VALUE = 65535;
 

@@ -5,7 +5,6 @@ import ru.hse.hw10.client.ServerFile;
 
 // Representation of file cell in list view
 class FileCell extends ListCell<ServerFile> {
-
     @Override
     public void updateItem(ServerFile item, boolean empty) {
         super.updateItem(item, empty);

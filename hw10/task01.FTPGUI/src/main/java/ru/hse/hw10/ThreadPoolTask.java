@@ -18,7 +18,6 @@ import java.util.concurrent.locks.Lock;
  * using processed request.
  */
 public class ThreadPoolTask implements Runnable {
-
     @NotNull private ClientData data;
     @NotNull private SocketChannel socketChannel;
 

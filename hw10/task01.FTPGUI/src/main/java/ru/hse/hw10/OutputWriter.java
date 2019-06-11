@@ -13,7 +13,6 @@ import java.nio.channels.SocketChannel;
  * then connection with such client will be closed
  */
 public class OutputWriter implements Runnable {
-
     @NotNull private Selector outputWriterSelector;
 
     public OutputWriter(@NotNull Selector outputWriterSelector) {

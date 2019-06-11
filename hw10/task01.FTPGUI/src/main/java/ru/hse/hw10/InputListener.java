@@ -18,7 +18,6 @@ import java.util.concurrent.locks.Lock;
  * to the thread pool.
  */
 public class InputListener implements Runnable {
-
     private static final int BLOCK_SIZE = 4096;
 
     @NotNull private Selector inputListenerSelector;

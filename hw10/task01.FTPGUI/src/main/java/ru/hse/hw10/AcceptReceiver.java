@@ -15,7 +15,6 @@ import java.util.concurrent.locks.Lock;
  * channel will be registered in input listener
  */
 public class AcceptReceiver implements Runnable {
-
     @NotNull private ServerSocketChannel serverSocketChannel;
 
     @NotNull private Selector inputListenerSelector;

@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 /** Representation of a file stored on a server */
 public class ServerFile {
-
     @NotNull private final String name;
     private final boolean isDirectory;
 
