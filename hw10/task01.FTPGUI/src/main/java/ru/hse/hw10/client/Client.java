@@ -2,6 +2,7 @@ package ru.hse.hw10.client;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,6 +10,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,20 +47,21 @@ public class Client {
     }
 
     /**
-     * Executes get file by specified path request
+     * Executes get request. In case of success (i.e. file exists on the server side
+     * and there were not any problem with reading) file will be downloaded
+     * in the given downloadFilePath. Otherwise nothing will happen.
      *
-     * @param path path to get file from
-     * @return file content represented by bytes or null if path associated
-     * with nonexistent file or path not pointing to a file which
-     * can be downloaded from the server
+     * @param sourceFilePath is the file on the server side
+     * @param downloadFilePath is the file on the client side
+     * @return true in case of success and false otherwise
      */
-    public byte[] executeGet(@NotNull String path) {
+    public boolean executeGet(@NotNull Path sourceFilePath, @NotNull Path downloadFilePath) {
         try (SocketChannel socketChannel = SocketChannel.open(address)) {
-            sendRequest(RequestType.GET_REQUEST, socketChannel, path);
-            return receiveGetRequest(socketChannel);
+            sendRequest(RequestType.GET_REQUEST, socketChannel, sourceFilePath.toString());
+            return receiveGetRequest(socketChannel, downloadFilePath);
         } catch (IOException exception) {
             logger.severe("Unable to execute get request: " + exception.getMessage());
-            return new byte[0];
+            return false;
         }
     }
 
@@ -80,47 +83,53 @@ public class Client {
         }
     }
 
-    private byte[] receiveGetRequest(SocketChannel socketChannel) throws IOException {
-        var dataInputStream = getResponseStream(socketChannel);
-        int bytesNumber = dataInputStream.readInt();
-        int size = dataInputStream.readInt();
-        if (size < 0) {
-            return null;
-        }
-        byte[] fileContent = dataInputStream.readAllBytes();
-        if (fileContent.length != bytesNumber) {
-            throw new IOException("Corrupted package");
-        }
-        return fileContent;
-    }
-
-    private DataInputStream getResponseStream(SocketChannel socketChannel) throws IOException {
-        var byteArrayOutputStream = new ByteArrayOutputStream();
-        var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-
+    private int readBytesNumber(@NotNull SocketChannel socketChannel) throws IOException {
         var headBuffer = ByteBuffer.allocate(Integer.BYTES);
-        var bodyBuffer = ByteBuffer.allocate(BLOCK_SIZE);
-
         while (headBuffer.position() < headBuffer.limit()) {
             socketChannel.read(headBuffer);
         }
-
         headBuffer.flip();
-        int remainingBytesNumber = headBuffer.getInt();
+        return headBuffer.getInt();
+    }
 
-        logger.info("rem bytes number = " + remainingBytesNumber + ", head = " + Arrays.toString(headBuffer.array()));
-
-        dataOutputStream.writeInt(remainingBytesNumber);
-        while (remainingBytesNumber > 0) {
-            bodyBuffer.clear();
-            socketChannel.read(bodyBuffer);
-            bodyBuffer.flip();
-            while (bodyBuffer.hasRemaining()) {
-                int b = bodyBuffer.get();
+    private void writeBytesFromSocketToStream(@NotNull SocketChannel socketChannel,
+                                              @NotNull DataOutputStream dataOutputStream,
+                                              int bytesNumber) throws IOException {
+        var buffer = ByteBuffer.allocate(BLOCK_SIZE);
+        while (bytesNumber > 0) {
+            buffer.clear();
+            socketChannel.read(buffer);
+            buffer.flip();
+            while (buffer.hasRemaining()) {
+                byte b = buffer.get();
                 dataOutputStream.writeByte(b);
-                remainingBytesNumber--;
+                bytesNumber--;
             }
         }
+    }
+
+    private boolean receiveGetRequest(@NotNull SocketChannel socketChannel,
+                                      @NotNull Path downloadFilePath) throws IOException {
+        readBytesNumber(socketChannel);
+        int bytesNumber = readBytesNumber(socketChannel);
+        if (bytesNumber < 0) {
+            return false;
+        }
+        var fileOutputStream = new FileOutputStream(downloadFilePath.toFile());
+        var dataOutputStream = new DataOutputStream(fileOutputStream);
+        writeBytesFromSocketToStream(socketChannel, dataOutputStream, bytesNumber);
+        return true;
+    }
+
+    /*
+    * In case of success stream will be returned and null otherwise
+    */
+    private DataInputStream getResponseStream(SocketChannel socketChannel) throws IOException {
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        int remainingBytesNumber = readBytesNumber(socketChannel);
+        dataOutputStream.writeInt(remainingBytesNumber);
+        writeBytesFromSocketToStream(socketChannel, dataOutputStream, remainingBytesNumber);
         return new DataInputStream(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
     }
 
@@ -165,7 +174,7 @@ public class Client {
 
         logger.info("path length = " + path.length());
         logger.info("bytes number = " + byteOutputStream.toByteArray().length
-                            + ", but found = " + bytesNumber);
+                + ", but found = " + bytesNumber);
 
         buffer.flip();
 

@@ -179,6 +179,7 @@ public class ClientData {
         var byteArrayOutputStream = new ByteArrayOutputStream();
         var dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         var childFiles = file.listFiles();
+        logFiles(childFiles);
         try {
             dataOutputStream.writeInt(Objects.requireNonNull(childFiles).length);
             for (var childFile : childFiles) {
@@ -257,5 +258,13 @@ public class ClientData {
      */
     public boolean isFinished() {
         return !buffer.hasRemaining();
+    }
+
+    private void logFiles(File[] childFiles) {
+        if (childFiles != null) {
+            for (var child : childFiles) {
+                Server.LOGGER.info(child.getName() + " is dir = " + child.isDirectory());
+            }
+        }
     }
 }
