@@ -91,13 +91,10 @@ public class ClientData {
      * @return true if package has been received fully and false otherwise
      */
     public boolean isFull() {
-        Server.LOGGER.info("is full.");
-        Server.LOGGER.info("sz = " + request.size());
         if (request.size() < Integer.BYTES) {
             return false;
         }
         int bytesNumber = getBytesNumber();
-        Server.LOGGER.info("bytesNumber = " + bytesNumber);
         return request.size() == bytesNumber + Integer.BYTES;
     }
 
@@ -237,7 +234,6 @@ public class ClientData {
         while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
             try {
                 byte b = answerInputStream.readByte();
-                Server.LOGGER.info("byte = " + b + ", remaining bytes number = " + remainingBytesNumber);
                 buffer.put(b);
                 remainingBytesNumber--;
             } catch (IOException ignore) {
