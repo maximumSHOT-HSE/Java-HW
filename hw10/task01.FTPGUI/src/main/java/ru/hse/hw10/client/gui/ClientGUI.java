@@ -15,12 +15,14 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.hse.hw10.client.Client;
 import ru.hse.hw10.client.ServerFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -36,6 +38,7 @@ public class ClientGUI {
     private final Button downloadButton = new Button("Download");
     private final Button enterButton = new Button("Enter");
     private final Button backButton = new Button("Back");
+    private final Stage stage;
     private ObservableList<ServerFile> files;
     private Label filesLabel;
     private ListView<ServerFile> filesListView;
@@ -45,6 +48,7 @@ public class ClientGUI {
     private VBox fileSelection;
 
     public ClientGUI(@NotNull Stage stage, @NotNull String ip, @NotNull String port) {
+        this.stage = stage;
         try {
             client = getClient(ip, port);
         } catch (UnknownHostException | IllegalArgumentException exception) {
@@ -143,7 +147,7 @@ public class ClientGUI {
 
         pane.setHgap(10);
         pane.setVgap(5);
-        pane.setPadding(new Insets(5,5,5,5));
+        pane.setPadding(new Insets(5, 5, 5, 5));
     }
 
     private Client getClient(@NotNull String ip, @NotNull String port) throws UnknownHostException {
@@ -189,25 +193,23 @@ public class ClientGUI {
     private void onDownloadButtonClicked() {
         assert !selectedFile.isDirectory();
 
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File downloadDirectory = directoryChooser.showDialog(stage);
+        Path downloadFilePath = downloadDirectory.toPath().resolve(selectedFile.getName());
         executor.submit(() -> {
-            Path path = currentPath.resolve(selectedFile.getName());
-            byte[] fileBytes = client.executeGet(path.toString());
+            Path pathDownloadFrom = currentPath.resolve(selectedFile.getName());
+            byte[] fileBytes = client.executeGet(pathDownloadFrom.toString());
             try {
+                if (Files.exists(downloadFilePath)) {
+                    Platform.runLater(() -> showDownLoadErrorAlert("File already exists"));
+                }
                 if (fileBytes == null) {
-                    throw new IllegalStateException("file does not exist");
+                    Platform.runLater(() -> showDownLoadErrorAlert("File does not exists on server"));
+                    return;
                 }
-                if (path.getParent() != null) {
-                    Files.createDirectories(path.getParent());
-                }
-                if (Files.exists(path)) {
-                    Files.delete(path);
-                }
-                Files.createFile(path);
-                Files.write(path, fileBytes);
+                Files.write(downloadFilePath, fileBytes);
             } catch (IOException | IllegalStateException exception) {
-                Platform.runLater(() -> {
-                    showDownLoadErrorAlert(exception.getMessage());
-                });
+                Platform.runLater(() -> showDownLoadErrorAlert(exception.getMessage()));
             }
         });
     }
