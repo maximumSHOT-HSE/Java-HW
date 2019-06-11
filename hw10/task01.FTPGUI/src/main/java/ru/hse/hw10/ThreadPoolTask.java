@@ -55,16 +55,16 @@ public class ThreadPoolTask implements Runnable {
     public void run() {
         try {
             parseRequest();
-        } catch (IOException ignored) {
-            // TODO handle me
+        } catch (IOException e) {
+            Server.LOGGER.info("Can not parse request: " + e.getMessage());
         }
         try {
             outputWriterSelectorLock.lock();
             Server.LOGGER.info("try to register");
             socketChannel.register(outputWriterSelector,
                     SelectionKey.OP_WRITE, data);
-        } catch (ClosedChannelException ignore) {
-            // TODO handle me
+        } catch (ClosedChannelException e) {
+            Server.LOGGER.info("Can not register socketChannel in output writer selector: " + e.getMessage());
         } finally {
             outputWriterSelectorLock.unlock();
         }

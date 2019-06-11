@@ -36,8 +36,8 @@ public class AcceptReceiver implements Runnable {
             SocketChannel socketChannel = null;
             try {
                 socketChannel = serverSocketChannel.accept();
-            } catch (IOException ignore) {
-                // TODO handle me
+            } catch (IOException e) {
+                Server.LOGGER.info("Can not accept socketChannel: " + e.getMessage());
             }
             if (socketChannel == null) {
                 continue;
@@ -46,15 +46,20 @@ public class AcceptReceiver implements Runnable {
             try {
                 socketChannel.configureBlocking(false);
                 socketChannel.socket().setTcpNoDelay(true);
-            } catch (IOException ignore) {
-                // TODO handle me
+            } catch (IOException e) {
+                Server.LOGGER.info("Can not configure socketChannel to non-blocking mode and" +
+                        "turn off tcp delay: " + e.getMessage());
+                continue;
             }
             var data = new ClientData();
             try {
                 inputListenerSelectorLock.lock();
-                socketChannel.register(inputListenerSelector, SelectionKey.OP_READ, data);
-            } catch (ClosedChannelException e) {
-                // TODO handle me
+                try {
+                    socketChannel.register(inputListenerSelector, SelectionKey.OP_READ, data);
+                } catch (ClosedChannelException e) {
+                    Server.LOGGER.info("Can not register socketChannel in input listener selector"
+                            + ": " + e.getMessage());
+                }
             } finally {
                 inputListenerSelectorLock.unlock();
             }

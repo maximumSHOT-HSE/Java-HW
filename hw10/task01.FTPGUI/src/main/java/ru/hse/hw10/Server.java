@@ -91,7 +91,7 @@ public class Server {
         Server server = new Server();
         try {
             server.start(port);
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             // ignore
         }
     }
