@@ -26,6 +26,11 @@ dependencies {
     compile 'org.jetbrains:annotations:16.0.2'
 }
 
+task runServer(type:JavaExec) {
+    main = 'ru.hse.hw10.Server'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
 test {
     useJUnitPlatform()
     testLogging {

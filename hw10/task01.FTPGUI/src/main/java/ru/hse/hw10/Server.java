@@ -17,6 +17,11 @@ import java.util.logging.Logger;
  */
 public class Server {
 
+    private static final int MIN_PORT_VALUE = 0;
+    private static final int MAX_PORT_VALUE = 65535;
+
+    private static final int INVALID_ARGUMENTS_NUMBER = -1;
+    private static final int INVALID_PORT_ERROR = -2;
     @NotNull static final Logger LOGGER = Logger.getLogger("ServerLogger");
     private static final int TIMEOUT = 1000;
 
@@ -38,7 +43,7 @@ public class Server {
      * accept receiver, input listener, output writer
      * and thread pool
      */
-    public void start() throws IOException {
+    public void start(int port) throws IOException {
         inputListenerSelector = Selector.open();
         outputWriterSelector = Selector.open();
         inputListenerThread = new Thread(new InputListener(
@@ -46,7 +51,7 @@ public class Server {
                 outputWriterSelector, outputWriterSelectorLock, threadPool));
         outputWriterThread = new Thread(new OutputWriter(outputWriterSelector));
         acceptReceiverThread = new Thread(new AcceptReceiver(inputListenerSelector,
-                inputListenerSelectorLock));
+                inputListenerSelectorLock, port));
         inputListenerThread.start();
         outputWriterThread.start();
         acceptReceiverThread.start();
@@ -68,9 +73,25 @@ public class Server {
     }
 
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Invalid number of arguments");
+            System.out.println("usage: server <port>");
+            System.exit(INVALID_ARGUMENTS_NUMBER);
+        }
+        int port = -1;
+        try {
+            port = Integer.parseInt(args[0]);
+        } catch (NumberFormatException ignored) {
+            // port value will remain equal to -1
+        }
+        if (port < MIN_PORT_VALUE || port > MAX_PORT_VALUE) {
+            System.out.println("Invalid port, should be in integer in [" + MIN_PORT_VALUE + ","
+                    + MAX_PORT_VALUE + "]");
+            System.exit(INVALID_PORT_ERROR);
+        }
         Server server = new Server();
         try {
-            server.start();
+            server.start(port);
         } catch (IOException e) {
             // ignore
         }

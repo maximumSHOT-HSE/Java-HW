@@ -31,7 +31,7 @@ class ServerTest {
             serverIP = "UNKNOWN";
         }
         server = new Server();
-        server.start();
+        server.start(PORT);
     }
 
     @AfterAll

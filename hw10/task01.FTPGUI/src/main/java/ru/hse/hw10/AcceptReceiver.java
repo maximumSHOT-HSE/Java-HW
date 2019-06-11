@@ -3,8 +3,6 @@ package ru.hse.hw10;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.concurrent.locks.Lock;
@@ -18,32 +16,18 @@ import java.util.concurrent.locks.Lock;
  */
 public class AcceptReceiver implements Runnable {
 
-    private static final int PORT = 9999;
-
     @NotNull private ServerSocketChannel serverSocketChannel;
 
     @NotNull private Selector inputListenerSelector;
     @NotNull private Lock inputListenerSelectorLock;
 
     public AcceptReceiver(@NotNull Selector inputListenerSelector,
-                          @NotNull Lock inputListenerSelectorLock) throws IOException {
+                          @NotNull Lock inputListenerSelectorLock, int port) throws IOException {
         this.inputListenerSelector = inputListenerSelector;
         this.inputListenerSelectorLock = inputListenerSelectorLock;
         serverSocketChannel = ServerSocketChannel.open()
-                .bind(new InetSocketAddress(PORT));
+                .bind(new InetSocketAddress(port));
         serverSocketChannel.configureBlocking(false);
-
-        String serverIP;
-        try (final var socket = new DatagramSocket()) {
-            socket.connect(InetAddress.getByName("8.8.8.8"), PORT);
-            serverIP = socket.getLocalAddress().getHostAddress();
-        } catch (Exception ignored) {
-            serverIP = "UNKNOWN";
-        }
-
-        Server.LOGGER.info("SERVER LISTENING...");
-        Server.LOGGER.info("IP = " + serverIP);
-        Server.LOGGER.info("PORT = " + PORT);
     }
 
     @Override
