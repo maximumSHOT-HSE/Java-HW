@@ -18,15 +18,13 @@ import java.util.concurrent.locks.Lock;
  * to the thread pool.
  */
 public class InputListener implements Runnable {
-    private static final int BLOCK_SIZE = 4096 * 1024;
-
     @NotNull private Selector inputListenerSelector;
     @NotNull private Lock inputListenerSelectorLock;
 
     @NotNull private Selector outputWriterSelector;
     @NotNull private Lock outputWriterSelectorLock;
 
-    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BLOCK_SIZE);
+    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(Server.getBlockSize());
     @NotNull private ExecutorService threadPool;
 
     public InputListener(@NotNull Selector inputListenerSelector,

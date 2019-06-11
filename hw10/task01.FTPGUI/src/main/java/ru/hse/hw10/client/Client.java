@@ -1,6 +1,7 @@
 package ru.hse.hw10.client;
 
 import org.jetbrains.annotations.NotNull;
+import ru.hse.hw10.Server;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -16,7 +17,6 @@ import java.util.logging.Logger;
 
 /** Implementation of ftp client */
 public class Client {
-    private static final int BLOCK_SIZE = 4096 * 1024;
     private final Logger logger = Logger.getLogger("ClientLogger");
     private final InetSocketAddress address;
 
@@ -91,7 +91,7 @@ public class Client {
     private void writeBytesFromSocketToStream(@NotNull SocketChannel socketChannel,
                                               @NotNull DataOutputStream dataOutputStream,
                                               int bytesNumber) throws IOException {
-        var buffer = ByteBuffer.allocate(BLOCK_SIZE);
+        var buffer = ByteBuffer.allocate(Server.getBlockSize());
         while (bytesNumber > 0) {
             buffer.clear();
             socketChannel.read(buffer);

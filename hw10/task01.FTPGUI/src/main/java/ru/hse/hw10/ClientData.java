@@ -24,7 +24,6 @@ import java.util.Objects;
  * string provided by client.
  */
 public class ClientData {
-    private static final int BUFFER_BLOCK_SIZE = 4096 * 1024;
     private static final int ERROR_CODE = -1;
 
     /**
@@ -58,7 +57,7 @@ public class ClientData {
     @NotNull private List<Byte> request = new ArrayList<>();
     @NotNull private RequestType requestType = RequestType.UNDEFINED;
     @Nullable private String pathString;
-    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_BLOCK_SIZE);
+    @NotNull private ByteBuffer buffer = ByteBuffer.allocate(Server.getBlockSize());
 
     @NotNull private DataInputStream answerInputStream;
     private int remainingBytesNumber;

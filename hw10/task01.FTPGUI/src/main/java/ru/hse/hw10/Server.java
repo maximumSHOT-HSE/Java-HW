@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * server files tree and download files
  */
 public class Server {
+    private static final int BLOCK_SIZE = 4096;
     private static final int MIN_PORT_VALUE = 0;
     private static final int MAX_PORT_VALUE = 65535;
 
@@ -125,5 +126,9 @@ public class Server {
             } catch (IOException ignored) {
             }
         }
+    }
+
+    public static int getBlockSize() {
+        return BLOCK_SIZE;
     }
 }
