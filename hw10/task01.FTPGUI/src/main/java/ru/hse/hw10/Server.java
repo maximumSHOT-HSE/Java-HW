@@ -103,7 +103,9 @@ public class Server {
     /**
      * Executes non blocking version of select method
      * of selector with defined timeout and returns zero
-     * in case of some problems related with IO
+     * in case of some problems related with IO. If there
+     * are no any IO problem then result of exection
+     * {@link Selector#select()} will be returned
      */
     public static int select(@NotNull Selector selector) {
         int lastSelect;

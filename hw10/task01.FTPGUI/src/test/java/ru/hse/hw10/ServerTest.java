@@ -35,7 +35,7 @@ class ServerTest {
     }
 
     @AfterAll
-    static void free() throws IOException {
+    static void free() throws IOException, InterruptedException {
         server.stop();
     }
 
