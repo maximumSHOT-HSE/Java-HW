@@ -1,7 +1,6 @@
 package ru.hse.hw10.client.gui;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +23,6 @@ import ru.hse.hw10.client.ServerFile;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,42 +42,89 @@ public class ClientGUI {
     private Client client;
     private ServerFile selectedFile;
     private Path currentPath;
+    private VBox fileSelection;
 
     public ClientGUI(@NotNull Stage stage, @NotNull String ip, @NotNull String port) {
         try {
             client = getClient(ip, port);
         } catch (UnknownHostException | IllegalArgumentException exception) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error occurred while connecting to client");
-            alert.setContentText(exception.getMessage());
-            alert.showAndWait();
+            showConnectingErrorAlert(exception.getMessage());
             return;
         }
 
-        files = FXCollections.observableArrayList(client.executeList("."));
         currentPath = Paths.get(".");
+
+        setUpFilesListView();
+        setUpVBoxForFilesListView();
+        setUpDownLoadButton();
+        setUpEnterButton();
+        setUpBackButton();
+
+        GridPane pane = new GridPane();
+        setUpPane(pane);
+        addElementsToPane(pane);
+
+        setUpStage(pane, stage);
+        stage.show();
+    }
+
+    private void setUpStage(GridPane pane, Stage stage) {
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.setTitle("FTP GUI");
+        stage.setMinWidth(550);
+        stage.setMinHeight(350);
+        stage.heightProperty().addListener((observable, oldValue, newValue) -> filesListView.setPrefHeight(newValue.doubleValue() - 50));
+    }
+
+    private void addElementsToPane(GridPane pane) {
+        pane.add(fileSelection, 0, 0, 1, 3);
+        pane.add(downloadButton, 1, 0);
+        pane.add(enterButton, 1, 1);
+        pane.add(backButton, 1, 2);
+    }
+
+    private void setUpBackButton() {
+        backButton.setDisable(true);
+        backButton.setOnAction(event -> onBackButtonClicked());
+    }
+
+    private void setUpEnterButton() {
+        enterButton.setDisable(true);
+        enterButton.setOnAction(event -> onEnterButtonClicked());
+    }
+
+    private void setUpDownLoadButton() {
+        downloadButton.setDisable(true);
+        downloadButton.setOnAction(event -> onDownloadButtonClicked());
+    }
+
+    private void setUpVBoxForFilesListView() {
         filesLabel = new Label("Current dir: \\");
+        fileSelection = new VBox();
+        fileSelection.setSpacing(10);
+        fileSelection.getChildren().addAll(filesLabel, filesListView);
+    }
+
+    private void showConnectingErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error occurred while connecting to server");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void setUpFilesListView() {
+        files = FXCollections.observableArrayList(client.executeList("."));
 
         filesListView = new ListView<>(files);
         filesListView.setOrientation(Orientation.VERTICAL);
         filesListView.setMinSize(200, 200);
         filesListView.setCellFactory(new FileCellFactory());
         filesListView.getSelectionModel().selectedItemProperty().addListener(this::fileChanged);
+    }
 
-        VBox fileSelection = new VBox();
-        fileSelection.setSpacing(10);
-        fileSelection.getChildren().addAll(filesLabel, filesListView);
-
-        downloadButton.setDisable(true);
-        enterButton.setDisable(true);
-        backButton.setDisable(true);
-
-        enterButton.setOnAction(event -> onEnterButtonClicked());
-        downloadButton.setOnAction(event -> onDownloadButtonClicked());
-        backButton.setOnAction(event -> onBackButtonClicked());
-
-        GridPane pane = new GridPane();
+    private void setUpPane(GridPane pane) {
         var column = new ColumnConstraints();
         column.setPercentWidth(80);
         pane.getColumnConstraints().add(column);
@@ -99,23 +144,6 @@ public class ClientGUI {
         pane.setHgap(10);
         pane.setVgap(5);
         pane.setPadding(new Insets(5,5,5,5));
-        pane.add(fileSelection, 0, 0, 1, 3);
-        pane.add(downloadButton, 1, 0);
-        pane.add(enterButton, 1, 1);
-        pane.add(backButton, 1, 2);
-
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.setTitle("FTP GUI");
-        stage.setMinWidth(550);
-        stage.setMinHeight(350);
-        stage.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                filesListView.setPrefHeight(newValue.doubleValue() - 50);
-            }
-        });
-        stage.show();
     }
 
     private Client getClient(@NotNull String ip, @NotNull String port) throws UnknownHostException {
@@ -178,14 +206,18 @@ public class ClientGUI {
                 Files.write(path, fileBytes);
             } catch (IOException | IllegalStateException exception) {
                 Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Error while downloading the file");
-                    alert.setContentText(exception.getMessage());
-                    alert.showAndWait();
+                    showDownLoadErrorAlert(exception.getMessage());
                 });
             }
         });
+    }
+
+    private void showDownLoadErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error while downloading the file");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void onBackButtonClicked() {

@@ -18,7 +18,7 @@ javafx {
     modules = ['javafx.controls']
 }
 
-mainClassName = 'ru.hse.hw10.client.gui.ClientGUIIntro'
+mainClassName = 'ru.hse.hw10.client.gui.ClientGUIStartActivity'
 
 dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
