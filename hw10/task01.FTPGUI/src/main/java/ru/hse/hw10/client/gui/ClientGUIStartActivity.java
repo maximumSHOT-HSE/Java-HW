@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /** Start activity of ftp client that asks of the server ip and port */
-public class ClientGUIIntro extends Application {
+public class ClientGUIStartActivity extends Application {
 
     public static void main(String[] args) {
         launch(args);
