@@ -44,7 +44,7 @@ public class ThreadPoolTask implements Runnable {
         byte requestType = inputStream.readByte();
         String path = inputStream.readUTF();
         data.setRequestType(ClientData.RequestType.get(requestType));
-        data.setPath(path);
+        data.setPathString(path);
         data.processRequest();
         Server.LOGGER.info("bytesNumber = " + bytesNumber
                 + ", requestType = " + requestType

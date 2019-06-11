@@ -57,7 +57,7 @@ public class ClientData {
 
     @NotNull private List<Byte> request = new ArrayList<>();
     @NotNull private RequestType requestType = RequestType.UNDEFINED;
-    @Nullable private String path;
+    @Nullable private String pathString;
     @NotNull private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_BLOCK_SIZE);
 
     @NotNull private DataInputStream answerInputStream;
@@ -122,8 +122,8 @@ public class ClientData {
         this.requestType = requestType;
     }
 
-    public void setPath(@NotNull String path) {
-        this.path = path;
+    public void setPathString(@NotNull String pathString) {
+        this.pathString = pathString;
     }
 
     /*
@@ -157,15 +157,15 @@ public class ClientData {
     }
 
     /*
-     * Checks whether path is correct or not.
-     * If path is correct then appropriate file
+     * Checks whether pathString is correct or not.
+     * If pathString is correct then appropriate file
      * will be returned, otherwise null will be returned.
      */
     @Nullable private File getFileByPath() {
-        if (path == null) {
+        if (pathString == null) {
             return null;
         }
-        File file = new File(path);
+        File file = new File(pathString);
         return file.exists() ? file : null;
     }
 
