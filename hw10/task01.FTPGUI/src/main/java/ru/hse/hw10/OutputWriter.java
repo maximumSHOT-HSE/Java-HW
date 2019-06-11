@@ -22,6 +22,7 @@ public class OutputWriter implements Runnable {
     private void writeToChannel(@NotNull SelectionKey key) {
         var data = (ClientData) key.attachment();
         Server.LOGGER.info("try to write to channel: is Finished = " + data.isFinished());
+        data.fillBuffer();
         if (data.isFinished()) {
             key.cancel();
             return;

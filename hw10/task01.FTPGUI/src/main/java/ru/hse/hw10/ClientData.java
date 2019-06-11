@@ -229,33 +229,38 @@ public class ClientData {
     }
 
     /**
+     * if buffer has not any byte for writing to a channel then
+     * extra bytes will be moved to the buffer from answer
+     * input stream. After that buffer will be in a correct state.
+     * Otherwise, nothing will happen.
+     */
+    public void fillBuffer() {
+        if (buffer.hasRemaining()) {
+            return;
+        }
+        buffer.clear();
+        while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
+            try {
+                byte b = answerInputStream.readByte();
+                Server.LOGGER.info("byte = " + b + ", remaining bytes number = " + remainingBytesNumber);
+                buffer.put(b);
+                remainingBytesNumber--;
+            } catch (IOException ignore) {
+            }
+        }
+        buffer.flip();
+    }
+
+    /**
      * Checks whether there exists information to work with.
      * If there is no such information then true will be returned.
-     * Otherwise, true will be returned. Moreover, in last case
-     * if buffer has not any byte write to a channel then
-     * extra bytes will be moved to the buffer. After that
-     * buffer will be in a correct state.
+     * Otherwise, false will be returned. Must be executed after
+     * {@link ClientData#fillBuffer()}
      *
      * @return true if answer for the request has been provided fully
      * and false otherwise.
      */
     public boolean isFinished() {
-        if (!buffer.hasRemaining()) {
-            if (remainingBytesNumber == 0) {
-                return true;
-            }
-            buffer.clear();
-            while (remainingBytesNumber > 0 && buffer.position() < buffer.limit()) {
-                try {
-                    byte b = answerInputStream.readByte();
-                    Server.LOGGER.info("byte = " + b + ", remaining bytes number = " + remainingBytesNumber);
-                    buffer.put(b);
-                    remainingBytesNumber--;
-                } catch (IOException ignore) {
-                }
-            }
-            buffer.flip();
-        }
-        return false;
+        return !buffer.hasRemaining();
     }
 }
