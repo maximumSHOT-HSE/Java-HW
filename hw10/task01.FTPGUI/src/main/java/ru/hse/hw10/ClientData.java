@@ -24,7 +24,7 @@ import java.util.Objects;
  * string provided by client.
  */
 public class ClientData {
-    private static final int BUFFER_BLOCK_SIZE = 4096;
+    private static final int BUFFER_BLOCK_SIZE = 4096 * 1024;
     private static final int ERROR_CODE = -1;
 
     /**

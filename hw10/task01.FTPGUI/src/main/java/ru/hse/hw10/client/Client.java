@@ -2,25 +2,21 @@ package ru.hse.hw10.client;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 /** Implementation of ftp client */
 public class Client {
-    private static final int BLOCK_SIZE = 4096;
+    private static final int BLOCK_SIZE = 4096 * 1024;
     private final Logger logger = Logger.getLogger("ClientLogger");
     private final InetSocketAddress address;
 
